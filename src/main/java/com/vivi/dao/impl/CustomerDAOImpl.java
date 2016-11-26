@@ -6,11 +6,49 @@
 package com.vivi.dao.impl;
 
 import com.vivi.dao.CustomerDAO;
+import com.vivi.entity.Customer;
+import java.util.List;
+import org.hibernate.SessionFactory;
 
 /**
  *
  * @author wewezhu
  */
 public class CustomerDAOImpl implements CustomerDAO {
+
+    private SessionFactory sessionFactory;
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+    
+    @Override
+    public List<Customer> getAllCustomers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Customer findCustomerByCustomerId(String customerId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Customer addCustomer(Customer customer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean removeCustomer(Customer customer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Customer updateCustomer(Customer customer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
