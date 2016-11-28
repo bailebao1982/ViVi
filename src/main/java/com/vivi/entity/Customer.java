@@ -43,7 +43,7 @@ public class Customer {
     String Address;
     
     @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-    @JoinColumn(name="cid",referencedColumnName="cid")
+    @JoinColumn(name="customerTypeId",referencedColumnName="customerTypeId")
     CustomerType type;
     
     public Customer(){

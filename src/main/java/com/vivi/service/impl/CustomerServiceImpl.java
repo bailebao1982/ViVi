@@ -5,6 +5,7 @@
  */
 package com.vivi.service.impl;
 
+import com.vivi.dao.CustomerDAO;
 import com.vivi.service.CustomerService;
 
 /**
@@ -12,5 +13,16 @@ import com.vivi.service.CustomerService;
  * @author wewezhu
  */
 public class CustomerServiceImpl implements CustomerService{
+    private CustomerDAO customerDAO;
+
+    public CustomerDAO getCustomerDAO() {
+        return customerDAO;
+    }
+
+    public void setCustomerDAO(CustomerDAO customerDAO) {
+        this.customerDAO = customerDAO;
+    }
+    
+    
     
 }

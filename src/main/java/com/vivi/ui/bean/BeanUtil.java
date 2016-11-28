@@ -23,7 +23,7 @@ public class BeanUtil {
         return null;
     }
     
-    public static ProcessStatus getBeanStatus(){
+    public static ErrorMessage getBeanStatus(){
         
         return null;
     }

@@ -9,7 +9,7 @@ package com.vivi.ui.bean;
  *
  * @author wewezhu
  */
-public class ProcessStatus {
+public class ErrorMessage {
     private String errorCode;
     
     private String errorMessage;

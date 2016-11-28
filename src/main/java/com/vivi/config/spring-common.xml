@@ -40,12 +40,16 @@
         </property>  
     </bean>
     
-      <bean id="customerDAO" class="com.wx.dao.impl.CustomerDAOImpl">  
+      <bean id="customerDAO" class="com.vivi.dao.impl.CustomerDAOImpl">  
         <property name="sessionFactory" ref="sessionFactory"></property>  
     </bean>   
   
      <bean id="customerService" parent="transactionProxy">  
         <property name="target" ref="customerServiceBase"></property>
+    </bean>
+    
+    <bean id="customerServiceBase" class="com.vivi.service.impl.CustomerServiceImpl">  
+        <property name="customerDAO" ref="customerDAO"></property>
     </bean>
     
       <!-- 配置一个事务管理器 -->  
