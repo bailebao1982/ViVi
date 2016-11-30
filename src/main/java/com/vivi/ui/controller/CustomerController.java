@@ -5,13 +5,18 @@
  */
 package com.vivi.ui.controller;
 
+import com.vivi.entity.Customer;
+import com.vivi.service.CustomerService;
 import com.vivi.ui.bean.BaseMessageBean;
 import com.vivi.ui.bean.StatusResponse;
 import com.vivi.ui.customer.bean.CustomerBean;
 import com.vivi.ui.customer.bean.CustomerBeanResponse;
+import com.vivi.ui.customer.bean.CustomerBeanUtil;
 import com.vivi.ui.customer.bean.CustomerSearchResultBean;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +32,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CustomerController {
     
+    @Resource(name="customerService")
+    private CustomerService customerService;
+
+    public CustomerService getCustomerService() {
+        return customerService;
+    }
+
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+    
+    
     @RequestMapping(value = "/customers", method = RequestMethod.GET,headers="Accept=application/json")  
     public @ResponseBody List<CustomerBean> getCustomers(){
         List<CustomerBean> listOfCustomers = new ArrayList<CustomerBean>();
@@ -40,6 +57,8 @@ public class CustomerController {
     public @ResponseBody StatusResponse addCustomer(@ModelAttribute CustomerBean customer){
         StatusResponse status = new StatusResponse();
         
+        Customer newCustomer = CustomerBeanUtil.parserCustomerBean(customer);
+        customerService.addCustomer(newCustomer);
         
         status.setErrorCode("000");
         status.setErrorMessage("Not");
@@ -51,6 +70,10 @@ public class CustomerController {
     public @ResponseBody StatusResponse updateCustomer(@ModelAttribute CustomerBean customer,@PathVariable String member_id){
         StatusResponse status = new StatusResponse();
         
+        Customer updateCustomer = CustomerBeanUtil.parserCustomerBean(customer);
+        updateCustomer.setCustomerId(member_id);
+        
+        customerService.updateCustomer(updateCustomer);
         
         status.setErrorCode("0010");
         status.setErrorMessage("Not");
@@ -62,6 +85,8 @@ public class CustomerController {
     public @ResponseBody StatusResponse removeCustomer(@PathVariable String member_id){
         StatusResponse status = new StatusResponse();
         
+        Customer removeCustomer = customerService.findCustomerByCustomerId(member_id);
+        customerService.removeCustomer(removeCustomer);
         
         status.setErrorCode("0020");
         status.setErrorMessage("Not");
@@ -71,12 +96,17 @@ public class CustomerController {
     
     @RequestMapping(value = "/member_detail/{member_id}", method = RequestMethod.GET,headers="Accept=application/json") 
     public @ResponseBody CustomerBeanResponse getCustomerByCustomerId(@PathVariable String member_id){
-        CustomerBeanResponse customerBeanResponse = new CustomerBeanResponse();
+       
+        Customer customer = customerService.findCustomerByCustomerId(member_id);
         
-        customerBeanResponse.setErrorCode("xxxx");
-        customerBeanResponse.setErrorMessage("NODOD");
+        CustomerBean responseCustomerBean = CustomerBeanUtil.createCustomerBean(customer);
         
-        return customerBeanResponse;
+        CustomerBeanResponse response = new CustomerBeanResponse();
+        
+        response.setCustomer(responseCustomerBean);
+        response.setSuccess("Success");
+        
+        return response;
     }
     
     @RequestMapping(value = "/list_memebers", method = RequestMethod.GET,headers="Accept=application/json") 

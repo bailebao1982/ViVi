@@ -6,6 +6,7 @@
 package com.vivi.service.impl;
 
 import com.vivi.dao.CustomerDAO;
+import com.vivi.entity.Customer;
 import com.vivi.service.CustomerService;
 
 /**
@@ -21,6 +22,27 @@ public class CustomerServiceImpl implements CustomerService{
 
     public void setCustomerDAO(CustomerDAO customerDAO) {
         this.customerDAO = customerDAO;
+    }
+
+    @Override
+    public void addCustomer(Customer customer) {
+        customerDAO.addCustomer(customer);
+    }
+
+    @Override
+    public Customer findCustomerByCustomerId(String customerId) {
+        return customerDAO.findCustomerByCustomerId(customerId);
+    }
+
+    @Override
+    public boolean removeCustomer(Customer customer) {
+        return customerDAO.removeCustomer(customer);
+    }
+
+    @Override
+    public boolean updateCustomer(Customer customer) {
+        customerDAO.updateCustomer(customer);
+        return true;
     }
     
     

@@ -187,6 +187,12 @@
             <groupId>net.vz.mongodb.jackson</groupId>
             <artifactId>mongo-jackson-mapper</artifactId>
             <version>1.4.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>persistence-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

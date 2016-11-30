@@ -5,6 +5,7 @@
  */
 package com.vivi.entity;
 
+import java.sql.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,33 @@ public class Customer {
     
     @Column(length=32)
     String Address;
+    
+    @Column(length=32)
+    String hobby;
+    
+    @Column(length=32)
+    String mobile;
+    
+    @Column(length=32)
+    String job;
+    
+    @Column(length=32)
+    String remark;
+    
+    @Column
+    Date birthDay;
+    
+    @Column
+    Date inputDate;
+    
+    @Column(length=32)
+    String customerName;
+    
+    @Column
+    int deleteFlag;
+    
+    
+    
     
     @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
     @JoinColumn(name="customerTypeId",referencedColumnName="customerTypeId")
@@ -96,6 +124,70 @@ public class Customer {
 
     public void setAddress(String Address) {
         this.Address = Address;
+    }
+
+    public String getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public Date getInputDate() {
+        return inputDate;
+    }
+
+    public void setInputDate(Date inputDate) {
+        this.inputDate = inputDate;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public int getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(int deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
     
     

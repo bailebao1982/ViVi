@@ -17,7 +17,7 @@ import java.util.List;
 public class CustomerSearchResultBean {
     private StatusResponse status;
     
-    private List<CustomerBean> customers;
+    private List<CustomerBean> members;
     
     private int total_pages;
     
@@ -27,19 +27,19 @@ public class CustomerSearchResultBean {
 
     public CustomerSearchResultBean(){
         status = new StatusResponse();
-        customers = new ArrayList<CustomerBean>();
+        members = new ArrayList<CustomerBean>();
     }
     
     public void addCustomer(CustomerBean customer){
-        this.customers.add(customer);
+        this.members.add(customer);
     }
     
-    public List<CustomerBean> getCustomers() {
-        return customers;
+    public List<CustomerBean> getMembers() {
+        return members;
     }
 
-    public void setCustomers(List<CustomerBean> customers) {
-        this.customers = customers;
+    public void setMembers(List<CustomerBean> members) {
+        this.members = members;
     }
 
     public int getTotal_pages() {

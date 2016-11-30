@@ -9,10 +9,10 @@
       <!-- 配置数据源 -->  
     <!-- bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >  
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>  
-        <property name="url" value="jdbc:mysql://120.24.58.237/HealthyCorporation"></property>  
+        <property name="url" value="jdbc:mysql://60.205.59.199/vivi"></property>  
         <property name="username" value="root"></property>  
-        <property name="password" value="xDPgrPTuZ65D"></property>  
-    </bean -->
+        <property name="password" value="Ouoiq5RMV141"></property>  
+    </bean-->
     
       <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >  
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>  
@@ -27,9 +27,10 @@
         <property name="hibernateProperties">  
             <props>  
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>  
-                <prop key="hiberjjanate.hbm2ddl.auto">update</prop>  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>  
                 <prop key="hibernate.show_sql">true</prop>  
-                <prop key="hibernate.format_sql">true</prop>  
+                <prop key="hibernate.format_sql">true</prop>
+                <!-- prop key="javax.persistence.validation.mode">none</prop-->  
             </props>  
         </property>  
         <property name="annotatedClasses">  
