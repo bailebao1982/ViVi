@@ -5,6 +5,7 @@
  */
 package com.vivi.entity;
 
+import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,6 +32,18 @@ public class CustomerType {
     
     @Column(length=32)
     String Description;
+    
+    @Column
+    Date creationDate;
+    
+    @Column
+    Date lastUpdateDate;
+    
+    @Column(length=32)
+    String creator;
+          
+    @Column(length=32)
+    String lastUpdateBy;
 
     public String getTypeName() {
         return typeName;
@@ -54,6 +67,38 @@ public class CustomerType {
 
     public void setCustomerTypeId(String customerTypeId) {
         this.customerTypeId = customerTypeId;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
     }
     
     

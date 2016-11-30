@@ -6,12 +6,17 @@
 package com.vivi.ui.controller;
 
 import com.vivi.entity.Customer;
+import com.vivi.search.Page;
+import com.vivi.search.SearchConditionEnum;
+import com.vivi.search.SearchCriteria;
+import com.vivi.search.SearchCriteriaItem;
 import com.vivi.service.CustomerService;
 import com.vivi.ui.bean.BaseMessageBean;
 import com.vivi.ui.bean.StatusResponse;
 import com.vivi.ui.customer.bean.CustomerBean;
 import com.vivi.ui.customer.bean.CustomerBeanResponse;
 import com.vivi.ui.customer.bean.CustomerBeanUtil;
+import com.vivi.ui.customer.bean.CustomerQueryBean;
 import com.vivi.ui.customer.bean.CustomerSearchResultBean;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +65,9 @@ public class CustomerController {
         Customer newCustomer = CustomerBeanUtil.parserCustomerBean(customer);
         customerService.addCustomer(newCustomer);
         
-        status.setErrorCode("000");
-        status.setErrorMessage("Not");
+        status.setSuccess("Sucess");
+        //status.setErrorCode("000");
+        //status.setErrorMessage("Not");
         
         return status;
     }
@@ -75,8 +81,9 @@ public class CustomerController {
         
         customerService.updateCustomer(updateCustomer);
         
+        status.setSuccess("Fail");
         status.setErrorCode("0010");
-        status.setErrorMessage("Not");
+        status.setErrorMessage("Not Known");
         
         return status;
     }
@@ -109,19 +116,26 @@ public class CustomerController {
         return response;
     }
     
-    @RequestMapping(value = "/list_memebers", method = RequestMethod.GET,headers="Accept=application/json") 
-    public @ResponseBody CustomerSearchResultBean searchCustomerByCondition(int page,int page_size,String name,String type,String birthday,String telepone,String email,String start_date,String end_date){
+    @RequestMapping(value = "/list_memebers", method = RequestMethod.GET,headers="Accept=application/json")
+      public @ResponseBody CustomerSearchResultBean searchCustomerByCondition(@ModelAttribute CustomerQueryBean queryBean){
+   // public @ResponseBody CustomerSearchResultBean searchCustomerByCondition(int page,int page_size,String name,String type,String birthday,String telepone,String email,String start_date,String end_date){
         CustomerSearchResultBean result = new CustomerSearchResultBean();
         
-        CustomerBean customer = new CustomerBean();
+        SearchCriteria sc = new SearchCriteria();
+        if(queryBean.getName()!=null)
+            sc.addSearchCriterialItem("name", new SearchCriteriaItem("customerName",queryBean.getName(),SearchConditionEnum.Like));
+        if(queryBean.getBirthday()!=null)
+             sc.addSearchCriterialItem("birthday", new SearchCriteriaItem("birthDay",queryBean.getBirthday(),SearchConditionEnum.Equal));
+        if(queryBean.getTelpone()!=null)
+             sc.addSearchCriterialItem("telepone", new SearchCriteriaItem("mobile",queryBean.getTelpone(),SearchConditionEnum.Equal));
+        if(queryBean.getStart_date()!=null)
+            sc.addSearchCriterialItem("start_date", new SearchCriteriaItem("creationDate",queryBean.getStart_date(),SearchConditionEnum.LargeOrEqual));
+        if(queryBean.getEnd_date()!=null)
+            sc.addSearchCriterialItem("end_date", new SearchCriteriaItem("creationDate",queryBean.getEnd_date(),SearchConditionEnum.Small));
         
-        
-        customer.setMember_name(name);
-        customer.setMember_type(type);
-        customer.setMember_birthday(birthday);
-        customer.setMember_telphone(telepone);
-        result.addCustomer(customer);
-        result.setCurrent_page(page);
+        Page<Customer> resultPage = customerService.queryForPage(queryBean.getPage(), queryBean.getPage_size(), sc);
+        System.out.println("searchCustomerByCondition.pageSize:"+resultPage.getPageSize());
+        result.setCustomerPage(resultPage);
         
         return result;    
     }

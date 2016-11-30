@@ -6,6 +6,7 @@
 package com.vivi.dao;
 
 import com.vivi.entity.Customer;
+import com.vivi.search.SearchCriteria;
 import java.util.List;
 
 /**
@@ -22,4 +23,8 @@ public interface CustomerDAO {
     public boolean removeCustomer(Customer customer);
     
     public Customer updateCustomer(Customer customer);
+    
+    public List<Customer> queryForPage(int offset,int length,SearchCriteria criteria);
+    
+    public int getAllRowCount();
 }

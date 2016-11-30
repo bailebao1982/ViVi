@@ -5,6 +5,8 @@
  */
 package com.vivi.ui.customer.bean;
 
+import com.vivi.entity.Customer;
+import com.vivi.search.Page;
 import com.vivi.ui.bean.ErrorMessage;
 import com.vivi.ui.bean.StatusResponse;
 import java.util.ArrayList;
@@ -14,56 +16,13 @@ import java.util.List;
  *
  * @author wewezhu
  */
-public class CustomerSearchResultBean {
+public class CustomerSearchResultBean{
     private StatusResponse status;
-    
-    private List<CustomerBean> members;
-    
-    private int total_pages;
-    
-    private int total_records;
-    
-    private int current_page;
 
+    private Page<Customer> customerPage;
+    
     public CustomerSearchResultBean(){
         status = new StatusResponse();
-        members = new ArrayList<CustomerBean>();
-    }
-    
-    public void addCustomer(CustomerBean customer){
-        this.members.add(customer);
-    }
-    
-    public List<CustomerBean> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<CustomerBean> members) {
-        this.members = members;
-    }
-
-    public int getTotal_pages() {
-        return total_pages;
-    }
-
-    public void setTotal_pages(int total_pages) {
-        this.total_pages = total_pages;
-    }
-
-    public int getTotal_records() {
-        return total_records;
-    }
-
-    public void setTotal_records(int total_records) {
-        this.total_records = total_records;
-    }
-
-    public int getCurrent_page() {
-        return current_page;
-    }
-
-    public void setCurrent_page(int current_page) {
-        this.current_page = current_page;
     }
     
     public String getSuccess() {
@@ -89,4 +48,31 @@ public class CustomerSearchResultBean {
      public void setErrorMessage(String errorMessage) {
          this.status.setErrorMessage(errorMessage);
     }
+
+    public List<CustomerBean> getCustomerPage() {
+        ArrayList<CustomerBean> customers = new ArrayList<CustomerBean>();
+        for(Customer customer: customerPage.getList()){
+            customers.add(CustomerBeanUtil.createCustomerBean(customer));
+        }
+        System.out.println("getCustomerPage.getPageSize:"+customerPage.getPageSize());
+        return customers;
+    }
+
+    public int getTotal_pages() {
+        return customerPage.getTotalPages();
+    }
+
+    public int getTotal_records() {
+        return customerPage.getTotalRecords();
+    }
+
+    public int getCurrent_page() {
+        return customerPage.getPageNo();
+    }
+
+    public void setCustomerPage(Page<Customer> customerPage) {
+        this.customerPage = customerPage;
+    }
+     
+     
 }

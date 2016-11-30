@@ -7,6 +7,8 @@ package com.vivi.dao.impl;
 
 import com.vivi.dao.CustomerDAO;
 import com.vivi.entity.Customer;
+import com.vivi.search.SearchCriteria;
+import java.sql.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -45,12 +47,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public Customer addCustomer(Customer customer) {
+        customer.setCreationDate(new Date(System.currentTimeMillis()));
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
         return customer;
     }
 
     @Override
     public boolean removeCustomer(Customer customer) {
+        customer.setLastUpdateDate(new Date(System.currentTimeMillis()));
         customer.setDeleteFlag(1);
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
         return true;
@@ -58,9 +62,40 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public Customer updateCustomer(Customer customer) {
+        customer.setLastUpdateDate(new Date(System.currentTimeMillis()));
         sessionFactory.getCurrentSession().saveOrUpdate(customer);
         
         return customer;
+    }
+
+    @Override
+    public List<Customer> queryForPage(int offset, int length,SearchCriteria criteria) {
+        List<Customer> entitylist=null;
+        try{
+            StringBuffer queryString = new StringBuffer();
+            queryString.append("from Customer where deleteFlag <>1");
+            
+            for(String key:criteria.getItemMap().keySet()){
+                queryString.append(" and ");
+                 queryString.append(criteria.getItemMap().get(key).getSearchCriteriaItem());  
+            }
+            
+            Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
+            query.setFirstResult(offset);
+            query.setMaxResults(length);
+            entitylist = query.list();
+            
+        }catch(RuntimeException re){
+            throw re;
+        }
+        
+        return entitylist;
+    }
+
+    @Override
+    public int getAllRowCount() {
+    
+        return 1;
     }
     
 }

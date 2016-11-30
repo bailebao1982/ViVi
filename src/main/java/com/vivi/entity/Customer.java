@@ -59,15 +59,46 @@ public class Customer {
     Date birthDay;
     
     @Column
-    Date inputDate;
+    Date creationDate;
+    
+    @Column
+    Date lastUpdateDate;
+    
+    @Column(length=32)
+    String creator;
+          
+    @Column(length=32)
+    String lastUpdateBy;
     
     @Column(length=32)
     String customerName;
     
     @Column
     int deleteFlag;
-    
-    
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
     
     
     @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
@@ -166,12 +197,12 @@ public class Customer {
         this.birthDay = birthDay;
     }
 
-    public Date getInputDate() {
-        return inputDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setInputDate(Date inputDate) {
-        this.inputDate = inputDate;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getCustomerName() {

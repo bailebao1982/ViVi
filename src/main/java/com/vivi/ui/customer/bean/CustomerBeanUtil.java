@@ -23,8 +23,8 @@ public class CustomerBeanUtil {
         if(customer.getBirthDay() != null)
             customerBean.setMember_birthday(customer.getBirthDay().toString());
         customerBean.setMember_hobby(customer.getHobby());
-        if(customer.getInputDate()!=null)
-            customerBean.setMember_inputdate(customer.getInputDate().toString());
+        if(customer.getCreationDate()!=null)
+            customerBean.setMember_inputdate(customer.getCreationDate().toString());
         customerBean.setMember_job(customer.getJob());
         customerBean.setMember_name(customer.getCustomerName());
         customerBean.setMember_note(customer.getRemark());
@@ -45,7 +45,7 @@ public class CustomerBeanUtil {
         customer.setCustomerName(customerBean.getMember_name());
         customer.setHobby(customerBean.getMember_hobby());
         if(customerBean.getMember_inputdate()!=null)
-            customer.setInputDate(java.sql.Date.valueOf(customerBean.getMember_inputdate()));
+            customer.setCreationDate(java.sql.Date.valueOf(customerBean.getMember_inputdate()));
         customer.setJob(customerBean.getMember_job());
         customer.setMobile(customerBean.getMember_telphone());
         customer.setRemark(customerBean.getMember_note());

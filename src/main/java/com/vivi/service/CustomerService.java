@@ -6,6 +6,8 @@
 package com.vivi.service;
 
 import com.vivi.entity.Customer;
+import com.vivi.search.Page;
+import com.vivi.search.SearchCriteria;
 
 /**
  *
@@ -19,4 +21,6 @@ public interface CustomerService {
     public boolean removeCustomer(Customer customer);
     
     public boolean updateCustomer(Customer customer);
+    
+    public Page<Customer> queryForPage(int currentPage,int pageSize,SearchCriteria sc);
 }

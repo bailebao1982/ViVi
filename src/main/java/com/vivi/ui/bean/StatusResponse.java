@@ -13,9 +13,18 @@ public class StatusResponse {
     
     private String success;
     
-    private ErrorMessage error = new ErrorMessage();
+    private ErrorMessage error;
 
     public StatusResponse(){ 
+    }
+    
+    private ErrorMessage getErrorMessageInstance(){
+        if(error!=null)
+            return error;
+        else{
+            error = new ErrorMessage();
+            return error;
+        }
     }
     
     public String getSuccess() {
@@ -35,11 +44,12 @@ public class StatusResponse {
     }
     
     public void setErrorCode(String errorCode) {
-        this.error.setErrorCode(errorCode);
+        if(this.error!= null)
+        this.getErrorMessageInstance().setErrorCode(errorCode);
     }
     
      public void setErrorMessage(String errorMessage) {
-         this.error.setErrorMessage(errorMessage);
+         this.getErrorMessageInstance().setErrorMessage(errorMessage);
     }
     
 }

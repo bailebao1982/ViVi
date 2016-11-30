@@ -7,7 +7,10 @@ package com.vivi.service.impl;
 
 import com.vivi.dao.CustomerDAO;
 import com.vivi.entity.Customer;
+import com.vivi.search.Page;
+import com.vivi.search.SearchCriteria;
 import com.vivi.service.CustomerService;
+import java.util.List;
 
 /**
  *
@@ -43,6 +46,24 @@ public class CustomerServiceImpl implements CustomerService{
     public boolean updateCustomer(Customer customer) {
         customerDAO.updateCustomer(customer);
         return true;
+    }
+
+    @Override
+    public Page<Customer> queryForPage(int currentPage, int pageSize,SearchCriteria sc) {
+        Page<Customer> page = new Page<Customer>();        
+        //总记录数
+        int allRow = customerDAO.getAllRowCount();
+        //当前页开始记录
+        int offset = page.countOffset(currentPage,pageSize);  
+        //分页查询结果集
+        List<Customer> list = customerDAO.queryForPage(offset, pageSize,sc); 
+
+        page.setPageNo(currentPage);
+        page.setPageSize(pageSize);
+        page.setTotalRecords(allRow);
+        page.setList(list);
+        
+        return page;
     }
     
     
