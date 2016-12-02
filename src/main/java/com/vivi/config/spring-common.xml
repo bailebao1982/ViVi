@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
     xmlns:tx="http://www.springframework.org/schema/tx"
-    xsi:schemaLocation="
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
     
       <!-- 配置数据源 -->  
-    <!-- bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >  
+    <!-- response id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>  
         <property name="url" value="jdbc:mysql://60.205.59.199/vivi"></property>  
         <property name="username" value="root"></property>  
         <property name="password" value="Ouoiq5RMV141"></property>  
-    </bean-->
+    </response-->
     
-      <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >  
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>  
-        <property name="url" value="jdbc:mysql://localhost/vivi"></property>  
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost/vivi"></property>
         <property name="username" value="root"></property>  
-        <property name="password" value="zhuwei1982"></property>  
-    </bean>    
+        <property name="password" value="111111"></property>
+    </bean>
     
     <!-- 配置SessionFactory -->  
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">  
@@ -27,7 +29,8 @@
         <property name="hibernateProperties">  
             <props>  
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>  
-                <prop key="hibernate.hbm2ddl.auto">update</prop>  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
                 <prop key="hibernate.show_sql">true</prop>  
                 <prop key="hibernate.format_sql">true</prop>
                 <!-- prop key="javax.persistence.validation.mode">none</prop-->  
@@ -35,24 +38,38 @@
         </property>  
         <property name="annotatedClasses">  
             <list>  
-                <value>com.vivi.entity.Customer</value>   
-                <value>com.vivi.entity.CustomerType</value> 
+                <value>com.vivi.modules.member.entity.Member</value>
+                <value>com.vivi.modules.member.entity.MemberType</value>
             </list>  
         </property>  
     </bean>
-    
-      <bean id="customerDAO" class="com.vivi.dao.impl.CustomerDAOImpl">  
-        <property name="sessionFactory" ref="sessionFactory"></property>  
-    </bean>   
-  
-     <bean id="customerService" parent="transactionProxy">  
-        <property name="target" ref="customerServiceBase"></property>
+
+    <!-- - - - - - - - - - - - - -->
+    <!-- Memeber related configuration -->
+    <!-- Member Type DAO Config -->
+    <bean id="memberTypeDAO" class="com.vivi.modules.member.dao.impl.MemberTypeDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
-    
-    <bean id="customerServiceBase" class="com.vivi.service.impl.CustomerServiceImpl">  
-        <property name="customerDAO" ref="customerDAO"></property>
+    <bean id="memberTypeService" parent="transactionProxy">
+        <property name="target" ref="memberTypeServiceBase"></property>
     </bean>
-    
+    <bean id="memberTypeServiceBase" class="com.vivi.modules.member.service.impl.MemberTypeServiceImpl">
+        <property name="memberTypeDAO" ref="memberTypeDAO"></property>
+    </bean>
+
+    <!-- Member DAO Config -->
+    <bean id="memberDAO" class="com.vivi.modules.member.dao.impl.MemberDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+     <bean id="memberService" parent="transactionProxy">
+        <property name="target" ref="memberServiceBase"></property>
+    </bean>
+    <bean id="memberServiceBase" class="com.vivi.modules.member.service.impl.MemberServiceImpl">
+        <property name="memberDAO" ref="memberDAO"></property>
+    </bean>
+    <!-- - - - - - - - - - - - - -->
+
+
       <!-- 配置一个事务管理器 -->  
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">  
         <property name="sessionFactory" ref="sessionFactory"/>  
