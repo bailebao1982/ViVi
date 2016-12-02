@@ -185,6 +185,7 @@ public class MemberController {
               @RequestParam(value="page", required=true) int page,
               @RequestParam(value="page_size", required=true) int page_size,
               @RequestParam(value="name", required=false) String name,
+              @RequestParam(value="type", required=false) String type,
               @RequestParam(value="telphone", required=false) String telphone,
               @RequestParam(value="email", required=false) String email,
               @RequestParam(value="reg_start_date", required=false) String reg_start_date,
@@ -193,6 +194,7 @@ public class MemberController {
         queryBean.setPage(page);
         queryBean.setPage_size(page_size);
         queryBean.setName(name);
+        queryBean.setType(type);
         queryBean.setTelphone(telphone);
         queryBean.setEmail(email);
         queryBean.setReg_start_date(reg_start_date);
@@ -209,11 +211,23 @@ public class MemberController {
              sc.addSearchCriterialItem("telepone",
                      new SearchCriteriaItem("mobile",queryBean.getTelphone(), SearchConditionEnum.Equal)
              );
+
+        if(queryBean.getType() != null &&
+           !queryBean.getType().isEmpty()) {
+            MemberType membType = memberTypeService.findMemberTypeByType(queryBean.getType());
+            if(membType != null) {
+                sc.addSearchCriterialItem("type",
+                        new SearchCriteriaItem("memberTypeId", membType.getMemberTypeId(), SearchConditionEnum.Equal)
+                );
+            }
+        }
+
         if(queryBean.getReg_start_date() != null &&
            !queryBean.getReg_start_date().isEmpty())
             sc.addSearchCriterialItem("start_date",
                     new SearchCriteriaItem("creationDate", queryBean.getReg_start_date(), SearchConditionEnum.LargeOrEqual)
             );
+
         if(queryBean.getReg_end_date()!=null &&
            !queryBean.getReg_end_date().isEmpty())
             sc.addSearchCriterialItem("end_date",
