@@ -54,6 +54,7 @@ public class MemberController {
     @RequestMapping(value = "/list_member_type",
             method = RequestMethod.GET,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean listMemberType(){
         List<MemberType> memberTypes = memberTypeService.listAllMemberType();
 
@@ -66,6 +67,7 @@ public class MemberController {
     @RequestMapping(value = "/add_member_type",
             method = RequestMethod.PUT,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean addMemberType(@RequestBody MemberTypeJsonBean memberTypeJson){
 
         MemberType newMemberType = MemberTypeJsonBeanUtil.toEntityBean(memberTypeJson);
@@ -76,6 +78,7 @@ public class MemberController {
     @RequestMapping(value = "/del_member_type/{member_type_id}",
             method = RequestMethod.DELETE,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean delMemberType(@PathVariable String member_type_id){
 
         MemberType newMemberType = memberTypeService.findMemberTypeById(member_type_id);
@@ -93,6 +96,7 @@ public class MemberController {
     @RequestMapping(value = "/add_member",
             method = RequestMethod.PUT,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean addMember(@RequestBody MemberJsonBean member){
         if(member.getMember_name().isEmpty() ||
            member.getMember_telphone().isEmpty()){
@@ -118,6 +122,7 @@ public class MemberController {
     @RequestMapping(value = "/update_member/{member_id}",
             method = RequestMethod.POST,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean updateMember(@RequestBody MemberJsonBean memberJson,
                                                      @PathVariable String member_id){
         // Something might be wrong here
@@ -136,6 +141,7 @@ public class MemberController {
     @RequestMapping(value = "/del_member/{member_id}",
             method = RequestMethod.DELETE,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean removeMember(@PathVariable String member_id){
 
         Member removeMember = memberService.findMemberByMemberId(member_id);
@@ -153,6 +159,7 @@ public class MemberController {
     @RequestMapping(value = "/member_detail/{member_id}",
             method = RequestMethod.GET,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean getMemberByMemberId(@PathVariable String member_id){
        
         Member member = memberService.findMemberByMemberId(member_id);
@@ -173,6 +180,7 @@ public class MemberController {
     @RequestMapping(value = "/list_memebers",
             method = RequestMethod.GET,
             headers="Accept=application/json")
+    @CrossOrigin
       public @ResponseBody ResponseBean searchMemberByCondition(
               @RequestParam(value="page", required=true) int page,
               @RequestParam(value="page_size", required=true) int page_size,
