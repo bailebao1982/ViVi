@@ -5,7 +5,7 @@
  *  This is the class act as the route for restful api
  *
  */
-package com.vivi.controller;
+package com.vivi.modules.member.controller;
 
 import com.vivi.common.response.ResponseBean;
 import com.vivi.common.response.ResponseMsgBeanFactory;
@@ -21,7 +21,6 @@ import com.vivi.common.search.SearchCriteriaItem;
 import com.vivi.modules.member.service.MemberService;
 
 import javax.annotation.Resource;
-import javax.validation.ConstraintViolationException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
@@ -51,15 +50,6 @@ public class MemberController {
     public void setMemberService(MemberService memberService) {
         this.memberService = memberService;
     }
-    
-    
-//    @RequestMapping(value = "/customers", method = RequestMethod.GET,headers="Accept=application/json")
-//    public @ResponseBody List<MemberJsonBean> getCustomers(){
-//        List<MemberJsonBean> listOfCustomers = new ArrayList<MemberJsonBean>();
-//        listOfCustomers = createCountryList();
-//
-//        return listOfCustomers;
-//    }
 
     @RequestMapping(value = "/list_member_type",
             method = RequestMethod.GET,
@@ -103,7 +93,7 @@ public class MemberController {
     @RequestMapping(value = "/add_member",
             method = RequestMethod.PUT,
             headers="Accept=application/json")
-    public @ResponseBody ResponseBean addCustomer(@RequestBody MemberJsonBean member){
+    public @ResponseBody ResponseBean addMember(@RequestBody MemberJsonBean member){
         if(member.getMember_name().isEmpty() ||
            member.getMember_telphone().isEmpty()){
             return ResponseMsgBeanFactory.getErrorResponseBean(
@@ -128,7 +118,7 @@ public class MemberController {
     @RequestMapping(value = "/update_member/{member_id}",
             method = RequestMethod.POST,
             headers="Accept=application/json")
-    public @ResponseBody ResponseBean updateCustomer(@RequestBody MemberJsonBean memberJson,
+    public @ResponseBody ResponseBean updateMember(@RequestBody MemberJsonBean memberJson,
                                                      @PathVariable String member_id){
         // Something might be wrong here
         Member updateMember = MemberJsonBeanUtil.toEntityBean(memberJson, memberTypeService);
@@ -146,7 +136,7 @@ public class MemberController {
     @RequestMapping(value = "/del_member/{member_id}",
             method = RequestMethod.DELETE,
             headers="Accept=application/json")
-    public @ResponseBody ResponseBean removeCustomer(@PathVariable String member_id){
+    public @ResponseBody ResponseBean removeMember(@PathVariable String member_id){
 
         Member removeMember = memberService.findMemberByMemberId(member_id);
         if (removeMember == null){
