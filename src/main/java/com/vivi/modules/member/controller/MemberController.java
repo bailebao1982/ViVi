@@ -237,7 +237,7 @@ public class MemberController {
         if(queryBean.getReg_end_date()!=null &&
            !queryBean.getReg_end_date().isEmpty())
             sc.addSearchCriterialItem("end_date",
-                    new SearchCriteriaItem("creationDate", queryBean.getReg_end_date(), SearchConditionEnum.Small)
+                    new SearchCriteriaItem("creationDate", queryBean.getReg_end_date(), SearchConditionEnum.SmallOrEqual)
             );
         
         Page<Member> resultPageBean = memberService.queryForPage(queryBean.getPage(), queryBean.getPage_size(), sc);
