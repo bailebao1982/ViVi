@@ -21,8 +21,8 @@ public class MemberJsonBeanUtil {
         if(member.getBirthDay() != null)
             memberJsonBean.setMember_birthday(member.getBirthDay().toString());
         memberJsonBean.setMember_hobby(member.getHobby());
-        if(member.getCreationDate()!=null)
-            memberJsonBean.setMember_inputdate(member.getCreationDate().toString());
+//        if(member.getCreationDate()!=null)
+//            memberJsonBean.setMember_inputdate(member.getCreationDate().toString());
         memberJsonBean.setMember_job(member.getJob());
         memberJsonBean.setMember_name(member.getMemberName());
         memberJsonBean.setMember_note(member.getRemark());
@@ -44,9 +44,9 @@ public class MemberJsonBeanUtil {
            memberJsonBean.getMember_birthday() != "")
             member.setBirthDay(java.sql.Date.valueOf(memberJsonBean.getMember_birthday()));
 
-        if(memberJsonBean.getMember_inputdate() != null &&
-           memberJsonBean.getMember_inputdate() != "")
-            member.setCreationDate(java.sql.Date.valueOf(memberJsonBean.getMember_inputdate()));
+//        if(memberJsonBean.getMember_inputdate() != null &&
+//           memberJsonBean.getMember_inputdate() != "")
+//            member.setCreationDate(java.sql.Date.valueOf(memberJsonBean.getMember_inputdate()));
 
         member.setMemberName(memberJsonBean.getMember_name());
         member.setHobby(memberJsonBean.getMember_hobby());

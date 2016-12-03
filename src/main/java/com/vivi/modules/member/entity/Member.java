@@ -56,7 +56,7 @@ public class Member {
     @Column
     Date birthDay;
     
-    @Column
+    @Column(updatable = false)
     Date creationDate;
     
     @Column
