@@ -16,6 +16,7 @@ public class MemberJsonBeanUtil {
     
     public static MemberJsonBean toJsonBean(Member member){
         MemberJsonBean memberJsonBean = new MemberJsonBean();
+        memberJsonBean.setMember_id(member.getMemberId());
         memberJsonBean.setMember_address(member.getAddress());
         if(member.getBirthDay() != null)
             memberJsonBean.setMember_birthday(member.getBirthDay().toString());
@@ -36,7 +37,7 @@ public class MemberJsonBeanUtil {
     
     public static Member toEntityBean(MemberJsonBean memberJsonBean, MemberTypeService service){
         Member member = new Member();
-      
+        //member.setMemberId(memberJsonBean.getMember_id());
         member.setAddress(memberJsonBean.getMember_address());
 
         if(memberJsonBean.getMember_birthday() != null &&

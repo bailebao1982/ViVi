@@ -10,6 +10,9 @@ package com.vivi.modules.member.bean.request;
  * @author wewezhu
  */
 public class MemberJsonBean {
+
+    private String member_id;
+
     private String member_wechat;
     
     private String member_sex;
@@ -35,6 +38,14 @@ public class MemberJsonBean {
     private String member_birthday;
 
     public MemberJsonBean(){
+    }
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
     }
 
     public String getMember_email() {
