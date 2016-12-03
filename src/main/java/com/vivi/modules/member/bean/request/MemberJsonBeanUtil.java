@@ -29,6 +29,7 @@ public class MemberJsonBeanUtil {
         memberJsonBean.setMember_telphone(member.getMobile());
         memberJsonBean.setMember_wechat(member.getWeixinId());
         memberJsonBean.setMember_type(member.getMemberType().getTypeName());
+        memberJsonBean.setMember_email(member.getEmail());
         
         return memberJsonBean;
     }
@@ -48,9 +49,7 @@ public class MemberJsonBeanUtil {
 
         member.setMemberName(memberJsonBean.getMember_name());
         member.setHobby(memberJsonBean.getMember_hobby());
-
-
-
+        member.setEmail(memberJsonBean.getMember_email());
         member.setJob(memberJsonBean.getMember_job());
         member.setMobile(memberJsonBean.getMember_telphone());
         member.setRemark(memberJsonBean.getMember_note());

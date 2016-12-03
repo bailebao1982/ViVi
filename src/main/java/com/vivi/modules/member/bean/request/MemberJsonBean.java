@@ -29,10 +29,20 @@ public class MemberJsonBean {
     private String member_inputdate;
     
     private String member_note;
+
+    private String member_email;
     
     private String member_birthday;
 
     public MemberJsonBean(){
+    }
+
+    public String getMember_email() {
+        return member_email;
+    }
+
+    public void setMember_email(String member_email) {
+        this.member_email = member_email;
     }
 
     public String getMember_wechat() {
@@ -122,6 +132,6 @@ public class MemberJsonBean {
     public void setMember_birthday(String member_birthday) {
         this.member_birthday = member_birthday;
     }
-    
-    
+
+
 }

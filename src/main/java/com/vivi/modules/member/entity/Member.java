@@ -43,6 +43,9 @@ public class Member {
     
     @Column(length=32, nullable = false)
     String mobile;
+
+    @Column
+    String email;
     
     @Column(length=32)
     String job;
@@ -74,6 +77,14 @@ public class Member {
     
     public Member(){
         
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getLastUpdateDate() {

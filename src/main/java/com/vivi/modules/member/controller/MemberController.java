@@ -212,6 +212,12 @@ public class MemberController {
                      new SearchCriteriaItem("mobile",queryBean.getTelphone(), SearchConditionEnum.Equal)
              );
 
+        if(queryBean.getEmail() != null &&
+           !queryBean.getEmail().isEmpty())
+            sc.addSearchCriterialItem("email",
+                    new SearchCriteriaItem("email",queryBean.getEmail(), SearchConditionEnum.Like)
+            );
+
         if(queryBean.getType() != null &&
            !queryBean.getType().isEmpty()) {
             MemberType membType = memberTypeService.findMemberTypeByType(queryBean.getType());
