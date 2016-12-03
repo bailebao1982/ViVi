@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- - - - - - - - - - - - - -->
+    <!-- WorkOrder related configuration -->
+    <!-- WorkOrder DAO Config -->
+    <bean id="workOrderDAO" class="com.vivi.modules.workorder.dao.impl.WorkOrderDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="workOrderServiceBase" class="com.vivi.modules.workorder.service.impl.WorkOrderServiceImpl">
+        <property name="workOrderDAO" ref="workOrderDAO"></property>
+    </bean>
+    <bean id="workOrderService" parent="transactionProxy">
+        <property name="target" ref="workOrderServiceBase"></property>
+    </bean>
+
+   
+</beans>

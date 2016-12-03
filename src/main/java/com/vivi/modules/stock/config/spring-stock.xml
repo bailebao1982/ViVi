@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- - - - - - - - - - - - - -->
+    <!-- Stock related configuration -->
+    <!-- Stock DAO Config -->
+    <bean id="stockDAO" class="com.vivi.modules.stock.dao.impl.StockDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="stockServiceBase" class="com.vivi.modules.stock.service.impl.StockServiceImpl">
+        <property name="stockDAO" ref="stockDAO"></property>
+    </bean>
+    <bean id="stockService" parent="transactionProxy">
+        <property name="target" ref="stockServiceBase"></property>
+    </bean>
+
+   
+</beans>

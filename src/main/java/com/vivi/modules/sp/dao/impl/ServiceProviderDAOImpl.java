@@ -6,11 +6,22 @@
 package com.vivi.modules.sp.dao.impl;
 
 import com.vivi.modules.sp.dao.ServiceProviderDAO;
+import org.hibernate.SessionFactory;
 
 /**
  *
  * @author wewezhu
  */
 public class ServiceProviderDAOImpl implements ServiceProviderDAO{
+    private SessionFactory sessionFactory;
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+    
     
 }

@@ -5,10 +5,22 @@
  */
 package com.vivi.modules.stock.service.impl;
 
+import com.vivi.modules.stock.dao.StockDAO;
+
 /**
  *
  * @author wewezhu
  */
 public class StockServiceImpl {
+    private StockDAO stockDAO;
+
+    public StockDAO getStockDAO() {
+        return stockDAO;
+    }
+
+    public void setStockDAO(StockDAO stockDAO) {
+        this.stockDAO = stockDAO;
+    }
+    
     
 }

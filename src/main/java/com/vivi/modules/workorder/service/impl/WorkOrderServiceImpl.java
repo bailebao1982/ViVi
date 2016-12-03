@@ -5,6 +5,7 @@
  */
 package com.vivi.modules.workorder.service.impl;
 
+import com.vivi.modules.workorder.dao.WorkOrderDAO;
 import com.vivi.modules.workorder.service.WorkOrderService;
 
 /**
@@ -12,5 +13,15 @@ import com.vivi.modules.workorder.service.WorkOrderService;
  * @author wewezhu
  */
 public class WorkOrderServiceImpl implements WorkOrderService{
+    private WorkOrderDAO workOrderDAO;
+
+    public WorkOrderDAO getWorkOrderDAO() {
+        return workOrderDAO;
+    }
+
+    public void setWorkOrderDAO(WorkOrderDAO workOrderDAO) {
+        this.workOrderDAO = workOrderDAO;
+    }
+    
     
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- - - - - - - - - - - - - -->
+    <!-- ServiceProvider related configuration -->
+    <!-- ServiceProvider DAO Config -->
+    <bean id="serviceProviderDAO" class="com.vivi.modules.sp.dao.impl.ServiceProviderDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="serviceProviderServiceBase" class="com.vivi.modules.sp.service.impl.ServiceProviderServiceImpl">
+        <property name="serviceProviderDAO" ref="serviceProviderDAO"></property>
+    </bean>
+    <bean id="serviceProviderService" parent="transactionProxy">
+        <property name="target" ref="serviceProviderServiceBase"></property>
+    </bean>
+
+   
+</beans>

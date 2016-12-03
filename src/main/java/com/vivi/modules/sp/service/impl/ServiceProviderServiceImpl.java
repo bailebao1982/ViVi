@@ -5,10 +5,24 @@
  */
 package com.vivi.modules.sp.service.impl;
 
+import com.vivi.modules.sp.dao.ServiceProviderDAO;
+import com.vivi.modules.sp.service.ServiceProviderService;
+
 /**
  *
  * @author wewezhu
  */
-public interface ServiceProviderServiceImpl {
+public class ServiceProviderServiceImpl implements ServiceProviderService{
+    private ServiceProviderDAO serviceProviderDAO;
+
+    public ServiceProviderDAO getServiceProviderDAO() {
+        return serviceProviderDAO;
+    }
+
+    public void setServiceProviderDAO(ServiceProviderDAO serviceProviderDAO) {
+        this.serviceProviderDAO = serviceProviderDAO;
+    }
+    
+    
     
 }

@@ -6,11 +6,22 @@
 package com.vivi.modules.newsletter.dao.impl;
 
 import com.vivi.modules.newsletter.dao.NewsletterDAO;
+import org.hibernate.SessionFactory;
 
 /**
  *
  * @author wewezhu
  */
 public class NewsletterDAOImpl implements NewsletterDAO{
+    private SessionFactory sessionFactory;
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+    
     
 }
