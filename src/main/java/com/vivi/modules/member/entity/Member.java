@@ -8,6 +8,8 @@ package com.vivi.modules.member.entity;
 import java.sql.Date;
 import javax.persistence.*;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -15,6 +17,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author wewezhu
  */
 @Entity
+@DynamicUpdate
+@DynamicInsert
 @Table(name="T_Member",
        uniqueConstraints={@UniqueConstraint(columnNames={"mobile"})}
 )
