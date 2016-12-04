@@ -21,8 +21,8 @@ public class MemberJsonBeanUtil {
         if(member.getBirthDay() != null)
             memberJsonBean.setMember_birthday(member.getBirthDay().toString());
         memberJsonBean.setMember_hobby(member.getHobby());
-//        if(member.getCreationDate()!=null)
-//            memberJsonBean.setMember_inputdate(member.getCreationDate().toString());
+        if(member.getCreationDate()!=null)
+            memberJsonBean.setMember_inputdate(member.getCreationDate().toString());
         memberJsonBean.setMember_job(member.getJob());
         memberJsonBean.setMember_name(member.getMemberName());
         memberJsonBean.setMember_note(member.getRemark());

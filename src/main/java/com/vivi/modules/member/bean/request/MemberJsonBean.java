@@ -29,7 +29,7 @@ public class MemberJsonBean {
     
     private String member_hobby;
     
-    //private String member_inputdate;
+    private String member_inputdate;
     
     private String member_note;
 
@@ -120,13 +120,13 @@ public class MemberJsonBean {
         this.member_hobby = member_hobby;
     }
 
-//    public String getMember_inputdate() {
-//        return member_inputdate;
-//    }
-//
-//    public void setMember_inputdate(String member_inputdate) {
-//        this.member_inputdate = member_inputdate;
-//    }
+    public String getMember_inputdate() {
+        return member_inputdate;
+    }
+
+    public void setMember_inputdate(String member_inputdate) {
+        this.member_inputdate = member_inputdate;
+    }
 
     public String getMember_note() {
         return member_note;
