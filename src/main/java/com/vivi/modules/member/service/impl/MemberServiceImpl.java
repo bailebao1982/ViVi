@@ -43,6 +43,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public boolean removeMemberList(List<String> memberIdList) {
+        return memberDAO.removeMemberList(memberIdList);
+    }
+
+    @Override
     public boolean updateMember(Member member) {
         memberDAO.updateMember(member);
         return true;

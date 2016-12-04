@@ -9,6 +9,7 @@ import com.vivi.modules.member.dao.MemberDAO;
 import com.vivi.modules.member.entity.Member;
 import com.vivi.common.search.SearchCriteria;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -59,6 +60,16 @@ public class MemberDAOImpl implements MemberDAO {
         // Just update delete flag
         sessionFactory.getCurrentSession().update(member);
         return true;
+    }
+
+    @Override
+    public boolean removeMemberList(List<String> memberIdList){
+        String hql = "update Member set deleteFlag = 1, lastUpdateDate = :updateDate where memberId in :member_ids";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("updateDate", new Date(System.currentTimeMillis()));
+        query.setParameterList("member_ids", memberIdList);
+        int result = query.executeUpdate();
+        return (result > 0);
     }
 
     @Override

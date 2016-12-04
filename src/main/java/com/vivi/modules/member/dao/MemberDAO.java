@@ -7,6 +7,8 @@ package com.vivi.modules.member.dao;
 
 import com.vivi.modules.member.entity.Member;
 import com.vivi.common.search.SearchCriteria;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ public interface MemberDAO {
     public Member addMember(Member member);
     
     public boolean removeMember(Member member);
+
+    public boolean removeMemberList(List<String> memberIdList);
     
     public Member updateMember(Member member);
     

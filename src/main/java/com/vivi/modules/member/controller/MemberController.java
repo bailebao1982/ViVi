@@ -155,6 +155,22 @@ public class MemberController {
             return ResponseMsgBeanFactory.getSuccessResponseBean("会员信息删除成功");
         }
     }
+
+    @RequestMapping(value = "/batdel_member",
+            method = RequestMethod.POST,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody ResponseBean batRemoveMembers(@RequestBody BatDelMemberBean batDelMemberJson){
+        boolean result = memberService.removeMemberList(batDelMemberJson.getMember_id_list());
+        if (result){
+            return ResponseMsgBeanFactory.getSuccessResponseBean("会员删除成功");
+        }else{
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "1011",
+                    "会员信息删除失败，会员列表中会员无一存在"
+            );
+        }
+    }
     
     @RequestMapping(value = "/member_detail/{member_id}",
             method = RequestMethod.GET,
