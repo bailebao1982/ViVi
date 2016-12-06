@@ -3,7 +3,7 @@ ViViCheckInSystem
 
 
 Package structure:
-    main.java.com.vivi
+    main.java.spstudio
         common                          ----        定义了木块间通用的一些东西
             response                    ----        通用 response json 数据格式Bean
             search                      ----        通用 search json 数据结构Bean
