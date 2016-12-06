@@ -7,7 +7,7 @@ package com.spstudio.modules.workorder.entity;
 
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.member.entity.Member;
-import com.spstudio.modules.sp.sp.entity.ServiceProvider;
+import com.spstudio.modules.sp.entity.ServiceProvider;
 
 import java.sql.Date;
 import java.sql.Time;
