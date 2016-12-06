@@ -9,7 +9,6 @@ import com.vivi.modules.member.dao.MemberDAO;
 import com.vivi.modules.member.entity.Member;
 import com.vivi.common.search.SearchCriteria;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
