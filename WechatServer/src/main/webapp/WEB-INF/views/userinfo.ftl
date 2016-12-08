@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="userinfo_header">
-    <img src="${userinfo.image}"/>
+    <img src="${userinfo.image}" width="60" height="60"/>
     ${userinfo.name}
 </div>
 <table class="table table-striped">
