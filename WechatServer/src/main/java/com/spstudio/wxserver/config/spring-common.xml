@@ -14,8 +14,25 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd">
 
-       <util:properties id="wxProperties" location="classpath*:com/spstudio/wxserver/config/wx.properties" />
-        <!-- 配置数据源 -->
+       <context:component-scan base-package="com.spstudio.wxserver"/>
+
+        <!-- 配置freemarker模板引擎 -->
+        <bean id="freemarkerConfig"
+              class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+            <property name="templateLoaderPath" value="/WEB-INF/views/" />
+            <property name="freemarkerSettings">
+                <props>
+                    <prop key="template_update_delay">0</prop>
+                    <prop key="default_encoding">UTF-8</prop>
+                    <prop key="number_format">0.##########</prop>
+                    <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                    <prop key="classic_compatible">true</prop>
+                    <prop key="template_exception_handler">ignore</prop>
+                </props>
+            </property>
+        </bean>
+
+       <!-- 配置数据源 -->
         <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >-->
                 <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>-->
                 <!--<property name="url" value="jdbc:mysql://60.205.59.199/vivi"></property>-->
@@ -43,10 +60,10 @@
                                 <!-- prop key="javax.persistence.validation.mode">none</prop-->
                         </props>
                 </property>
-                <property name="packagesToScan" value="com.spstudio.wxserver.modules.*.entity"/>
+                <!--<property name="packagesToScan" value="com.spstudio.modules.*.entity"/>-->
         </bean>
 
-        <import resource="classpath*:com/spstudio/modules/*/config/spring-*.xml"/>
+        <!--<import resource="classpath*:com/spstudio/modules/*/config/spring-*.xml"/>-->
 
         <!-- 配置一个事务管理器 -->
         <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
@@ -67,4 +84,9 @@
                         </props>
                 </property>
         </bean>
+
+        <!-- 配置使Spring采用CGLIB代理 -->
+        <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+        <util:properties id="wxProperties" location="classpath*:com/spstudio/wxserver/config/wx.properties" />
 </beans>
