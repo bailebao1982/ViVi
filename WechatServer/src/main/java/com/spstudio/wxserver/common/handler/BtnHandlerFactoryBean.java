@@ -117,12 +117,12 @@ public class BtnHandlerFactoryBean extends AbstractHandler  implements ResourceL
         try {
             ClassLoader cl = this.resourcePatternResolver.getClassLoader();
             for (String className : handlerClassNames) {
-                Class<?> clsInstance = cl.loadClass(className);
-                BtnHandler btnHandler = clsInstance.getAnnotation(BtnHandler.class);
+                Class<?> clsDef = cl.loadClass(className);
+                BtnHandler btnHandler = clsDef.getAnnotation(BtnHandler.class);
                 if(btnHandler != null){
                     String key = btnHandler.key();
                     if(!key.isEmpty()){
-                        this.keyClassMap.put(key.toLowerCase(), clsInstance);
+                        this.keyClassMap.put(key.toLowerCase(), clsDef);
                     }
                 }
             }
@@ -140,16 +140,16 @@ public class BtnHandlerFactoryBean extends AbstractHandler  implements ResourceL
             WxSessionManager wxSessionManager) throws WxErrorException {
 
         String eventKey = wxMpXmlMessage.getEventKey().toLowerCase();
-        Class<?> clsInstance = this.keyClassMap.get(eventKey);
+        Class<?> clsDef = this.keyClassMap.get(eventKey);
 
-        if(clsInstance != null){
+        if(clsDef != null){
             try {
-                Method handleProxy = clsInstance.getDeclaredMethod("handle",
+                Method handleProxy = clsDef.getDeclaredMethod("handle",
                         WxMpXmlMessage.class,
                         Map.class,
                         WxMpService.class,
                         WxSessionManager.class);
-                Object bean = applicationContext.getBean(clsInstance);
+                Object bean = applicationContext.getBean(clsDef);
                 //return bean.handle(wxMpXmlMessage, map, wxMpService, wxSessionManager);
                 return (WxMpXmlOutMessage)
                         handleProxy.invoke(bean, wxMpXmlMessage, map, wxMpService, wxSessionManager);
