@@ -89,4 +89,8 @@
         <aop:aspectj-autoproxy proxy-target-class="true"/>
 
         <util:properties id="wxProperties" location="classpath*:com/spstudio/wxserver/config/wx.properties" />
+
+        <bean id="btnHandlerFactoryBean" class="com.spstudio.wxserver.common.handler.BtnHandlerFactoryBean">
+            <property name="packagesToScan" value="com.spstudio.wxserver.modules.*.handler"/>
+        </bean>
 </beans>

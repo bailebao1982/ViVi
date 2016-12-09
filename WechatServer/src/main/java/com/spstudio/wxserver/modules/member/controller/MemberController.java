@@ -28,11 +28,7 @@ public class MemberController extends WxBaseController {
     protected WxMpService wxMpService;
 
     /**
-     * 通过code获得基本用户信息
-     * 详情请见: http://mp.weixin.qq.com/wiki/14/bb5031008f1494a59c6f71fa0f319c66.html
-     *
-     * @param response
-     * @param code     code
+     *  response to view event, return my profile webpage
      */
     @RequestMapping(value = "/myinfo")
     public ModelAndView getOAuth2UserInfo(HttpServletResponse response, @RequestParam(value = "code") String code) {

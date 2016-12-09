@@ -1,5 +1,6 @@
-package com.spstudio.wxserver.common.handler;
+package com.spstudio.wxserver.modules.core.handler;
 
+import com.spstudio.wxserver.common.handler.AbstractHandler;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
