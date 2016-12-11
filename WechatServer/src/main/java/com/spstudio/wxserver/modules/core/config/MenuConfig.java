@@ -45,14 +45,14 @@ public class MenuConfig {
      *
      * @param args
      */
-    public static void main(String[] args) {
-        MainConfig mainConfig = new MainConfig();
-        WxMpService wxMpService = mainConfig.wxMpService();
-        try {
-            wxMpService.getMenuService().menuCreate(getMenu());
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        MainConfig mainConfig = new MainConfig();
+//        WxMpService wxMpService = mainConfig.wxMpService();
+//        try {
+//            wxMpService.getMenuService().menuCreate(getMenu());
+//        } catch (WxErrorException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

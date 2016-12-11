@@ -18,6 +18,8 @@ public interface MemberDAO {
     public List<Member> getAllMembers();
     
     public Member findMemberByMemberId(String memberId);
+
+    public Member findMemberByWechatId(String wechatId);
     
     public Member addMember(Member member);
     

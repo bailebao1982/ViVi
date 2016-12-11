@@ -38,6 +38,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findMemberByWechatId(String wechatId){
+        return memberDAO.findMemberByWechatId(wechatId);
+    }
+
+    @Override
     public boolean removeMember(Member member) {
         return memberDAO.removeMember(member);
     }

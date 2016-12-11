@@ -40,7 +40,18 @@ public class MemberDAOImpl implements MemberDAO {
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString("id", memberId);
         List<Member> list = query.list();
-        if(list.size()>0)
+        if(list.size() > 0)
+            return list.get(0);
+        return null;
+    }
+
+    @Override
+    public Member findMemberByWechatId(String wechatId) {
+        String hql = "from Member where weixinId = :wechatid and deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("wechatid", wechatId);
+        List<Member> list = query.list();
+        if(list.size() > 0)
             return list.get(0);
         return null;
     }

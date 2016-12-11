@@ -1,9 +1,9 @@
 package com.spstudio.wxserver.common.service.impl;
 
-import com.spstudio.wxserver.common.handler.ButtonHandler;
-import com.spstudio.wxserver.common.handler.LogHandler;
-import com.spstudio.wxserver.common.handler.MsgHandler;
-import com.spstudio.wxserver.common.handler.SubscribeHandler;
+import com.spstudio.wxserver.common.handler.BtnHandlerFactoryBean;
+import com.spstudio.wxserver.modules.core.handler.LogHandler;
+import com.spstudio.wxserver.modules.core.handler.MsgHandler;
+import com.spstudio.wxserver.modules.core.handler.SubscribeHandler;
 import com.spstudio.wxserver.common.service.WxRouteService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -52,7 +52,7 @@ public class WxRouteServiceImpl implements WxRouteService {
     protected MsgHandler msgHandler;
 
     @Autowired
-    protected ButtonHandler btnHandler;
+    protected BtnHandlerFactoryBean btnHandlerFactoryBean;
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -114,12 +114,13 @@ public class WxRouteServiceImpl implements WxRouteService {
         newRouter.rule().handler(this.logHandler).next();
         // 关注事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_SUBSCRIBE).handler(this.subscribeHandler)
+                .event(WxConsts.EVT_SUBSCRIBE)
+                .handler(this.subscribeHandler)
                 .end();
         // 按钮事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_CLICK)
-                .handler(this.btnHandler).
+                .event(WxConsts.BUTTON_CLICK)
+                .handler(this.btnHandlerFactoryBean).
                 end();
         // 默认,转发消息给客服人员
         newRouter.rule().async(false).handler(this.msgHandler).end();
