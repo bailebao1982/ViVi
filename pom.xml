@@ -14,9 +14,9 @@
     </properties>
 
 	<modules>
-         <module>pstudio.member.service</module>
-         <module>spstudio.wxserver Maven Webapp</module>
-		 <module>com.spstudio.server.rest</module>
+         <module>DataService</module>
+         <module>RestServer</module>
+		 <module>WechatServer</module>
 	</modules>
 
     <build>
