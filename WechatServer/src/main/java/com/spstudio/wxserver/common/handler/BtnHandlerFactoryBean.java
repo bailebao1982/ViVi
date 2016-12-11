@@ -150,7 +150,6 @@ public class BtnHandlerFactoryBean extends AbstractHandler  implements ResourceL
                         WxMpService.class,
                         WxSessionManager.class);
                 Object bean = applicationContext.getBean(clsDef);
-                //return bean.handle(wxMpXmlMessage, map, wxMpService, wxSessionManager);
                 return (WxMpXmlOutMessage)
                         handleProxy.invoke(bean, wxMpXmlMessage, map, wxMpService, wxSessionManager);
             } catch (NoSuchMethodException e) {

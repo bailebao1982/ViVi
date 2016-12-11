@@ -1,39 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Auth Page</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css"/>
-</head>
-<body>
-<div class="userinfo_header">
-    <img src="${userinfo.image}" width="60" height="60"/>
-    ${userinfo.name}
-</div>
-<table class="table table-striped">
-    <tr>
-        <td>OpenId:</td>
-        <td>${userinfo.openid}</td>
-    </tr>
-    <tr>
-        <td>性别:</td>
-        <td>${userinfo.sex}</td>
-    </tr>
-    <tr>
-        <td>城市:</td>
-        <td>${userinfo.city}</td>
-    </tr>
-</table>
+<#import "layout.ftl" as mainLayout>
 
-<div class="weui-msg__extra-area">
-    <div class="weui-footer">
-        <p class="weui-footer__links">
-            <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
-        </p>
-        <p class="weui-footer__text">Copyright &copy; 2009-2016 Plume.Studio</p>
+<@mainLayout.layout pageTitile="会员信息">
+    <div class="weui-panel">
+        <div class="weui-panel__bd">
+            <div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="${userinfo.image}" alt="">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">${userinfo.name}</h4>
+                        <p class="weui-media-box__desc">OpenId: ${userinfo.openid}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box weui-media-box_small-appmsg">
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">性别: ${userinfo.sex}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box weui-media-box_small-appmsg">
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">城市: ${userinfo.city}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-</body>
-</html>
+    <#include "footer.ftl">
+</@mainLayout.layout>
