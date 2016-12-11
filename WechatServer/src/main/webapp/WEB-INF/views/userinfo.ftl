@@ -17,6 +17,13 @@
             <div class="weui-media-box weui-media-box_appmsg">
                 <div class="weui-media-box weui-media-box_small-appmsg">
                     <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">会员类别: ${userinfo.member_type}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box weui-media-box_small-appmsg">
+                    <div class="weui-media-box__bd">
                         <h4 class="weui-media-box__title">性别: ${userinfo.sex}</h4>
                     </div>
                 </div>

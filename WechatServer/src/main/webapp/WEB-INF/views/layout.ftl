@@ -1,4 +1,4 @@
-<#macro layout>
+<#macro layout pageTitile>
 <!DOCTYPE html>
 <html lang="en">
 <head>
