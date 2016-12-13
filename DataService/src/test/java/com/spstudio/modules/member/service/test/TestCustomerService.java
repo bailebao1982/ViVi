@@ -36,7 +36,7 @@ public class TestCustomerService {
     @Before
     public void setUp() {
         System.out.println("setUp()...");
-        ApplicationContext factory = new FileSystemXmlApplicationContext( "src/main/java/com/com.spstudio/config/spring-*.xml");
+        ApplicationContext factory = new FileSystemXmlApplicationContext( "src/main/java/com/spstudio/common/config/spring-*.xml");
         sessionFactory = (SessionFactory) factory.getBean("sessionFactory");
         
     }
