@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  * @author wewezhu
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 public class TestProductService {
     
     private static SessionFactory sessionFactory;
