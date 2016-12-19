@@ -5,10 +5,26 @@
  */
 package com.spstudio.modules.product.service;
 
+import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.product.entity.Product;
+import java.util.List;
+
 /**
  *
  * @author wewezhu
  */
 public interface ProductService {
+    public List<Product> getAllProducts();
     
+    public Product findProductByProductId(String productId);
+    
+    public Product addProduct(Product product);
+    
+    public boolean removeProduct(Product product);
+    
+    public Product updateProduct(Product product);
+    
+    public List<Product> queryForPage(int offset, int length, SearchCriteria criteria);
+    
+    public int getAllRowCount();
 }
