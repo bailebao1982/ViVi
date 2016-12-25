@@ -37,7 +37,7 @@
             </props>
         </property>
 
-        <!--property name="packagesToScan" value="com.spstudio.modules.*.entity"/-->
+        <property name="packagesToScan" value="com.spstudio.modules.*.entity"/>
         <!--<property name="annotatedClasses">-->
             <!--<list>-->
                 <!--<value>com.spstudioudio.modules.Member</value>-->

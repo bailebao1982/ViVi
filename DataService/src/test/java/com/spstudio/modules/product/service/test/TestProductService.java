@@ -5,12 +5,15 @@
  */
 package com.spstudio.modules.product.service.test;
 
+import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.service.ProductService;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -26,12 +29,14 @@ public class TestProductService {
     
     private static ProductService productService;
     
+    private static Product product;
+    
     public TestProductService() {
     }
     
     @BeforeClass
     public static void setUpClass() {
-         System.out.println("setUp()...");
+       
         ApplicationContext factory = new FileSystemXmlApplicationContext( new String[]{"src/main/java/com/spstudio/common/config/spring-*.xml","src/main/java/com/spstudio/modules/*/config/spring-*.xml"});
         sessionFactory = (SessionFactory) factory.getBean("sessionFactory");
         productService = (ProductService)factory.getBean("productService");
@@ -44,6 +49,13 @@ public class TestProductService {
     
     @Before
     public void setUp() {
+        
+        product = new Product();
+        product.setProductName("TestProduct");
+        product.setUnitPrice(280);
+        product.setUnitBounce(1);
+        product.setDescription("TestDescription");
+        product.setBonusePoint(1);
     }
     
     @After
@@ -53,6 +65,15 @@ public class TestProductService {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    // @Test
-    // public void hello() {}
+     @Test
+     public void crudProduct() {
+         
+        Product newAddProduct = productService.addProduct(product);
+        Product findProduct = productService.findProductByProductId(newAddProduct.getProductId());
+        assertNotNull(findProduct);
+        
+        productService.removeProduct(findProduct);
+        
+        
+     }
 }
