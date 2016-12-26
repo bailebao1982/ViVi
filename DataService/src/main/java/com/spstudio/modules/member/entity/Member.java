@@ -5,7 +5,10 @@
  */
 package com.spstudio.modules.member.entity;
 
+import com.spstudio.modules.workorder.entity.WorkOrder;
 import java.sql.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -78,6 +81,13 @@ public class Member {
     @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
     @JoinColumn(name="memberTypeId",referencedColumnName="memberTypeId")
     MemberType type;
+    
+    
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "member_workorder", 
+	   joinColumns = {@JoinColumn(name = "memberId")}, 
+	   inverseJoinColumns = {@JoinColumn(name = "workOrderId")})
+    private Set<WorkOrder> workOrders = new LinkedHashSet<WorkOrder>();
     
     public Member(){
         
@@ -217,6 +227,14 @@ public class Member {
 
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public Set<WorkOrder> getWorkOrders() {
+        return workOrders;
+    }
+
+    public void setWorkOrders(Set<WorkOrder> workOrders) {
+        this.workOrders = workOrders;
     }
     
     

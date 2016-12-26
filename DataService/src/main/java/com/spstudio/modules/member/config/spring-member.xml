@@ -5,6 +5,17 @@
 
     <!-- - - - - - - - - - - - - -->
     <!-- Memeber related configuration -->
+    <!-- Member Asset DAO Config -->
+    <bean id="memberAssetDAO" class="com.spstudio.modules.member.dao.impl.MemberAssetDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="memberAssetServiceBase" class="com.spstudio.modules.member.service.impl.MemberAssetServiceImpl">
+        <property name="memberAssetDAO" ref="memberAssetDAO"></property>
+    </bean>
+    <bean id="memberAssetService" parent="transactionProxy">
+        <property name="target" ref="memberAssetServiceBase"></property>
+    </bean>
+    
     <!-- Member Type DAO Config -->
     <bean id="memberTypeDAO" class="com.spstudio.modules.member.dao.impl.MemberTypeDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>

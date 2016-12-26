@@ -6,6 +6,7 @@
 package com.spstudio.modules.workorder.service.impl;
 
 import com.spstudio.modules.workorder.dao.WorkOrderDAO;
+import com.spstudio.modules.workorder.entity.WorkOrder;
 import com.spstudio.modules.workorder.service.WorkOrderService;
 
 /**
@@ -21,6 +22,21 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
     public void setWorkOrderDAO(WorkOrderDAO workOrderDAO) {
         this.workOrderDAO = workOrderDAO;
+    }
+
+    @Override
+    public WorkOrder addWorkOrder(WorkOrder workOrder) {
+        return workOrderDAO.addWorkOrder(workOrder);
+    }
+
+    @Override
+    public WorkOrder confirmWorkOrder(String workOrderId, String rate, String status) {
+        return workOrderDAO.confirmWorkOrder(workOrderId, rate, status);
+    }
+
+    @Override
+    public WorkOrder findWorkOrdertByWordOrderId(String workOrderId) {
+        return workOrderDAO.findWorkOrdertByWordOrderId(workOrderId);
     }
     
     

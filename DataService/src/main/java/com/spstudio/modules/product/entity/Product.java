@@ -5,12 +5,18 @@
  */
 package com.spstudio.modules.product.entity;
 
+import com.spstudio.modules.workorder.entity.WorkOrder;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -49,6 +55,8 @@ public class Product {
     
     @Column(columnDefinition = "int default 0")
     int deleteFlag;
+    
+     
     
     public String getProductId() {
         return productId;
@@ -112,6 +120,14 @@ public class Product {
 
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
     
     

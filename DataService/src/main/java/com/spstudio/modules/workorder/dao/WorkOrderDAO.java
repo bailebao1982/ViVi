@@ -5,10 +5,16 @@
  */
 package com.spstudio.modules.workorder.dao;
 
+import com.spstudio.modules.workorder.entity.WorkOrder;
+
 /**
  *
  * @author wewezhu
  */
 public interface WorkOrderDAO {
+    public WorkOrder addWorkOrder(WorkOrder workOrder);
     
+    public WorkOrder confirmWorkOrder(String workOrderId,String rate,String status);
+    
+    public WorkOrder findWorkOrdertByWordOrderId(String workOrderId);
 }
