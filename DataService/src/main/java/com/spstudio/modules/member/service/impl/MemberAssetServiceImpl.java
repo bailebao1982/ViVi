@@ -16,25 +16,25 @@ import com.spstudio.modules.product.entity.Product;
  * @author wewezhu
  */
 public class MemberAssetServiceImpl implements MemberAssetService{
-    private MemberAssetDAO memeberAssetDAO;
+    private MemberAssetDAO memberAssetDAO;
 
-    public MemberAssetDAO getMemeberAssetDAO() {
-        return memeberAssetDAO;
+    public MemberAssetDAO getMemberAssetDAO() {
+        return memberAssetDAO;
     }
 
-    public void setMemeberAssetDAO(MemberAssetDAO memeberAssetDAO) {
-        this.memeberAssetDAO = memeberAssetDAO;
+    public void setMemberAssetDAO(MemberAssetDAO memberAssetDAO) {
+        this.memberAssetDAO = memberAssetDAO;
     }
 
     @Override
     public MemberAsset addMemeberProductAsset(Member member, Product product, int count) {
-        return memeberAssetDAO.addMemeberProductAsset(member, product, count);
+        return memberAssetDAO.addMemeberProductAsset(member, product, count);
     }
 
     @Override
     public MemberAsset addMemeberDepositAsset(Member member, int deposit) {
       
-        return memeberAssetDAO.addMemeberDepositAsset(member, deposit);
+        return memberAssetDAO.addMemeberDepositAsset(member, deposit);
     }
     
     

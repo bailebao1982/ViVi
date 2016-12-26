@@ -6,10 +6,10 @@
     <!-- - - - - - - - - - - - - -->
     <!-- WorkOrder related configuration -->
     <!-- WorkOrder DAO Config -->
-    <bean id="workOrderDAO" class="WorkOrderDAOImpl">
+    <bean id="workOrderDAO" class="com.spstudio.modules.workorder.dao.impl.WorkOrderDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="workOrderServiceBase" class="WorkOrderServiceImpl">
+    <bean id="workOrderServiceBase" class="com.spstudio.modules.workorder.service.impl.WorkOrderServiceImpl">
         <property name="workOrderDAO" ref="workOrderDAO"></property>
     </bean>
     <bean id="workOrderService" parent="transactionProxy">

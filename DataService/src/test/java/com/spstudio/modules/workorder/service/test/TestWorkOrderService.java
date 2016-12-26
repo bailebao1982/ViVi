@@ -5,12 +5,17 @@
  */
 package com.spstudio.modules.workorder.service.test;
 
+import com.spstudio.modules.product.service.ProductService;
+import com.spstudio.modules.workorder.service.WorkOrderService;
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  *
@@ -18,11 +23,19 @@ import static org.junit.Assert.*;
  */
 public class TestWorkOrderService {
     
+    private static SessionFactory sessionFactory;
+    
+    private static WorkOrderService workOrderService;
+    
     public TestWorkOrderService() {
     }
     
     @BeforeClass
     public static void setUpClass() {
+        ApplicationContext factory = new FileSystemXmlApplicationContext( new String[]{"src/main/java/com/spstudio/common/config/spring-*.xml","src/main/java/com/spstudio/modules/*/config/spring-*.xml"});
+        sessionFactory = (SessionFactory) factory.getBean("sessionFactory");
+        workOrderService = (WorkOrderService)factory.getBean("workOrderService");
+        
     }
     
     @AfterClass
