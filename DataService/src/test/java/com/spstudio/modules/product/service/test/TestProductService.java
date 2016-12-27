@@ -65,7 +65,7 @@ public class TestProductService {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-     @Test
+     //@Test
      public void crudProduct() {
          
         Product newAddProduct = productService.addProduct(product);

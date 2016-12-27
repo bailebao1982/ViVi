@@ -6,10 +6,10 @@
     <!-- - - - - - - - - - - - - -->
     <!-- Sale related configuration -->
     <!-- Product DAO Config -->
-    <bean id="saleDAO" class="SaleDAOImpl">
+    <bean id="saleDAO" class="com.spstudio.modules.sales.dao.impl.SaleDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="saleServiceBase" class="SaleServiceImpl">
+    <bean id="saleServiceBase" class="com.spstudio.modules.sales.service.impl.SaleServiceImpl">
         <property name="saleDAO" ref="saleDAO"></property>
     </bean>
     <bean id="saleService" parent="transactionProxy">
