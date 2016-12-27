@@ -5,10 +5,12 @@
  */
 package com.spstudio.modules.sales.dao;
 
+import com.spstudio.modules.sales.entity.Sales;
+
 /**
  *
  * @author wewezhu
  */
 public interface SaleDAO {
-    
+    public Sales addSalesRecord(Sales sales);
 }

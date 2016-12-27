@@ -5,7 +5,9 @@
  */
 package com.spstudio.modules.sales.service.impl;
 
+import com.spstudio.modules.member.dao.MemberAssetDAO;
 import com.spstudio.modules.sales.dao.SaleDAO;
+import com.spstudio.modules.sales.entity.Sales;
 import com.spstudio.modules.sales.service.SaleService;
 
 /**
@@ -14,6 +16,8 @@ import com.spstudio.modules.sales.service.SaleService;
  */
 public class SaleServiceImpl implements SaleService {
     private SaleDAO saleDAO;
+    
+    private MemberAssetDAO memberAssetDAO;
 
     public SaleDAO getSaleDAO() {
         return saleDAO;
@@ -21,6 +25,15 @@ public class SaleServiceImpl implements SaleService {
 
     public void setSaleDAO(SaleDAO saleDAO) {
         this.saleDAO = saleDAO;
+    }
+
+    @Override
+    public Sales addSalesRecord(Sales sales) {
+        Sales saleRec = saleDAO.addSalesRecord(sales);
+        //Add MemberAsset
+        memberAssetDAO.addMemeberDepositAsset(sales.getMember(), sales.getSalesCount());
+        
+        return saleRec;
     }
     
     

@@ -6,6 +6,7 @@
 package com.spstudio.modules.sales.dao.impl;
 
 import com.spstudio.modules.sales.dao.SaleDAO;
+import com.spstudio.modules.sales.entity.Sales;
 import org.hibernate.SessionFactory;
 
 /**
@@ -21,6 +22,12 @@ public class SaleDAOImpl implements SaleDAO {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public Sales addSalesRecord(Sales sales) {
+        this.sessionFactory.getCurrentSession().saveOrUpdate(sales);
+        return sales;
     }
     
     

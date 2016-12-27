@@ -5,10 +5,12 @@
  */
 package com.spstudio.modules.sales.service;
 
+import com.spstudio.modules.sales.entity.Sales;
+
 /**
  *
  * @author wewezhu
  */
 public interface SaleService {
-    
+    public Sales addSalesRecord(Sales sales);
 }
