@@ -27,11 +27,24 @@ public class SaleServiceImpl implements SaleService {
         this.saleDAO = saleDAO;
     }
 
+    public MemberAssetDAO getMemberAssetDAO() {
+        return memberAssetDAO;
+    }
+
+    public void setMemberAssetDAO(MemberAssetDAO memberAssetDAO) {
+        this.memberAssetDAO = memberAssetDAO;
+    }
+
+    
+    
     @Override
     public Sales addSalesRecord(Sales sales) {
         Sales saleRec = saleDAO.addSalesRecord(sales);
         //Add MemberAsset
-        memberAssetDAO.addMemeberDepositAsset(sales.getMember(), sales.getSalesCount());
+        if(saleRec.getProduct()!=null)
+            memberAssetDAO.addMemeberProductAsset(sales.getMember(),sales.getProduct(),sales.getSalesCount());
+        else
+            memberAssetDAO.addMemeberDepositAsset(sales.getMember(), sales.getSalesCount());
         
         return saleRec;
     }

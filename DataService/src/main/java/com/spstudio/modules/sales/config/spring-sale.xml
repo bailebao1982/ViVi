@@ -11,6 +11,7 @@
     </bean>
     <bean id="saleServiceBase" class="com.spstudio.modules.sales.service.impl.SaleServiceImpl">
         <property name="saleDAO" ref="saleDAO"></property>
+        <property name="memberAssetDAO" ref="memberAssetDAO"></property>
     </bean>
     <bean id="saleService" parent="transactionProxy">
         <property name="target" ref="saleServiceBase"></property>

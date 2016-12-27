@@ -21,6 +21,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -36,6 +38,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * 6. Confirm New Work Order
  * 
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestBasicUseCase {
     
     private static SessionFactory sessionFactory;
@@ -96,10 +99,42 @@ public class TestBasicUseCase {
          member.setAddress("TestAddress");
          member.setWeixinId("TestWxId");
          member.setSex("Male");
+         member.setMobile("149994033");
          
         memeberService.addMember(member);
         Member findMember = memeberService.findMemberByMemberId(member.getMemberId());
         assertNotNull(findMember);
         
      }
+     
+     //2. Add New Product
+     @Test
+     public void testAddNewProduct() {
+         product = new Product();
+         product.setProductName("TestProduct");
+            product.setUnitPrice(280);
+        product.setUnitBounce(1);
+        product.setDescription("TestDescription");
+        product.setBonusePoint(1);
+         
+        productService.addProduct(product);
+        Product findProduct = productService.findProductByProductId(product.getProductId());
+        assertNotNull(findProduct);
+        
+     }
+     
+     @Test
+     public void testAddSale(){
+         saleRec = new Sales();
+         saleRec.setMember(member);
+         saleRec.setProduct(product);
+         saleRec.setSaler("TestSaler");
+         saleRec.setSalesCount(100);
+         
+         saleRec = salesService.addSalesRecord(saleRec);
+         
+         
+         
+     }
+     
 }
