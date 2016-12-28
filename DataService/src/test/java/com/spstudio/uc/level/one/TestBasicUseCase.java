@@ -133,7 +133,10 @@ public class TestBasicUseCase {
          
          saleRec = salesService.addSalesRecord(saleRec);
          
-         
+     }
+     
+     @Test
+     public void testAddMemberSet(){
          
      }
      
