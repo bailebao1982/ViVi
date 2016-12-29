@@ -83,11 +83,8 @@ public class Member {
     MemberType type;
     
     
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinTable(name = "member_workorder", 
-	   joinColumns = {@JoinColumn(name = "memberId")}, 
-	   inverseJoinColumns = {@JoinColumn(name = "workOrderId")})
-    private Set<WorkOrder> workOrders = new LinkedHashSet<WorkOrder>();
+    @ManyToMany(mappedBy = "customers")
+    private Set<WorkOrder> workOrders;
     
     public Member(){
         

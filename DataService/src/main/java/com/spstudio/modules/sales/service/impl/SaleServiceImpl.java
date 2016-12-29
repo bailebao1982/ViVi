@@ -48,6 +48,11 @@ public class SaleServiceImpl implements SaleService {
         
         return saleRec;
     }
+
+    @Override
+    public void zapSalesRecord(Sales sales) {
+        saleDAO.zapSalesRecord(sales);
+    }
     
     
 }

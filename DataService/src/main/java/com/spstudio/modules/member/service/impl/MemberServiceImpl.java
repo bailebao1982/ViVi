@@ -75,5 +75,10 @@ public class MemberServiceImpl implements MemberService {
         
         return page;
     }
+
+    @Override
+    public void zapMember(Member member) {
+       memberDAO.zapMember(member);
+    }
     
 }

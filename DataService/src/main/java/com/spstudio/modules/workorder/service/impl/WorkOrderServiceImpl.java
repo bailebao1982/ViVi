@@ -38,6 +38,11 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public WorkOrder findWorkOrdertByWordOrderId(String workOrderId) {
         return workOrderDAO.findWorkOrdertByWordOrderId(workOrderId);
     }
+
+    @Override
+    public void zapWorkOrder(WorkOrder workOrder) {
+       workOrderDAO.zapWorkOrder(workOrder);
+    }
     
     
 }

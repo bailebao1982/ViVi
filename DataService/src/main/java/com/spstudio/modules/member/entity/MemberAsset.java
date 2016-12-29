@@ -31,13 +31,11 @@ public class MemberAsset {
     @Column(length=32)
     private String memberAssetId;
     
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST,  
-            CascadeType.REFRESH })
+    @ManyToOne(cascade = { CascadeType.DETACH })
     @JoinColumn(name = "memberId") 
     private Member memeber;
     
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST,  
-            CascadeType.REFRESH })
+    @ManyToOne(cascade = { CascadeType.DETACH})
     @JoinColumn(name = "productId")
     private Product product;
     

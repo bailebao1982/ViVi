@@ -18,4 +18,6 @@ public interface WorkOrderService {
     public WorkOrder confirmWorkOrder(String workOrderId,String rate,String status);
     
     public WorkOrder findWorkOrdertByWordOrderId(String workOrderId);
+    
+    public void zapWorkOrder(WorkOrder workOrder);
 }

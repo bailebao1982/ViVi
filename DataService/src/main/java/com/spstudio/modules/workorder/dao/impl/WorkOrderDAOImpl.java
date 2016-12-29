@@ -52,6 +52,11 @@ public class WorkOrderDAOImpl implements WorkOrderDAO {
        return wo;
        
     }
+
+    @Override
+    public void zapWorkOrder(WorkOrder workOrder) {
+        this.sessionFactory.getCurrentSession().delete(workOrder);
+    }
     
     
 }

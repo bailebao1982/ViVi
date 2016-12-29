@@ -49,4 +49,9 @@ public class MemberAssetDAOImpl implements MemberAssetDAO{
         
         return asset;
     }
+
+    @Override
+    public void zapMemeberAsset(MemberAsset asset) {
+         this.sessionFactory.getCurrentSession().delete(asset);
+    }
 }

@@ -17,4 +17,6 @@ public interface MemberAssetService {
      public MemberAsset addMemeberProductAsset(Member member,Product product,int count);
     
     public MemberAsset addMemeberDepositAsset(Member member,int deposit);
+    
+    public void zapMemberAsset(MemberAsset asset);
 }

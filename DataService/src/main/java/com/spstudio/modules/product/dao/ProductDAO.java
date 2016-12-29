@@ -27,4 +27,6 @@ public interface ProductDAO {
     public List<Product> queryForPage(int offset, int length, SearchCriteria criteria);
     
     public int getAllRowCount();
+    
+    public void zapProduct(Product product);
 }

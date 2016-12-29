@@ -18,7 +18,7 @@ public interface MemberAssetDAO {
     
     public MemberAsset addMemeberDepositAsset(Member member,int deposit);
     
-    
+    public void zapMemeberAsset(MemberAsset asset);
     
     
 }

@@ -13,4 +13,6 @@ import com.spstudio.modules.sales.entity.Sales;
  */
 public interface SaleDAO {
     public Sales addSalesRecord(Sales sales);
+    
+    public void zapSalesRecord(Sales saleRec);
 }

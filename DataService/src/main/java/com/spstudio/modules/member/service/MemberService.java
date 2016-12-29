@@ -29,4 +29,6 @@ public interface MemberService {
     public boolean updateMember(Member member);
     
     public Page<Member> queryForPage(int currentPage, int pageSize, SearchCriteria sc);
+    
+    public void zapMember(Member member);
 }

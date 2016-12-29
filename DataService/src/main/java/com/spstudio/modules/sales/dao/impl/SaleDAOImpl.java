@@ -29,6 +29,11 @@ public class SaleDAOImpl implements SaleDAO {
         this.sessionFactory.getCurrentSession().saveOrUpdate(sales);
         return sales;
     }
+
+    @Override
+    public void zapSalesRecord(Sales saleRec) {
+        this.sessionFactory.getCurrentSession().delete(saleRec);
+    }
     
     
 }

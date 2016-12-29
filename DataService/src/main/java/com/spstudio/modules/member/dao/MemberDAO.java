@@ -32,4 +32,6 @@ public interface MemberDAO {
     public List<Member> queryForPage(int offset, int length, SearchCriteria criteria);
     
     public int getAllRowCount();
+    
+    public void zapMember(Member member);
 }

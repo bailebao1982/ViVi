@@ -36,6 +36,11 @@ public class MemberAssetServiceImpl implements MemberAssetService{
       
         return memberAssetDAO.addMemeberDepositAsset(member, deposit);
     }
+
+    @Override
+    public void zapMemberAsset(MemberAsset asset) {
+        memberAssetDAO.zapMemeberAsset(asset);
+    }
     
     
 }

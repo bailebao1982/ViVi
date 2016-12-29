@@ -119,5 +119,10 @@ public class MemberDAOImpl implements MemberDAO {
         Long count = (Long)sessionFactory.getCurrentSession().createQuery("select count(1) from Member where deleteFlag = 0").uniqueResult();
         return count.intValue();
     }
+
+    @Override
+    public void zapMember(Member member) {
+        this.sessionFactory.getCurrentSession().delete(member);
+    }
     
 }

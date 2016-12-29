@@ -6,7 +6,9 @@
 package com.spstudio.uc.level.one;
 
 import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.entity.MemberType;
+import com.spstudio.modules.member.service.MemberAssetService;
 import com.spstudio.modules.member.service.MemberService;
 import com.spstudio.modules.member.service.MemberTypeService;
 import com.spstudio.modules.product.entity.Product;
@@ -14,6 +16,10 @@ import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.sales.entity.Sales;
 import com.spstudio.modules.sales.service.SaleService;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import com.spstudio.modules.workorder.service.WorkOrderService;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,15 +53,21 @@ public class TestBasicUseCase {
     
     private static MemberTypeService memberTypeService;
     
+    private static MemberAssetService memberAssetService;
+    
     private static MemberService memeberService;
     
     private static SaleService salesService;
+    
+    private static WorkOrderService workOrderService; 
     
      private static Product product;
      
      private static Member member;
      
      private static MemberType memberType;
+     
+     private static MemberAsset asset;
      
      private static Sales saleRec;
      
@@ -72,11 +84,18 @@ public class TestBasicUseCase {
         memberTypeService = (MemberTypeService)factory.getBean("memberTypeService");
         memeberService = (MemberService)factory.getBean("memberService");
         salesService = (SaleService)factory.getBean("saleService");
-        
+        memberAssetService = (MemberAssetService)factory.getBean("memberAssetService");
+        workOrderService = (WorkOrderService)factory.getBean("workOrderService");
     }
     
     @AfterClass
     public static void tearDownClass() {
+        workOrderService.zapWorkOrder(workOrder);
+        salesService.zapSalesRecord(saleRec);
+        memberAssetService.zapMemberAsset(asset);
+        productService.zapProduct(product);
+        memeberService.zapMember(member);
+        
     }
     
     @Before
@@ -123,8 +142,9 @@ public class TestBasicUseCase {
         
      }
      
+     //3. Add New Sales, verify member asset has create as well.
      @Test
-     public void testAddSale(){
+     public void testAddNewSale(){
          saleRec = new Sales();
          saleRec.setMember(member);
          saleRec.setProduct(product);
@@ -132,12 +152,28 @@ public class TestBasicUseCase {
          saleRec.setSalesCount(100);
          
          saleRec = salesService.addSalesRecord(saleRec);
+         assertNotNull(saleRec);
          
+     }
+     
+     //4. Add New member Asset
+     @Test
+     public void testAddNewMemberSet(){
+         
+         asset = memberAssetService.addMemeberDepositAsset(member, 1000);
+         assertNotNull(asset);
      }
      
      @Test
-     public void testAddMemberSet(){
+     public void testAddNewWorkOrder(){
+         workOrder = new WorkOrder();
+         workOrder.setConsumeProduct(product);
+         Set<Member> customers = new LinkedHashSet<Member>();
+         customers.add(member);
+         workOrder.setCustomers(customers);
+         workOrder.setCreateDate(new Date(System.currentTimeMillis()));
+         workOrderService.addWorkOrder(workOrder);
          
+         assertNotNull(workOrder);
      }
-     
 }

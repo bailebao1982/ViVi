@@ -10,9 +10,11 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -36,8 +38,12 @@ public class WorkOrder {
     @Temporal(TemporalType.DATE)
     Date registerDate;
     
-    @ManyToMany(mappedBy = "workOrders")
-    Set<Member> customer;
+    
+    @ManyToMany(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @JoinTable(name = "member_workorder", 
+	   joinColumns = {@JoinColumn(name = "workOrderId")}, 
+	   inverseJoinColumns = {@JoinColumn(name = "memberId")})        
+    Set<Member> customers;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST,  
             CascadeType.REFRESH })
@@ -72,12 +78,12 @@ public class WorkOrder {
         this.registerDate = registerDate;
     }
 
-    public Set<Member> getCustomer() {
-        return customer;
+    public Set<Member> getCustomers() {
+        return customers;
     }
 
-    public void setCustomer(Set<Member> customer) {
-        this.customer = customer;
+    public void setCustomers(Set<Member> customers) {
+        this.customers = customers;
     }
 
     public Product getConsumeProduct() {

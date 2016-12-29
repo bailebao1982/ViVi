@@ -60,6 +60,11 @@ public class ProductServiceImpl implements ProductService{
     public int getAllRowCount() {
         return productDAO.getAllRowCount();
     }
+
+    @Override
+    public void zapProduct(Product product) {
+         productDAO.zapProduct(product);
+    }
     
     
 }

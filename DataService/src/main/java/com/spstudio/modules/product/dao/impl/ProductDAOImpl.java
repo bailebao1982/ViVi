@@ -96,6 +96,11 @@ public class ProductDAOImpl implements ProductDAO{
         
         return count.intValue();
     }
+
+    @Override
+    public void zapProduct(Product product) {
+        this.sessionFactory.getCurrentSession().delete(product);
+    }
     
     
 }
