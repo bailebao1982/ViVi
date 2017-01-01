@@ -7,7 +7,10 @@ package com.spstudio.modules.product.dao;
 
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -29,4 +32,13 @@ public interface ProductDAO {
     public int getAllRowCount();
     
     public void zapProduct(Product product);
+    
+    public ProductPackage addProductPackage(ProductPackage productPackage);
+    
+    public ProductPackage updateProdctPackage(ProductPackage productPackage);
+    
+    public ProductPackage findProductPackageByPackageId(String productPackageId);
+    
+    public void zapProductPackage(ProductPackage productPackage);
+     
 }

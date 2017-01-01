@@ -9,7 +9,10 @@ import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductSet;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
@@ -100,6 +103,35 @@ public class ProductDAOImpl implements ProductDAO{
     @Override
     public void zapProduct(Product product) {
         this.sessionFactory.getCurrentSession().delete(product);
+    }
+
+    @Override
+    public ProductPackage addProductPackage(ProductPackage productPackage) {
+        this.sessionFactory.getCurrentSession().saveOrUpdate(productPackage);
+        return productPackage;
+    }
+
+    @Override
+    public ProductPackage updateProdctPackage(ProductPackage productPackage) {
+        this.sessionFactory.getCurrentSession().saveOrUpdate(productPackage);
+        return productPackage;
+    }
+
+    @Override
+    public ProductPackage findProductPackageByPackageId(String productPackageId) {
+        String hql = "from ProductPackage where productPackageId = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("id", productPackageId);
+        List<ProductPackage> list = query.list();
+        if(list.size()>0)
+            return list.get(0);
+        else
+            return null;
+    }
+
+    @Override
+    public void zapProductPackage(ProductPackage productPackage) {
+        this.sessionFactory.getCurrentSession().delete(this);
     }
     
     

@@ -7,7 +7,11 @@ package com.spstudio.modules.product.service;
 
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductSet;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -29,4 +33,12 @@ public interface ProductService {
     public int getAllRowCount();
     
     public void zapProduct(Product product);
+    
+    public ProductPackage addProductPackage(Set<ProductSet> productSet, int unitPrice,String description,String packageName, Date effectiveStartDate, Date effectiveEndDate);
+    
+    public ProductPackage updateProdctPackage(ProductPackage productPackage);
+    
+    public ProductPackage findProductPackageByPackageId(String productPackageId);
+    
+    public void zapProductPackage(ProductPackage productPackage);
 }
