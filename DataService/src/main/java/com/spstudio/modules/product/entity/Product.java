@@ -11,6 +11,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.sql.Date;
+
 /**
  *
  * @author wewezhu
@@ -18,7 +20,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Table(name="T_Product")
+@Table(
+        name="T_Product",
+        uniqueConstraints={@UniqueConstraint(columnNames={"serialno"})}
+)
 public class Product {
     @Id  
     @GeneratedValue(generator="system-uuid")  
@@ -26,9 +31,13 @@ public class Product {
     @Column(length=32)
     private String productId;
 
+    // 产品编号
+    @Column(nullable = false)
+    private String serialno;
+
     // 单价
     @Column
-    private int unitPrice;
+    private float unitPrice;
 
     // 单格
     @Column
@@ -65,6 +74,50 @@ public class Product {
     @JoinColumn(name="productTypeId",referencedColumnName="productTypeId")
     ProductType type;
 
+    @Column(updatable = false)
+    Date creationDate;
+
+    @Column
+    Date lastUpdateDate;
+
+    @Column(length=32)
+    String creator;
+
+    @Column(length=32)
+    String lastUpdateBy;
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
     public String getProductId() {
         return productId;
     }
@@ -73,11 +126,19 @@ public class Product {
         this.productId = productId;
     }
 
-    public int getUnitPrice() {
+    public String getSerialno() {
+        return serialno;
+    }
+
+    public void setSerialno(String serialno) {
+        this.serialno = serialno;
+    }
+
+    public float getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(int unitPrice) {
+    public void setUnitPrice(float unitPrice) {
         this.unitPrice = unitPrice;
     }
 

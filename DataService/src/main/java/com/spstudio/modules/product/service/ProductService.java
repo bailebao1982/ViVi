@@ -5,7 +5,9 @@
  */
 package com.spstudio.modules.product.service;
 
+import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.product.entity.ProductSet;
@@ -25,10 +27,12 @@ public interface ProductService {
     public Product addProduct(Product product);
     
     public boolean removeProduct(Product product);
+
+    public boolean removeProductList(List<String> idList, String user);
     
-    public Product updateProduct(Product product);
+    public boolean updateProduct(Product product);
     
-    public List<Product> queryForPage(int offset, int length, SearchCriteria criteria);
+    public Page<Product> queryForPage(int offset, int length, SearchCriteria criteria);
     
     public int getAllRowCount();
     

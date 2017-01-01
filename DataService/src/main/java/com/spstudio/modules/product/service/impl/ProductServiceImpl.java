@@ -5,6 +5,7 @@
  */
 package com.spstudio.modules.product.service.impl;
 
+import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
@@ -51,13 +52,32 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product updateProduct(Product product) {
-        return productDAO.updateProduct(product);
+    public boolean removeProductList(List<String> idList, String user){
+        return productDAO.removeProductList(idList, user);
     }
 
     @Override
-    public List<Product> queryForPage(int offset, int length, SearchCriteria criteria) {
-        return productDAO.queryForPage(offset, length, criteria);
+    public boolean updateProduct(Product product) {
+        productDAO.updateProduct(product);
+        return true;
+    }
+
+    @Override
+    public Page<Product> queryForPage(int currentPage, int pageSize, SearchCriteria criteria) {
+        Page<Product> page = new Page<Product>();
+        //总记录数
+        int allRow = productDAO.getAllRowCount();
+        //当前页开始记录
+        int offset = page.countOffset(currentPage, pageSize);
+        //分页查询结果集
+        List<Product> list = productDAO.queryForPage(offset, pageSize,criteria);
+
+        page.setPageNo(currentPage);
+        page.setPageSize(pageSize);
+        page.setTotalRecords(allRow);
+        page.setList(list);
+
+        return page;
     }
 
     @Override

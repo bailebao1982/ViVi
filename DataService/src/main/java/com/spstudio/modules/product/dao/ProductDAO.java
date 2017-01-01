@@ -24,13 +24,15 @@ public interface ProductDAO {
     public Product addProduct(Product product);
     
     public boolean removeProduct(Product product);
+
+    public boolean removeProductList(List<String> id, String user);
     
     public Product updateProduct(Product product);
     
     public List<Product> queryForPage(int offset, int length, SearchCriteria criteria);
     
     public int getAllRowCount();
-    
+
     public void zapProduct(Product product);
     
     public ProductPackage addProductPackage(ProductPackage productPackage);

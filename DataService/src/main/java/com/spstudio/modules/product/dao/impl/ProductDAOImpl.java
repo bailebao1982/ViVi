@@ -11,6 +11,8 @@ import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.product.entity.ProductSet;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.Query;
@@ -38,7 +40,7 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public Product findProductByProductId(String productId) {
-         String hql = "from Product where productId = :id and deleteFlag = 0";
+        String hql = "from Product where productId = :id and deleteFlag = 0";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString("id", productId);
         List<Product> list = query.list();
@@ -49,19 +51,40 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public Product addProduct(Product product) {
-     sessionFactory.getCurrentSession().saveOrUpdate(product);
-     return product;
+        java.sql.Date now = new java.sql.Date(new Date().getTime());
+        product.setCreationDate(now);
+        product.setLastUpdateDate(now);
+
+        sessionFactory.getCurrentSession().save(product);
+        return product;
     }
 
     @Override
     public boolean removeProduct(Product product) {
         product.setDeleteFlag(1);
-        sessionFactory.getCurrentSession().saveOrUpdate(product);
+        java.sql.Date now = new java.sql.Date(new Date().getTime());
+        product.setLastUpdateDate(now);
+
+        sessionFactory.getCurrentSession().update(product);
         return true;
     }
 
     @Override
+    public boolean removeProductList(List<String> idList, String updater){
+        String hql = "update Member set deleteFlag = 1, lastUpdateDate = :updateDate, lastUpdateBy = :updater where productId in :product_ids";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("updateDate", new java.sql.Date(System.currentTimeMillis()));
+        query.setParameter("updater", updater);
+        query.setParameterList("product_ids", idList);
+        int result = query.executeUpdate();
+        return (result > 0);
+    }
+
+    @Override
     public Product updateProduct(Product product) {
+        java.sql.Date now = new java.sql.Date(new Date().getTime());
+        product.setLastUpdateDate(now);
+
         sessionFactory.getCurrentSession().update(product);
         return product;
     }
