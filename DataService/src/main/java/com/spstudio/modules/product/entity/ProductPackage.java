@@ -52,12 +52,12 @@ public class ProductPackage {
     @Column(length=32)
     String packageName;
     
-    @Column(name = "salesDate", columnDefinition="DATETIME")
+    @Column(name = "effectiveStartDate", columnDefinition="DATETIME")
     @Temporal(TemporalType.DATE)
     Date effectiveStartDate;
     
     
-    @Column(name = "salesDate", columnDefinition="DATETIME")
+    @Column(name = "effectiveEndDate", columnDefinition="DATETIME")
     @Temporal(TemporalType.DATE)
     Date effectiveEndDate;
     
@@ -65,11 +65,14 @@ public class ProductPackage {
     
     //int bonusePoint;
 
-    public String getProductId() {
+    @Column(columnDefinition = "int default 0")
+    int deleteFlag;
+    
+    public String getProductPackageId() {
         return productPackageId;
     }
 
-    public void setProductId(String productPackageId) {
+    public void setProductPackageId(String productPackageId) {
         this.productPackageId = productPackageId;
     }
 
@@ -119,6 +122,14 @@ public class ProductPackage {
 
     public void setEffectiveEndDate(Date effectiveEndDate) {
         this.effectiveEndDate = effectiveEndDate;
+    }
+
+    public int getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(int deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
     
     

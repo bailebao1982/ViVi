@@ -107,6 +107,11 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public ProductPackage addProductPackage(ProductPackage productPackage) {
+      /**  
+        for(ProductSet productSet:productPackage.getProductSets()){
+            this.sessionFactory.getCurrentSession().saveOrUpdate(productSet);
+        }
+        **/
         this.sessionFactory.getCurrentSession().saveOrUpdate(productPackage);
         return productPackage;
     }
@@ -131,7 +136,7 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public void zapProductPackage(ProductPackage productPackage) {
-        this.sessionFactory.getCurrentSession().delete(this);
+        this.sessionFactory.getCurrentSession().delete(productPackage);
     }
     
     
