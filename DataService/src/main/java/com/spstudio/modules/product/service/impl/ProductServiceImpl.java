@@ -8,8 +8,12 @@ package com.spstudio.modules.product.service.impl;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductSet;
 import com.spstudio.modules.product.service.ProductService;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -64,6 +68,36 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void zapProduct(Product product) {
          productDAO.zapProduct(product);
+    }
+
+    @Override
+    public ProductPackage addProductPackage(Set<ProductSet> productSet, int unitPrice, String description, String packageName, Date effectiveStartDate, Date effectiveEndDate) {
+        ProductPackage productPackage = new ProductPackage();
+        productPackage.setUnitPrice(unitPrice);
+        productPackage.setDescription(description);
+        productPackage.setEffectiveEndDate(effectiveEndDate);
+        productPackage.setEffectiveEndDate(effectiveEndDate);
+        productPackage.setPackageName(packageName);
+       
+        
+        return productDAO.addProductPackage(productPackage);
+        
+        
+    }
+
+    @Override
+    public ProductPackage updateProdctPackage(ProductPackage productPackage) {
+        return productDAO.updateProdctPackage(productPackage);
+    }
+
+    @Override
+    public ProductPackage findProductPackageByPackageId(String productPackageId) {
+        return productDAO.findProductPackageByPackageId(productPackageId);
+    }
+
+    @Override
+    public void zapProductPackage(ProductPackage productPackage) {
+         productDAO.zapProductPackage(productPackage);
     }
     
     
