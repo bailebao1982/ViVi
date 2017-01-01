@@ -98,6 +98,7 @@ public class ProductServiceImpl implements ProductService{
         productPackage.setEffectiveEndDate(effectiveEndDate);
         productPackage.setEffectiveEndDate(effectiveEndDate);
         productPackage.setPackageName(packageName);
+        productPackage.setProductSets(productSet);
        
         
         return productDAO.addProductPackage(productPackage);

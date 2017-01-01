@@ -12,6 +12,8 @@ import com.spstudio.modules.member.service.MemberAssetService;
 import com.spstudio.modules.member.service.MemberService;
 import com.spstudio.modules.member.service.MemberTypeService;
 import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductSet;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.sales.entity.Sales;
 import com.spstudio.modules.sales.service.SaleService;
@@ -38,6 +40,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * This test case will cover a very typical test case of WorkOrderOnline Service
  * 1. Add New Member
  * 2. Add New Product
+ * 2.a Add New ProductPackage
  * 3. Add New Sales, verify member asset has create as well.
  * 4. Add New member Asset.
  * 5. Add new Work Order
@@ -67,6 +70,10 @@ public class TestBasicUseCase {
      
      private static MemberType memberType;
      
+     private static ProductSet productSet;
+     
+     private static ProductPackage productPackage;
+     
      private static MemberAsset asset;
      
      private static Sales saleRec;
@@ -90,11 +97,12 @@ public class TestBasicUseCase {
     
     @AfterClass
     public static void tearDownClass() {
-        workOrderService.zapWorkOrder(workOrder);
-        salesService.zapSalesRecord(saleRec);
-        memberAssetService.zapMemberAsset(asset);
-        productService.zapProduct(product);
-        memeberService.zapMember(member);
+        //workOrderService.zapWorkOrder(workOrder);
+        //salesService.zapSalesRecord(saleRec);
+        //memberAssetService.zapMemberAsset(asset);
+        //productService.zapProduct(product);
+        //memeberService.zapMember(member);
+        productService.zapProductPackage(productPackage);
         
     }
     
@@ -139,6 +147,22 @@ public class TestBasicUseCase {
         productService.addProduct(product);
         Product findProduct = productService.findProductByProductId(product.getProductId());
         assertNotNull(findProduct);
+        
+     }
+     
+     //* 2.a Add New ProductPackage
+      @Test
+     public void testAddNewProductPackage() {
+         productSet = new ProductSet();
+         productSet.setProduct(product);
+         productSet.setCount(5);
+         
+         Set<ProductSet> productSets = new LinkedHashSet<ProductSet>(); 
+         productSets.add(productSet);
+         
+        productPackage = productService.addProductPackage(productSets,49, "TestPackageDesc", "TestPackage", new Date(System.currentTimeMillis()),new Date(System.currentTimeMillis()));
+        ProductPackage findProductPackage = productService.findProductPackageByPackageId(productPackage.getProductPackageId());
+        assertNotNull(findProductPackage);
         
      }
      
