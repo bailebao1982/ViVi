@@ -46,14 +46,12 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public Product addProduct(Product product) {
-       
      sessionFactory.getCurrentSession().saveOrUpdate(product);
      return product;
     }
 
     @Override
     public boolean removeProduct(Product product) {
-     
         product.setDeleteFlag(1);
         sessionFactory.getCurrentSession().saveOrUpdate(product);
         return true;
@@ -85,15 +83,12 @@ public class ProductDAOImpl implements ProductDAO{
         }catch(RuntimeException re){
             throw re;
         }
-        
         return entitylist;
-    
     }
 
     @Override
     public int getAllRowCount() {
         Long count = (Long)sessionFactory.getCurrentSession().createQuery("select count(1) from Product where deleteFlag = 0").uniqueResult();
-        
         return count.intValue();
     }
 
@@ -101,6 +96,5 @@ public class ProductDAOImpl implements ProductDAO{
     public void zapProduct(Product product) {
         this.sessionFactory.getCurrentSession().delete(product);
     }
-    
-    
+
 }

@@ -5,19 +5,10 @@
  */
 package com.spstudio.modules.product.entity;
 
-import com.spstudio.modules.workorder.entity.WorkOrder;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -25,39 +16,55 @@ import org.hibernate.annotations.GenericGenerator;
  * @author wewezhu
  */
 @Entity
+@DynamicUpdate
+@DynamicInsert
 @Table(name="T_Product")
 public class Product {
-   
     @Id  
     @GeneratedValue(generator="system-uuid")  
     @GenericGenerator(name = "system-uuid",strategy="uuid")  
     @Column(length=32)
-    String productId;
-    
-    @Column
-    int unitPrice;
-    
-    @Column
-    int unitBounce;
-    
-    @Column(length=32)
-    String description;
-    
-    @Column(length=32)
-    String productName;
-    
-    @Column
-    int bonusePoint;
-    
-    //Set<ProductPackage> productPackage = new LinkedHashSet<ProductPackage>();
+    private String productId;
 
+    // 单价
+    @Column
+    private int unitPrice;
+
+    // 单格
+    @Column
+    private int unitBounce;
+
+    // 描述
+    @Column(length=32)
+    private String description;
+
+    // 名称
+    @Column(length=32)
+    private String productName;
+
+    // 计量单位(Unit of Measurement)
+    @Column(length=32)
+    private String uom;
+
+    // ??
+    @Column
+    private int bonusePoint;
+
+    // ??
     boolean available;
-    
+
+    // 规格
+    @Column
+    private String specification;
+
     @Column(columnDefinition = "int default 0")
     int deleteFlag;
-    
-     
-    
+
+    // 类别
+    @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+    @JoinColumn(name="productTypeId",referencedColumnName="productTypeId")
+    ProductType type;
+
     public String getProductId() {
         return productId;
     }
@@ -102,17 +109,17 @@ public class Product {
         return bonusePoint;
     }
 
+    public String getUom() {
+        return uom;
+    }
+
+    public void setUom(String uom) {
+        this.uom = uom;
+    }
+
     public void setBonusePoint(int bonusePoint) {
         this.bonusePoint = bonusePoint;
     }
-
-    //public Set<ProductPackage> getProductPackage() {
-    //    return productPackage;
-    //}
-
-    //public void setProductPackage(Set<ProductPackage> productPackage) {
-    //    this.productPackage = productPackage;
-    //}
 
     public int getDeleteFlag() {
         return deleteFlag;
@@ -129,6 +136,21 @@ public class Product {
     public void setAvailable(boolean available) {
         this.available = available;
     }
-    
-    
+
+    public ProductType getType() {
+        return type;
+    }
+
+    public void setType(ProductType type) {
+        this.type = type;
+    }
+
+
+    public String getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification;
+    }
 }

@@ -16,5 +16,14 @@
         <property name="target" ref="productServiceBase"></property>
     </bean>
 
-   
+    <!-- Product Type DAO Config -->
+    <bean id="productTypeDAO" class="com.spstudio.modules.product.dao.impl.ProductTypeDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="productTypeServiceBase" class="com.spstudio.modules.product.service.impl.ProductTypeServiceImpl">
+        <property name="productTypeDAO" ref="productTypeDAO"></property>
+    </bean>
+    <bean id="productTypeService" parent="transactionProxy">
+        <property name="target" ref="productTypeServiceBase"></property>
+    </bean>
 </beans>
