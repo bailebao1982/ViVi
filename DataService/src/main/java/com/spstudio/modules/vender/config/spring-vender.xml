@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- - - - - - - - - - - - - -->
+    <!-- Stock related configuration -->
+    <!-- Stock DAO Config -->
+    <bean id="venderDAO" class="com.spstudio.modules.vender.dao.impl.VenderDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="venderServiceBase" class="com.spstudio.modules.vender.service.impl.VenderServiceImpl">
+        <property name="venderDAO" ref="venderDAO"></property>
+    </bean>
+    <bean id="venderService" parent="transactionProxy">
+        <property name="target" ref="venderServiceBase"></property>
+    </bean>
+
+   
+</beans>

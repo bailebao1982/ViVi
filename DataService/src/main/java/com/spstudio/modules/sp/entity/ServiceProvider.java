@@ -5,7 +5,7 @@
  */
 package com.spstudio.modules.sp.entity;
 
-import com.spstudio.modules.member.entity.Vender;
+import com.spstudio.modules.vender.entity.Vender;
 
 /**
  *
