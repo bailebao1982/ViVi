@@ -5,10 +5,18 @@
  */
 package com.spstudio.modules.sp.service;
 
+import com.spstudio.modules.sp.entity.ServiceProvider;
+
 /**
  *
  * @author wewezhu
  */
 public interface ServiceProviderService {
+     public ServiceProvider addServiceProvider(ServiceProvider sp);
     
+    public ServiceProvider updateServiceProvider(ServiceProvider sp);
+    
+    public ServiceProvider deleteServiceProvider(ServiceProvider sp);
+    
+    public void zapServiceProvider(ServiceProvider sp);
 }

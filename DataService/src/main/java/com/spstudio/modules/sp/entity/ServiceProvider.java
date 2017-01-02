@@ -46,6 +46,9 @@ public class ServiceProvider {
     
     @Column
     private boolean verified;
+    
+    @Column(columnDefinition = "int default 0")
+    int deleteFlag;
 
     public String getServiceProviderId() {
         return serviceProviderId;
@@ -86,6 +89,15 @@ public class ServiceProvider {
     public void setVerified(boolean verified) {
         this.verified = verified;
     }
+
+    public int getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(int deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+    
     
     
 }
