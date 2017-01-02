@@ -6,10 +6,10 @@
     <!-- - - - - - - - - - - - - -->
     <!-- Stock related configuration -->
     <!-- Stock DAO Config -->
-    <bean id="stockDAO" class="StockDAOImpl">
+    <bean id="stockDAO" class="com.spstudio.modules.stock.dao.impl.StockDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="stockServiceBase" class="StockServiceImpl">
+    <bean id="stockServiceBase" class="com.spstudio.modules.stock.service.impl.StockServiceImpl">
         <property name="stockDAO" ref="stockDAO"></property>
     </bean>
     <bean id="stockService" parent="transactionProxy">

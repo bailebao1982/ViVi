@@ -5,10 +5,27 @@
  */
 package com.spstudio.modules.stock.service;
 
+import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.stock.entity.Stock;
+import java.util.Date;
+
 /**
  *
  * @author wewezhu
  */
-public class StockService {
+public interface StockService {
+    public Stock addNewStock(Product product, int inventory,Date startDate,Date endDate);
+    
+    public Stock increaseStockNum(Product product,int num);
+    
+    public Stock decreaseStockNum(Product product,int num);
+    
+    public boolean isStockEnoughForDecrease(Product product,int num);
+    
+    public Stock findStockByProduct(Product product);
+    
+    public void zapStock(Stock stock);
+    
+    public Stock updateStock(Stock stock);
     
 }
