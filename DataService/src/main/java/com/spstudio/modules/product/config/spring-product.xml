@@ -11,6 +11,7 @@
     </bean>
     <bean id="productServiceBase" class="com.spstudio.modules.product.service.impl.ProductServiceImpl">
         <property name="productDAO" ref="productDAO"></property>
+        <property name="stockDAO" ref="stockDAO"></property>
     </bean>
     <bean id="productService" parent="transactionProxy">
         <property name="target" ref="productServiceBase"></property>

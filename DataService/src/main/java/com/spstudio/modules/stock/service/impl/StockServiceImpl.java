@@ -38,7 +38,13 @@ public class StockServiceImpl implements StockService{
 
     @Override
     public Stock decreaseStockNum(Product product, int num) {
-       return stockDAO.decreaseStockInventory(product, num);
+       Stock stock =  stockDAO.decreaseStockInventory(product, num);
+       if(stock.getInventory() == 0){
+           
+       }
+       return stock;
+       
+       
     }
 
     @Override

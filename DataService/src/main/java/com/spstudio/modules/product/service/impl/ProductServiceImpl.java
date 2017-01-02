@@ -12,6 +12,8 @@ import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.product.entity.ProductSet;
 import com.spstudio.modules.product.service.ProductService;
+import com.spstudio.modules.stock.dao.StockDAO;
+import com.spstudio.modules.stock.entity.Stock;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +24,8 @@ import java.util.Set;
  */
 public class ProductServiceImpl implements ProductService{
     private ProductDAO productDAO;
+    
+    private StockDAO stockDAO;
 
     public ProductDAO getProductDAO() {
         return productDAO;
@@ -31,6 +35,16 @@ public class ProductServiceImpl implements ProductService{
         this.productDAO = productDAO;
     }
 
+    public StockDAO getStockDAO() {
+        return stockDAO;
+    }
+
+    public void setStockDAO(StockDAO stockDAO) {
+        this.stockDAO = stockDAO;
+    }
+
+    
+    
     @Override
     public List<Product> getAllProducts() {
         return productDAO.getAllProducts();
@@ -57,9 +71,9 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public boolean updateProduct(Product product) {
+    public Product updateProduct(Product product) {
         productDAO.updateProduct(product);
-        return true;
+        return product;
     }
 
     @Override
@@ -119,6 +133,37 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void zapProductPackage(ProductPackage productPackage) {
          productDAO.zapProductPackage(productPackage);
+    }
+
+    @Override
+    public Product onStoreShelf(Product product) {
+        Stock stock = stockDAO.findStockByProduct(product);
+        if(stock!= null){
+            if(stock.getInventory()>0){
+                product.setAvailable(true);
+                return this.updateProduct(product);
+               
+            }else{
+                //TODO add exception 
+                return product;
+            }
+        }else{
+            //TODO add exception here
+            return product;
+        }
+    }
+
+    @Override
+    public Product takeOffStoreShelf(Product product) {
+        Stock stock = stockDAO.findStockByProduct(product);
+         if(stock!= null){
+             product.setAvailable(false);
+             return this.updateProduct(product);
+             
+         }else{
+            //TODO add exception here
+            return product;
+        }
     }
     
     
