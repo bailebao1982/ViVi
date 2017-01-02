@@ -61,12 +61,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<Member> queryForPage(int currentPage, int pageSize, SearchCriteria sc) {
         Page<Member> page = new Page<Member>();
-        //总记录数
-        int allRow = memberDAO.getAllRowCount();
         //当前页开始记录
         int offset = page.countOffset(currentPage,pageSize);  
         //分页查询结果集
         List<Member> list = memberDAO.queryForPage(offset, pageSize,sc);
+        //总记录数
+        int allRow = list.size();
 
         page.setPageNo(currentPage);
         page.setPageSize(pageSize);

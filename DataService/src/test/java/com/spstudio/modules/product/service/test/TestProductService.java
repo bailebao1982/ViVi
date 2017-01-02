@@ -10,14 +10,12 @@ import com.spstudio.modules.product.service.ProductService;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  *

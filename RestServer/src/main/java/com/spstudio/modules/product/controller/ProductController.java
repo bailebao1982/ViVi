@@ -102,7 +102,14 @@ public class ProductController {
                     "错误：产品必要的信息丢失。请检查 产品名称，产品编码"
             );
         }else{
-            Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productService);
+            Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productTypeService);
+            if(product == null){
+                return ResponseMsgBeanFactory.getErrorResponseBean(
+                        "2020",
+                        "错误：单位价格数字格式不正确"
+                );
+            }
+
             Map modelMap = model.asMap();
             Object userObj = modelMap.get("currentUser");
             if(userObj != null){
@@ -112,7 +119,7 @@ public class ProductController {
 
             try {
                 productService.addProduct(product);
-                return ResponseMsgBeanFactory.getSuccessResponseBean("会员创建成功");
+                return ResponseMsgBeanFactory.getSuccessResponseBean("创建产品成功");
             }catch (DataIntegrityViolationException ex){
                 return ResponseMsgBeanFactory.getErrorResponseBean(
                         "2010",
@@ -151,7 +158,13 @@ public class ProductController {
     public @ResponseBody ResponseBean updateProduct(@RequestBody ProductJsonBean productJsonBean,
                                                     @PathVariable String product_id,
                                                     Model model){
-        Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productService);
+        Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productTypeService);
+        if(product == null){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "2020",
+                    "错误：单位价格数字格式不正确"
+            );
+        }
         Map map = model.asMap();
         Object userObj = map.get("currentUser");
         if(userObj != null){
@@ -197,8 +210,9 @@ public class ProductController {
     public @ResponseBody ResponseBean listProducts(
             @RequestParam(value="page", required=true) int page,
             @RequestParam(value="page_size", required=true) int page_size,
-            @RequestParam(value="name", required=false) String name,
-            @RequestParam(value="type", required=false) String type,
+            @RequestParam(value="product_name", required=false) String name,
+            @RequestParam(value="product_type", required=false) String type,
+            @RequestParam(value="product_serialno", required=false) String serialno,
             @RequestParam(value="price_start", required=false, defaultValue = "0") String price_start,
             @RequestParam(value="price_end", required=false, defaultValue = "0") String price_end){
         ProductQueryBean queryBean = new ProductQueryBean();
@@ -206,6 +220,7 @@ public class ProductController {
         queryBean.setPage(page);
         queryBean.setPage_size(page_size);
         queryBean.setType(type);
+        queryBean.setSerialno(serialno);
         try {
             queryBean.setPrice_start(Float.valueOf(price_start));
         }catch (NumberFormatException ex){
@@ -227,6 +242,13 @@ public class ProductController {
             );
         }
 
+        if(queryBean.getSerialno() != null &&
+           !queryBean.getSerialno().isEmpty()){
+            sc.addSearchCriterialItem("serialno",
+                    new SearchCriteriaItem("serialno", queryBean.getSerialno(), SearchConditionEnum.Like)
+            );
+        }
+
         if(queryBean.getPrice_start() > 0){
             sc.addSearchCriterialItem("price_start",
                     new SearchCriteriaItem("unitPrice", String.valueOf(queryBean.getPrice_start()), SearchConditionEnum.LargeOrEqual)
@@ -235,7 +257,7 @@ public class ProductController {
 
         if(queryBean.getPrice_end() > 0){
             sc.addSearchCriterialItem("price_end",
-                    new SearchCriteriaItem("unitPrice", String.valueOf(queryBean.getPrice_end()), SearchConditionEnum.LargeOrEqual)
+                    new SearchCriteriaItem("unitPrice", String.valueOf(queryBean.getPrice_end()), SearchConditionEnum.SmallOrEqual)
             );
         }
 

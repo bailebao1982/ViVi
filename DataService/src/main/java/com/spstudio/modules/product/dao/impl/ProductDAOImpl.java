@@ -55,7 +55,7 @@ public class ProductDAOImpl implements ProductDAO{
         product.setCreationDate(now);
         product.setLastUpdateDate(now);
 
-        sessionFactory.getCurrentSession().save(product);
+        sessionFactory.getCurrentSession().saveOrUpdate(product);
         return product;
     }
 
@@ -71,7 +71,7 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public boolean removeProductList(List<String> idList, String updater){
-        String hql = "update Member set deleteFlag = 1, lastUpdateDate = :updateDate, lastUpdateBy = :updater where productId in :product_ids";
+        String hql = "update Product set deleteFlag = 1, lastUpdateDate = :updateDate, lastUpdateBy = :updater where productId in :product_ids";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("updateDate", new java.sql.Date(System.currentTimeMillis()));
         query.setParameter("updater", updater);

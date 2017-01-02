@@ -12,9 +12,19 @@ public class ProductQueryBean {
 
     private String type;
 
+    private String serialno;
+
     private float price_start;
 
     private float price_end;
+
+    public String getSerialno() {
+        return serialno;
+    }
+
+    public void setSerialno(String serialno) {
+        this.serialno = serialno;
+    }
 
     public int getPage() {
         return page;

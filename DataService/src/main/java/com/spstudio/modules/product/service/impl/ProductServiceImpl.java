@@ -65,12 +65,12 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Page<Product> queryForPage(int currentPage, int pageSize, SearchCriteria criteria) {
         Page<Product> page = new Page<Product>();
-        //总记录数
-        int allRow = productDAO.getAllRowCount();
         //当前页开始记录
         int offset = page.countOffset(currentPage, pageSize);
         //分页查询结果集
         List<Product> list = productDAO.queryForPage(offset, pageSize,criteria);
+        //总记录数
+        int allRow = list.size();
 
         page.setPageNo(currentPage);
         page.setPageSize(pageSize);
