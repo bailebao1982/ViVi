@@ -5,10 +5,17 @@
  */
 package com.spstudio.modules.vender.entity;
 
+import com.spstudio.modules.sp.entity.ServiceProvider;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -47,6 +54,9 @@ public class Vender {
     @Column(columnDefinition = "int default 0")
     int deleteFlag;
 
+   @ManyToMany(mappedBy = "venders")
+    private Set<ServiceProvider> sps;
+    
     public String getVenderId() {
         return venderId;
     }
@@ -109,6 +119,14 @@ public class Vender {
 
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public Set<ServiceProvider> getSps() {
+        return sps;
+    }
+
+    public void setSps(Set<ServiceProvider> sps) {
+        this.sps = sps;
     }
     
     
