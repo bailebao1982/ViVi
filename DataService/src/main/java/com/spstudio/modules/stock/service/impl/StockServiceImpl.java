@@ -5,6 +5,7 @@
  */
 package com.spstudio.modules.stock.service.impl;
 
+import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.stock.dao.StockDAO;
 import com.spstudio.modules.stock.entity.Stock;
@@ -18,6 +19,8 @@ import java.util.Date;
 public class StockServiceImpl implements StockService{
     private StockDAO stockDAO;
 
+    private ProductDAO productDAO;
+    
     public StockDAO getStockDAO() {
         return stockDAO;
     }
@@ -38,7 +41,14 @@ public class StockServiceImpl implements StockService{
 
     @Override
     public Stock decreaseStockNum(Product product, int num) {
-       return stockDAO.decreaseStockInventory(product, num);
+       Stock stock =  stockDAO.decreaseStockInventory(product, num);
+       if(stock.getInventory() == 0){
+           product.setAvailable(false);
+           productDAO.updateProduct(product);
+       }
+       return stock;
+       
+       
     }
 
     @Override

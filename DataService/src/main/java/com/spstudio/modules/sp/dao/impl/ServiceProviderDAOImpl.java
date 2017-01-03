@@ -6,6 +6,7 @@
 package com.spstudio.modules.sp.dao.impl;
 
 import com.spstudio.modules.sp.dao.ServiceProviderDAO;
+import com.spstudio.modules.sp.entity.ServiceProvider;
 import org.hibernate.SessionFactory;
 
 /**
@@ -21,6 +22,30 @@ public class ServiceProviderDAOImpl implements ServiceProviderDAO {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public ServiceProvider addServiceProvider(ServiceProvider sp) {
+        this.sessionFactory.getCurrentSession().saveOrUpdate(sp);
+        return sp;
+    }
+
+    @Override
+    public ServiceProvider updateServiceProvider(ServiceProvider sp) {
+        this.sessionFactory.getCurrentSession().saveOrUpdate(sp);
+        return sp;
+    }
+
+    @Override
+    public ServiceProvider deleteServiceProvider(ServiceProvider sp) {
+        sp.setDeleteFlag(1);
+        this.sessionFactory.getCurrentSession().saveOrUpdate(sp);
+        return sp;
+    }
+
+    @Override
+    public void zapServiceProvider(ServiceProvider sp) {
+        this.sessionFactory.getCurrentSession().delete(sp);
     }
     
     

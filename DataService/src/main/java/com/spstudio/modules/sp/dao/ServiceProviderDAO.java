@@ -5,10 +5,19 @@
  */
 package com.spstudio.modules.sp.dao;
 
+import com.spstudio.modules.sp.entity.ServiceProvider;
+
 /**
  *
  * @author wewezhu
  */
 public interface ServiceProviderDAO {
+    public ServiceProvider addServiceProvider(ServiceProvider sp);
+    
+    public ServiceProvider updateServiceProvider(ServiceProvider sp);
+    
+    public ServiceProvider deleteServiceProvider(ServiceProvider sp);
+    
+    public void zapServiceProvider(ServiceProvider sp);
     
 }

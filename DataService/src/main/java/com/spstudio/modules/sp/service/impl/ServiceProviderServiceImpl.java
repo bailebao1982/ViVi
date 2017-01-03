@@ -7,6 +7,7 @@ package com.spstudio.modules.sp.service.impl;
 
 import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.sp.dao.ServiceProviderDAO;
+import com.spstudio.modules.sp.entity.ServiceProvider;
 
 /**
  *
@@ -21,6 +22,26 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     public void setServiceProviderDAO(ServiceProviderDAO serviceProviderDAO) {
         this.serviceProviderDAO = serviceProviderDAO;
+    }
+
+    @Override
+    public ServiceProvider addServiceProvider(ServiceProvider sp) {
+        return serviceProviderDAO.addServiceProvider(sp);
+    }
+
+    @Override
+    public ServiceProvider updateServiceProvider(ServiceProvider sp) {
+        return serviceProviderDAO.updateServiceProvider(sp);
+    }
+
+    @Override
+    public ServiceProvider deleteServiceProvider(ServiceProvider sp) {
+        return serviceProviderDAO.deleteServiceProvider(sp);
+    }
+
+    @Override
+    public void zapServiceProvider(ServiceProvider sp) {
+        serviceProviderDAO.zapServiceProvider(sp);
     }
     
     

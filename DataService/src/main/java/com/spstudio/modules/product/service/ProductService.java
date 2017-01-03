@@ -30,7 +30,7 @@ public interface ProductService {
 
     public boolean removeProductList(List<String> idList, String user);
     
-    public boolean updateProduct(Product product);
+    public Product updateProduct(Product product);
     
     public Page<Product> queryForPage(int offset, int length, SearchCriteria criteria);
     
@@ -45,4 +45,8 @@ public interface ProductService {
     public ProductPackage findProductPackageByPackageId(String productPackageId);
     
     public void zapProductPackage(ProductPackage productPackage);
+    
+    public Product onStoreShelf(Product prodct);
+    
+    public Product takeOffStoreShelf(Product product);
 }

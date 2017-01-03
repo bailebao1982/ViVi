@@ -6,15 +6,14 @@
     <!-- - - - - - - - - - - - - -->
     <!-- Stock related configuration -->
     <!-- Stock DAO Config -->
-    <bean id="stockDAO" class="com.spstudio.modules.stock.dao.impl.StockDAOImpl">
+    <bean id="venderDAO" class="com.spstudio.modules.vender.dao.impl.VenderDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="stockServiceBase" class="com.spstudio.modules.stock.service.impl.StockServiceImpl">
-        <property name="stockDAO" ref="stockDAO"></property>
-        <property name="productDAO" ref="productDAO"></property>
+    <bean id="venderServiceBase" class="com.spstudio.modules.vender.service.impl.VenderServiceImpl">
+        <property name="venderDAO" ref="venderDAO"></property>
     </bean>
-    <bean id="stockService" parent="transactionProxy">
-        <property name="target" ref="stockServiceBase"></property>
+    <bean id="venderService" parent="transactionProxy">
+        <property name="target" ref="venderServiceBase"></property>
     </bean>
 
    
