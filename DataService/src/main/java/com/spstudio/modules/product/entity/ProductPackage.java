@@ -8,18 +8,8 @@ package com.spstudio.modules.product.entity;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -36,8 +26,9 @@ public class ProductPackage {
     @Column(length=32)
     String productPackageId;
     
-    
-     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(
+            cascade = {CascadeType.ALL},
+            fetch = FetchType.EAGER)
     @JoinTable(name = "productPackage_productSet", 
 	   joinColumns = {@JoinColumn(name = "productPackageId")}, 
 	   inverseJoinColumns = {@JoinColumn(name = "productSetId")})
@@ -55,7 +46,6 @@ public class ProductPackage {
     @Column(name = "effectiveStartDate", columnDefinition="DATETIME")
     @Temporal(TemporalType.DATE)
     Date effectiveStartDate;
-    
     
     @Column(name = "effectiveEndDate", columnDefinition="DATETIME")
     @Temporal(TemporalType.DATE)

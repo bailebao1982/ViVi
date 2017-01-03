@@ -59,8 +59,8 @@ public class Product {
     @Column
     private int bonusePoint;
 
-    // ??
-    boolean available;
+    // 是否上架
+    private boolean available;
 
     // 规格
     @Column
