@@ -171,7 +171,8 @@ public class ProductController {
             product.setLastUpdateBy(userObj.toString());
         }
         product.setProductId(product_id);
-        if(productService.updateProduct(product)){
+        Product prdt = productService.updateProduct(product);
+        if(prdt != null){
             return ResponseMsgBeanFactory.getSuccessResponseBean("产品信息更新成功");
         }else{
             return ResponseMsgBeanFactory.getErrorResponseBean(
