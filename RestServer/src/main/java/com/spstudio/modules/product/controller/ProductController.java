@@ -290,6 +290,25 @@ public class ProductController {
         );
     }
 
+    @RequestMapping(value = "/detail_product/{product_id}",
+            method = RequestMethod.GET)
+    @CrossOrigin
+    public @ResponseBody ResponseBean detailProduct(@PathVariable String product_id){
+        Product product = productService.findProductByProductId(product_id);
+        if(product != null){
+            ProductJsonBean responseProductJsonBean = ProductJsonBeanUtil.toJsonBean(product);
+            return ResponseMsgBeanFactory.getResponseBean(
+                    true,
+                    responseProductJsonBean
+            );
+        }else{
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "2008",
+                    "产品信息查找失败，无法找到产品ID：" + product_id
+            );
+        }
+    }
+
     @RequestMapping(value = "/test",
             method = RequestMethod.GET,
             headers="Accept=application/json")
