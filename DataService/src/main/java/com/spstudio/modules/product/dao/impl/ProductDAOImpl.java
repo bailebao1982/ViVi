@@ -35,7 +35,9 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public List<Product> getAllProducts() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String hql = "from Product where deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        return query.list();
     }
 
     @Override

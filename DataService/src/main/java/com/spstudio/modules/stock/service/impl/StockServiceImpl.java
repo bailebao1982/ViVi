@@ -29,6 +29,14 @@ public class StockServiceImpl implements StockService{
         this.stockDAO = stockDAO;
     }
 
+    public ProductDAO getProductDAO() {
+        return productDAO;
+    }
+
+    public void setProductDAO(ProductDAO productDAO) {
+        this.productDAO = productDAO;
+    }
+
     @Override
     public Stock addNewStock(Product product, int inventory, Date startDate, Date endDate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

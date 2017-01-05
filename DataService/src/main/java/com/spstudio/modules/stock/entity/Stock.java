@@ -6,7 +6,7 @@
 package com.spstudio.modules.stock.entity;
 
 import com.spstudio.modules.product.entity.Product;
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -205,6 +205,14 @@ public class ProductController {
         }
     }
 
+    @RequestMapping(value = "/list_products_for_select",
+            method = RequestMethod.GET)
+    @CrossOrigin
+    public @ResponseBody List<SimpleProductJsonBean> listProducts(){
+        List<Product> allProducts = productService.getAllProducts();
+        return SimpleProductJsonBeanUtil.toJsonBeanList(allProducts);
+    }
+
     @RequestMapping(value = "/list_products",
             method = RequestMethod.GET)
     @CrossOrigin
