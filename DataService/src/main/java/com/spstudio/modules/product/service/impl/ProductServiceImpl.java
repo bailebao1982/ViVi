@@ -10,13 +10,11 @@ import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
-import com.spstudio.modules.product.entity.ProductSet;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.stock.dao.StockDAO;
 import com.spstudio.modules.stock.entity.Stock;
-import java.util.Date;
+
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -43,8 +41,6 @@ public class ProductServiceImpl implements ProductService{
         this.stockDAO = stockDAO;
     }
 
-    
-    
     @Override
     public List<Product> getAllProducts() {
         return productDAO.getAllProducts();
@@ -53,6 +49,11 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Product findProductByProductId(String productId) {
        return productDAO.findProductByProductId(productId);
+    }
+
+    @Override
+    public Product findProductByProductSerialno(String serialno) {
+        return productDAO.findProductByProductSerialno(serialno);
     }
 
     @Override
@@ -77,14 +78,15 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Page<Product> queryForPage(int currentPage, int pageSize, SearchCriteria criteria) {
+    public Page<Product> queryProductsForPage(int currentPage, int pageSize, SearchCriteria criteria) {
+        //总记录数
+        int allRow = productDAO.getAllProductsCount();
+
         Page<Product> page = new Page<Product>();
         //当前页开始记录
         int offset = page.countOffset(currentPage, pageSize);
         //分页查询结果集
-        List<Product> list = productDAO.queryForPage(offset, pageSize,criteria);
-        //总记录数
-        int allRow = list.size();
+        List<Product> list = productDAO.queryProductsForPage(offset, pageSize,criteria);
 
         page.setPageNo(currentPage);
         page.setPageSize(pageSize);
@@ -96,7 +98,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public int getAllRowCount() {
-        return productDAO.getAllRowCount();
+        return productDAO.getAllProductsCount();
     }
 
     @Override
@@ -105,19 +107,13 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductPackage addProductPackage(Set<ProductSet> productSet, int unitPrice, String description, String packageName, Date effectiveStartDate, Date effectiveEndDate) {
-        ProductPackage productPackage = new ProductPackage();
-        productPackage.setUnitPrice(unitPrice);
-        productPackage.setDescription(description);
-        productPackage.setEffectiveEndDate(effectiveEndDate);
-        productPackage.setEffectiveEndDate(effectiveEndDate);
-        productPackage.setPackageName(packageName);
-        productPackage.setProductSets(productSet);
-       
-        
-        return productDAO.addProductPackage(productPackage);
-        
-        
+    public List<ProductPackage> getAllPackages() {
+        return productDAO.getAllPackages();
+    }
+
+    @Override
+    public ProductPackage addProductPackage(ProductPackage pkg) {
+        return productDAO.addProductPackage(pkg);
     }
 
     @Override
@@ -126,8 +122,41 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public boolean removePackage(ProductPackage productPackage) {
+        return productDAO.removeProductPackage(productPackage);
+    }
+
+    @Override
+    public boolean removePackageList(List<String> idList, String user) {
+        return productDAO.removeProductPackageList(idList, user);
+    }
+
+    @Override
     public ProductPackage findProductPackageByPackageId(String productPackageId) {
         return productDAO.findProductPackageByPackageId(productPackageId);
+    }
+
+    @Override
+    public ProductPackage findProductPackageByPackageSerialno(String serialno) {
+        return productDAO.findProductPackageBySerialno(serialno);
+    }
+
+    @Override
+    public Page<ProductPackage> queryPackagesForPage(int currentPage, int pageSize, SearchCriteria criteria) {
+        Page<ProductPackage> page = new Page<ProductPackage>();
+        //当前页开始记录
+        int offset = page.countOffset(currentPage, pageSize);
+        //分页查询结果集
+        List<ProductPackage> list = productDAO.queryPackagesForPage(offset, pageSize, criteria);
+        //总记录数
+        int allRow = list.size();
+
+        page.setPageNo(currentPage);
+        page.setPageSize(pageSize);
+        page.setTotalRecords(allRow);
+        page.setList(list);
+
+        return page;
     }
 
     @Override
@@ -165,6 +194,5 @@ public class ProductServiceImpl implements ProductService{
             return product;
         }
     }
-    
-    
+
 }

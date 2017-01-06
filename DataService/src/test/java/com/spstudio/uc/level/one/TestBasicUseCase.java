@@ -11,9 +11,9 @@ import com.spstudio.modules.member.entity.MemberType;
 import com.spstudio.modules.member.service.MemberAssetService;
 import com.spstudio.modules.member.service.MemberService;
 import com.spstudio.modules.member.service.MemberTypeService;
+import com.spstudio.modules.product.entity.PackageProductMapping;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
-import com.spstudio.modules.product.entity.ProductSet;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.sales.entity.Sales;
 import com.spstudio.modules.sales.service.SaleService;
@@ -70,7 +70,7 @@ public class TestBasicUseCase {
      
      private static MemberType memberType;
      
-     private static ProductSet productSet;
+     private static PackageProductMapping packageProductMapping;
      
      private static ProductPackage productPackage;
      
@@ -153,17 +153,17 @@ public class TestBasicUseCase {
      //* 2.a Add New ProductPackage
       @Test
      public void testAddNewProductPackage() {
-         productSet = new ProductSet();
-         productSet.setProduct(product);
-         productSet.setCount(5);
+         packageProductMapping = new PackageProductMapping();
+         packageProductMapping.setProduct(product);
+         packageProductMapping.setCount(5);
          
-         Set<ProductSet> productSets = new LinkedHashSet<ProductSet>(); 
-         productSets.add(productSet);
+         Set<PackageProductMapping> packageProductMappings = new LinkedHashSet<PackageProductMapping>();
+         packageProductMappings.add(packageProductMapping);
          
-        productPackage = productService.addProductPackage(productSets,49, "TestPackageDesc", "TestPackage", new Date(System.currentTimeMillis()),new Date(System.currentTimeMillis()));
-        ProductPackage findProductPackage = productService.findProductPackageByPackageId(productPackage.getProductPackageId());
-        assertNotNull(findProductPackage);
-        
+        //productPackage = productService.addProductPackage(packageProductMappings,49, "TestPackageDesc", "TestPackage", new Date(System.currentTimeMillis()),new Date(System.currentTimeMillis()));
+        //ProductPackage findProductPackage = productService.findProductPackageByPackageId(productPackage.getProductPackageId());
+        //assertNotNull(findProductPackage);
+          assertNotNull(null);
      }
      
      //3. Add New Sales, verify member asset has create as well.

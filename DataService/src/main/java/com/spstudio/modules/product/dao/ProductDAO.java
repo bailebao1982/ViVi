@@ -8,9 +8,8 @@ package com.spstudio.modules.product.dao;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
-import com.spstudio.modules.product.entity.ProductSet;
+
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -20,6 +19,8 @@ public interface ProductDAO {
     public List<Product> getAllProducts();
     
     public Product findProductByProductId(String productId);
+
+    public Product findProductByProductSerialno(String serialno);
     
     public Product addProduct(Product product);
     
@@ -29,17 +30,29 @@ public interface ProductDAO {
     
     public Product updateProduct(Product product);
     
-    public List<Product> queryForPage(int offset, int length, SearchCriteria criteria);
+    public List<Product> queryProductsForPage(int offset, int length, SearchCriteria criteria);
     
-    public int getAllRowCount();
+    public int getAllProductsCount();
 
     public void zapProduct(Product product);
-    
+
+    public List<ProductPackage> getAllPackages();
+
     public ProductPackage addProductPackage(ProductPackage productPackage);
+
+    public boolean removeProductPackage(ProductPackage productPackage);
+
+    public boolean removeProductPackageList(List<String> ids, String user);
     
     public ProductPackage updateProdctPackage(ProductPackage productPackage);
-    
+
+    public List<ProductPackage> queryPackagesForPage(int offset, int length, SearchCriteria criteria);
+
     public ProductPackage findProductPackageByPackageId(String productPackageId);
+
+    public ProductPackage findProductPackageBySerialno(String serialno);
+
+    public int getAllPackagesCount();
     
     public void zapProductPackage(ProductPackage productPackage);
      

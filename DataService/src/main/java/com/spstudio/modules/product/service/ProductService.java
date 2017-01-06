@@ -7,10 +7,11 @@ package com.spstudio.modules.product.service;
 
 import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
-import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
-import com.spstudio.modules.product.entity.ProductSet;
+import com.spstudio.modules.product.entity.PackageProductMapping;
+import com.sun.xml.internal.bind.v2.schemagen.episode.Package;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,8 @@ public interface ProductService {
     public List<Product> getAllProducts();
     
     public Product findProductByProductId(String productId);
+
+    public Product findProductByProductSerialno(String serialno);
     
     public Product addProduct(Product product);
     
@@ -32,18 +35,28 @@ public interface ProductService {
     
     public Product updateProduct(Product product);
     
-    public Page<Product> queryForPage(int offset, int length, SearchCriteria criteria);
+    public Page<Product> queryProductsForPage(int offset, int length, SearchCriteria criteria);
     
     public int getAllRowCount();
     
     public void zapProduct(Product product);
-    
-    public ProductPackage addProductPackage(Set<ProductSet> productSet, int unitPrice,String description,String packageName, Date effectiveStartDate, Date effectiveEndDate);
+
+    public List<ProductPackage> getAllPackages();
+
+    public ProductPackage addProductPackage(ProductPackage pkg);
     
     public ProductPackage updateProdctPackage(ProductPackage productPackage);
-    
+
+    public boolean removePackage(ProductPackage productPackage);
+
+    public boolean removePackageList(List<String> idList, String user);
+
     public ProductPackage findProductPackageByPackageId(String productPackageId);
-    
+
+    public ProductPackage findProductPackageByPackageSerialno(String serialno);
+
+    public Page<ProductPackage> queryPackagesForPage(int offset, int length, SearchCriteria criteria);
+
     public void zapProductPackage(ProductPackage productPackage);
     
     public Product onStoreShelf(Product prodct);

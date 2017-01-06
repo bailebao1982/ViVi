@@ -6,15 +6,13 @@
 package com.spstudio.modules.product.dao.impl;
 
 import com.spstudio.common.search.SearchCriteria;
-import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.product.dao.ProductDAO;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
-import com.spstudio.modules.product.entity.ProductSet;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
@@ -47,6 +45,17 @@ public class ProductDAOImpl implements ProductDAO{
         query.setString("id", productId);
         List<Product> list = query.list();
         if(list.size()>0)
+            return list.get(0);
+        return null;
+    }
+
+    @Override
+    public Product findProductByProductSerialno(String serialno) {
+        String hql = "from Product where serialno = :serialno and deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("serialno", serialno);
+        List<Product> list = query.list();
+        if(list.size() > 0)
             return list.get(0);
         return null;
     }
@@ -92,7 +101,7 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     @Override
-    public List<Product> queryForPage(int offset, int length, SearchCriteria criteria) {
+    public List<Product> queryProductsForPage(int offset, int length, SearchCriteria criteria) {
         List<Product> entitylist = null;
         try{
             StringBuffer queryString = new StringBuffer();
@@ -115,7 +124,7 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     @Override
-    public int getAllRowCount() {
+    public int getAllProductsCount() {
         Long count = (Long)sessionFactory.getCurrentSession().createQuery("select count(1) from Product where deleteFlag = 0").uniqueResult();
         return count.intValue();
     }
@@ -127,18 +136,41 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public ProductPackage addProductPackage(ProductPackage productPackage) {
-      /**  
-        for(ProductSet productSet:productPackage.getProductSets()){
-            this.sessionFactory.getCurrentSession().saveOrUpdate(productSet);
-        }
-        **/
+        java.sql.Date now = new java.sql.Date(new Date().getTime());
+        productPackage.setCreationDate(now);
+        productPackage.setLastUpdateDate(now);
+
         this.sessionFactory.getCurrentSession().saveOrUpdate(productPackage);
         return productPackage;
     }
 
     @Override
+    public boolean removeProductPackage(ProductPackage productPackage) {
+        java.sql.Date now = new java.sql.Date(new Date().getTime());
+        productPackage.setLastUpdateDate(now);
+        productPackage.setDeleteFlag(1);
+
+        this.sessionFactory.getCurrentSession().update(productPackage);
+        return true;
+    }
+
+    @Override
+    public boolean removeProductPackageList(List<String> ids, String user) {
+        String hql = "update ProductPackage set deleteFlag = 1, lastUpdateDate = :updateDate, lastUpdateBy = :updater where productPackageId in :ids";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("updateDate", new java.sql.Date(System.currentTimeMillis()));
+        query.setParameter("updater", user);
+        query.setParameterList("ids", ids);
+        int result = query.executeUpdate();
+        return (result > 0);
+    }
+
+    @Override
     public ProductPackage updateProdctPackage(ProductPackage productPackage) {
-        this.sessionFactory.getCurrentSession().saveOrUpdate(productPackage);
+        java.sql.Date now = new java.sql.Date(new Date().getTime());
+        productPackage.setLastUpdateDate(now);
+
+        this.sessionFactory.getCurrentSession().update(productPackage);
         return productPackage;
     }
 
@@ -155,8 +187,57 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     @Override
+    public ProductPackage findProductPackageBySerialno(String serialno) {
+        String hql = "from ProductPackage where serialno = :serialno";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("serialno", serialno);
+        List<ProductPackage> list = query.list();
+        if(list.size() > 0)
+            return list.get(0);
+        else
+            return null;
+    }
+
+    @Override
+    public List<ProductPackage> getAllPackages() {
+        String hql = "from ProductPackage where deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        return query.list();
+    }
+
+    @Override
     public void zapProductPackage(ProductPackage productPackage) {
         this.sessionFactory.getCurrentSession().delete(productPackage);
+    }
+
+
+    @Override
+    public List<ProductPackage> queryPackagesForPage(int offset, int length, SearchCriteria criteria) {
+        List<ProductPackage> entitylist = null;
+        try{
+            StringBuffer queryString = new StringBuffer();
+            queryString.append("from ProductPackage where deleteFlag = 0");
+
+            for(String key:criteria.getItemMap().keySet()){
+                queryString.append(" and ");
+                queryString.append(criteria.getItemMap().get(key).getSearchCriteriaItem());
+            }
+
+            Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
+            query.setFirstResult(offset);
+            query.setMaxResults(length);
+            entitylist = query.list();
+
+        }catch(RuntimeException re){
+            throw re;
+        }
+        return entitylist;
+    }
+
+    @Override
+    public int getAllPackagesCount() {
+        Long count = (Long)sessionFactory.getCurrentSession().createQuery("select count(1) from ProductPackage where deleteFlag = 0").uniqueResult();
+        return count.intValue();
     }
 
 }

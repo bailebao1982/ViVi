@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Soul on 2017/1/1.
  */
-public class BatDelProductBean {
+public class ProductIdListBean {
     private ArrayList<String> product_id_list;
 
     public ArrayList<String> getProduct_id_list() {
