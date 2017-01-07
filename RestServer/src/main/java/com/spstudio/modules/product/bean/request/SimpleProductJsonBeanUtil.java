@@ -11,8 +11,9 @@ import java.util.List;
 public class SimpleProductJsonBeanUtil {
     public static SimpleProductJsonBean toJsonBean(Product product) {
         SimpleProductJsonBean jsonBean = new SimpleProductJsonBean();
-        jsonBean.setId(product.getSerialno());
-        jsonBean.setText(product.getProductName());
+        String text = String.format("%s:%s", product.getSerialno(), product.getProductName());
+        jsonBean.setId(text);
+        jsonBean.setText(text);
         return jsonBean;
     }
 

@@ -339,17 +339,17 @@ public class ProductController {
             headers="Accept=application/json")
     @CrossOrigin
     public @ResponseBody ResponseBean addPackage(@RequestBody PackageJsonBean packageJson){
-        if(packageJson.getProducts().isEmpty()){
+        if(packageJson.getPackage_products().isEmpty()){
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "2101",
                     "新建套餐失败，该套餐不包含任何产品"
             );
-        }else if(packageJson.getName().isEmpty()){
+        }else if(packageJson.getPackage_name().isEmpty()){
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "2102",
                     "新建套餐失败，该套餐名称为空"
             );
-        }else if(packageJson.getSerialno().isEmpty()){
+        }else if(packageJson.getPackage_serialno().isEmpty()){
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "2103",
                     "新建套餐失败，该套餐编号为空"
@@ -439,7 +439,7 @@ public class ProductController {
                 Product product = productService.findProductByProductId(pkgProduct.getProduct().getProduct_id());
 
                 PackageProductMapping newMapping = new PackageProductMapping();
-                newMapping.setCount(pkgProduct.getCount());
+                newMapping.setCount(pkgProduct.getProduct_count());
                 newMapping.setProduct(product);
                 newMapping.setProductPackage(pkg);
 
@@ -566,7 +566,7 @@ public class ProductController {
         if(queryBean.getSerialno() != null &&
            !queryBean.getSerialno().isEmpty()){
             sc.addSearchCriterialItem("serialNo",
-                    new SearchCriteriaItem("serialNo", queryBean.getSerialno(), SearchConditionEnum.Like)
+                    new SearchCriteriaItem("serialNo", queryBean.getSerialno(), SearchConditionEnum.Equal)
             );
         }
 

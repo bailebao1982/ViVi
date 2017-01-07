@@ -17,8 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author wewezhu
  */
 @Entity
-@Table(name="T_PackageMapping",
-       uniqueConstraints={@UniqueConstraint(columnNames={"productPackageId", "productId"})})
+@Table(name="T_PackageMapping")
 @DynamicUpdate
 @DynamicInsert
 public class PackageProductMapping {
