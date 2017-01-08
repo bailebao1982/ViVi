@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Aspect  
 public class SessionAOP {  
       
-    @Around(value = "@annotation(com.eaglec.plat.hj.aop.NeedSession)")  
+    @Around(value = "@annotation(com.spstudio.session.UserSession)")  
     public Object aroundManager(ProceedingJoinPoint pj) throws Exception {  
         HttpServletRequest request = SysContent.getRequest();  
         HttpServletResponse response = SysContent.getResponse();  
