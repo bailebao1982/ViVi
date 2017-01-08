@@ -119,7 +119,7 @@ public class TestBasicUseCase {
     //
     
     //1. Add New Member
-     @Test
+     //@Test
      public void testAddNewMember() {
          member = new Member();
          member.setMemberName("TestName");
@@ -135,7 +135,7 @@ public class TestBasicUseCase {
      }
      
      //2. Add New Product
-     @Test
+     //@Test
      public void testAddNewProduct() {
          product = new Product();
          product.setProductName("TestProduct");
@@ -151,7 +151,7 @@ public class TestBasicUseCase {
      }
      
      //* 2.a Add New ProductPackage
-      @Test
+      //@Test
      public void testAddNewProductPackage() {
          packageProductMapping = new PackageProductMapping();
          packageProductMapping.setProduct(product);
@@ -167,7 +167,7 @@ public class TestBasicUseCase {
      }
      
      //3. Add New Sales, verify member asset has create as well.
-     @Test
+     //@Test
      public void testAddNewSale(){
          saleRec = new Sales();
          saleRec.setMember(member);
@@ -181,14 +181,14 @@ public class TestBasicUseCase {
      }
      
      //4. Add New member Asset
-     @Test
+     //@Test
      public void testAddNewMemberSet(){
          
          asset = memberAssetService.addMemeberDepositAsset(member, 1000);
          assertNotNull(asset);
      }
      
-     @Test
+     //@Test
      public void testAddNewWorkOrder(){
          workOrder = new WorkOrder();
          workOrder.setConsumeProduct(product);
