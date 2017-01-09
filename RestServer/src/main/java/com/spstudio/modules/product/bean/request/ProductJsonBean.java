@@ -19,6 +19,16 @@ public class ProductJsonBean {
 
     private String product_description;
 
+    private boolean product_available;
+
+    public boolean isProduct_available() {
+        return product_available;
+    }
+
+    public void setProduct_available(boolean product_available) {
+        this.product_available = product_available;
+    }
+
     public String getProduct_create_date() {
         return product_create_date;
     }

@@ -60,7 +60,7 @@ public class Product {
     private int bonusePoint;
 
     // 是否上架
-    @Column
+    @Column(columnDefinition = "int default 0")
     private boolean available;
 
     // 规格

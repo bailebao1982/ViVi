@@ -21,6 +21,7 @@ public class PackageJsonBeanUtil {
         packageJsonBean.setPackage_name(pkg.getPackageName());
         packageJsonBean.setPackage_serialno(pkg.getSerialNo());
         packageJsonBean.setPackage_price(String.valueOf(pkg.getUnitPrice()));
+        packageJsonBean.setPackage_available(pkg.isAvailable());
         if(pkg.getEffectiveStartDate() != null)
             packageJsonBean.setPackage_start_date(pkg.getEffectiveStartDate().toString());
         if(pkg.getEffectiveEndDate() != null)
@@ -49,6 +50,7 @@ public class PackageJsonBeanUtil {
 
         pkgBean.setPackageName(pkgJsonBean.getPackage_name());
         pkgBean.setDescription(pkgJsonBean.getPackage_note());
+        pkgBean.setAvailable(pkgJsonBean.isPackage_available());
         try{
             pkgBean.setUnitPrice(Integer.valueOf(pkgJsonBean.getPackage_price()));
         }catch (NumberFormatException ex){

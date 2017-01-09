@@ -394,6 +394,10 @@ public class ProductController {
                postPkg.getProductMappingSet().size() > 0){
                 currentPkg.setProductMappingSet(postPkg.getProductMappingSet());
             }
+
+            if(currentPkg.isAvailable() !=  postPkg.isAvailable()){
+                currentPkg.setAvailable(postPkg.isAvailable());
+            }
         }
     }
 

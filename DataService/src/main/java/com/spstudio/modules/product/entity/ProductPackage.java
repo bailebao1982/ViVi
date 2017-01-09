@@ -77,6 +77,17 @@ public class ProductPackage {
     @Column(length=32)
     String lastUpdateBy;
 
+    @Column(columnDefinition = "int default 0")
+    private boolean available;
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     public String getSerialNo() {
         return serialNo;
     }

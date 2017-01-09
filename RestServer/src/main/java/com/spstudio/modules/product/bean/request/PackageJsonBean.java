@@ -26,6 +26,8 @@ public class PackageJsonBean {
 
     private String package_content;
 
+    private boolean package_available;
+
     private List<PackageProductJsonBean> package_products;
 
     public String getPackage_id() {
@@ -113,5 +115,13 @@ public class PackageJsonBean {
             }
             return content;
         }
+    }
+
+    public boolean isPackage_available() {
+        return package_available;
+    }
+
+    public void setPackage_available(boolean package_available) {
+        this.package_available = package_available;
     }
 }

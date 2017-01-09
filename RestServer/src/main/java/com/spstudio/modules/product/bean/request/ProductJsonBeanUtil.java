@@ -19,6 +19,7 @@ public class ProductJsonBeanUtil {
         jsonBean.setProduct_name(product.getProductName());
         jsonBean.setProduct_description(product.getDescription());
         jsonBean.setProduct_create_date(product.getCreationDate().toString());
+        jsonBean.setProduct_available(product.isAvailable());
 
         return jsonBean;
     }
@@ -35,6 +36,7 @@ public class ProductJsonBeanUtil {
         product.setProductName(productJsonBean.getProduct_name());
         product.setUom(productJsonBean.getProduct_uom());
         product.setDescription(productJsonBean.getProduct_description());
+        product.setAvailable(productJsonBean.isProduct_available());
 
         String productType = productJsonBean.getProduct_type();
         if(!productType.isEmpty()){
