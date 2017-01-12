@@ -66,7 +66,12 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     }
 
     @Override
-    public ServiceProvider findServiceProviderByMemberId(String spId) {
+    public boolean removeServiceProviderInList(List<String> spIdList) {
+        return serviceProviderDAO.removeServiceProviderList(spIdList);
+    }
+
+    @Override
+    public ServiceProvider findServiceProviderById(String spId) {
         return serviceProviderDAO.findServiceProviderById(spId);
     }
 

@@ -27,13 +27,15 @@ public interface ServiceProviderService {
 
     public boolean removeServiceProviderType(ServiceProviderType type);
 
-    public ServiceProvider findServiceProviderByMemberId(String spId);
+    public ServiceProvider findServiceProviderById(String spId);
 
     public ServiceProvider addServiceProvider(ServiceProvider sp);
     
     public ServiceProvider updateServiceProvider(ServiceProvider sp);
     
     public ServiceProvider removeServiceProvider(ServiceProvider sp);
+
+    public boolean removeServiceProviderInList(List<String> spIdList);
 
     public Page<ServiceProvider> queryForPage(int currentPage, int pageSize, SearchCriteria sc);
     
