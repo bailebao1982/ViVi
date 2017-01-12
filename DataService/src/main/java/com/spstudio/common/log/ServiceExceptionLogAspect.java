@@ -8,22 +8,40 @@ package com.spstudio.common.log;
 import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author wewezhu
  */
+@Component
+@Aspect
 public class ServiceExceptionLogAspect {
 
-    private static final Logger logger = Logger.getLogger(ServiceExceptionLogAspect.class.getName());
+    private static final Logger logger = Logger.getLogger(ServiceExceptionLogAspect.class);
 
     @Pointcut("execution(* com.spstudio.modules.*.service.impl.*.*(..))")
     public void serviceAspect() {
     }
 
-    @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
+    @Around("serviceAspect()")
+    public void doAroundTask(ProceedingJoinPoint pjp) throws Throwable {
+       logger.warn("Entering.." + pjp.getSignature().getDeclaringTypeName()+ "." + pjp.getSignature().getName());
+        try {
+            pjp.proceed();
+        } catch (Throwable ex) {
+            System.out.println("error in around");
+            throw ex;
+        }
+        logger.warn("Exiting.." + pjp.getSignature().getDeclaringTypeName()+ "." + pjp.getSignature().getName());
+    }
+
+    //@AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) throws Exception {
 
         //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();  
@@ -52,13 +70,16 @@ public class ServiceExceptionLogAspect {
 
     }
 
-    /**      *
-     * 获取注解中对方法的描述信息 用于service层注解      *
+    /**
+     * *
+     * 获取注解中对方法的描述信息 用于service层注解 *
      *
      *
-     * @param joinPoint 切点      *
-     * @return 方法描述      *
-     * @throws Exception      *
+     * @param joinPoint 切点
+     *
+     * @return 方法描述
+     *
+     * @throws Exception *
      */
     public static String getServiceMthodDescription(JoinPoint joinPoint)
             throws Exception {

@@ -9,12 +9,8 @@ import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
-import com.spstudio.modules.product.entity.PackageProductMapping;
-import com.sun.xml.internal.bind.v2.schemagen.episode.Package;
-
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 
 /**
  *
