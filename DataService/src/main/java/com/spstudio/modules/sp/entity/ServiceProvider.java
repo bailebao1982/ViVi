@@ -7,7 +7,7 @@ package com.spstudio.modules.sp.entity;
 
 import com.spstudio.modules.vender.entity.Vender;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 
