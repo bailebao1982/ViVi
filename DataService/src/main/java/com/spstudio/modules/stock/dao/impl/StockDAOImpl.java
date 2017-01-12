@@ -9,8 +9,11 @@ import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.stock.dao.StockDAO;
 import com.spstudio.modules.stock.entity.Stock;
 import java.util.List;
+
+import com.spstudio.modules.stock.exceptions.StockNotEnoughException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.omg.CORBA.SetOverrideType;
 
 /**
  *
@@ -34,55 +37,78 @@ public class StockDAOImpl implements StockDAO{
     }
 
     @Override
-    public Stock inreaseStockInventory(Product product, int num) {
+    public Stock increaseStockInventory(Product product, int num) {
+       if(product == null) return null;
+
        Stock stock = this.findStockByProduct(product);
-       if(stock!=null){
-           stock.setInventory(stock.getInventory()+num);
-           this.sessionFactory.getCurrentSession().saveOrUpdate(stock);
+       if(stock == null) {
+           stock = new Stock();
+           stock.setProduct(product);
+           stock.setIsinfinite(false);
+           stock.setInventory(num);
+           newStock(stock);
            return stock;
         }else{
-           //TODO add exception
-           return null;
+           if(num > 0){
+               stock.setInventory(stock.getInventory() + num);
+               this.sessionFactory.getCurrentSession().saveOrUpdate(stock);
+           }
+           return stock;
        }
     }
 
     @Override
-    public Stock decreaseStockInventory(Product product, int num) {
-        Stock stock = this.findStockByProduct(product);
-       if(stock!=null){
-           if(this.isStockEnoughForDecrease(product, num)){
-                stock.setInventory(stock.getInventory()-num);
-                this.sessionFactory.getCurrentSession().saveOrUpdate(stock);
-                return stock;
-           }else{
-               //TODO add exception that stock is not enough to delete
-               return null;
-           }
+    public Stock decreaseStockInventory(Product product, int num) throws StockNotEnoughException {
+       if(product == null) return null;
+
+       Stock stock = this.findStockByProduct(product);
+       if(stock == null){
+           // Just create a new stock
+           stock = new Stock();
+           stock.setProduct(product);
+           stock.setIsinfinite(false);
+           stock.setInventory(0);
+           newStock(stock);
+           throw new StockNotEnoughException();
         }else{
-           //TODO add exception
-           return null;
+           if(this.isStockEnoughForDecrease(product, num)){
+               stock.setInventory(stock.getInventory()-num);
+               this.sessionFactory.getCurrentSession().saveOrUpdate(stock);
+               return stock;
+           }else{
+               throw new StockNotEnoughException();
+           }
        }
     }
 
     @Override
     public Stock findStockByProduct(Product product) {
-        //TODO: add effective date check condition.
-         String hql = "from Stock where productId = :id";
+        String hql = "from Stock where productId = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString("id", product.getProductId());
         List<Stock> list = query.list();
         if(list.size() > 0)
             return list.get(0);
-        return null;
+        else{
+            Stock stock = new Stock();
+            stock.setProduct(product);
+            stock.setIsinfinite(false);
+            stock.setInventory(0);
+            return newStock(stock);
+        }
     }
 
     @Override
     public boolean isStockEnoughForDecrease(Product product, int num) {
          Stock stock = this.findStockByProduct(product);
-       if(stock!=null){
+       if(stock != null){
            return stock.getInventory() > num;
         }else{
-           //TODO add exception stock not find for this product.
+           stock = new Stock();
+           stock.setProduct(product);
+           stock.setIsinfinite(false);
+           stock.setInventory(0);
+           newStock(stock);
            return false;
        }
     }
@@ -97,6 +123,4 @@ public class StockDAOImpl implements StockDAO{
        this.sessionFactory.getCurrentSession().saveOrUpdate(stock);
        return stock;
     }
-    
-    
 }

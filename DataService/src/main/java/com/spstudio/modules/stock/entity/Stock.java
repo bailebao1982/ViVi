@@ -17,6 +17,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -24,6 +27,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author wewezhu
  */
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name="T_Stock")
 public class Stock {
     
@@ -39,14 +44,17 @@ public class Stock {
     
     @Column
     int inventory;
-    
-    @Column(name = "effectiveStartDate", columnDefinition="DATETIME")
-    @Temporal(TemporalType.DATE)
-    Date effectiveStartDate;
-    
-    @Column(name = "effectiveEndDate", columnDefinition="DATETIME")
-    @Temporal(TemporalType.DATE)
-    Date effectiveEndDate;
+
+    @Column
+    boolean isinfinite;
+
+    public boolean isinfinite() {
+        return isinfinite;
+    }
+
+    public void setIsinfinite(boolean isinfinite) {
+        this.isinfinite = isinfinite;
+    }
 
     public String getStockId() {
         return stockId;
@@ -71,24 +79,4 @@ public class Stock {
     public void setInventory(int inventory) {
         this.inventory = inventory;
     }
-
-    public Date getEffectiveStartDate() {
-        return effectiveStartDate;
-    }
-
-    public void setEffectiveStartDate(Date effectiveStartDate) {
-        this.effectiveStartDate = effectiveStartDate;
-    }
-
-    public Date getEffectiveEndDate() {
-        return effectiveEndDate;
-    }
-
-    public void setEffectiveEndDate(Date effectiveEndDate) {
-        this.effectiveEndDate = effectiveEndDate;
-    }
-    
-    
-    
-    
 }

@@ -15,6 +15,8 @@ import com.spstudio.modules.product.entity.ProductType;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.product.service.ProductTypeService;
 
+import com.spstudio.modules.stock.entity.Stock;
+import com.spstudio.modules.stock.service.StockService;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
@@ -40,6 +42,9 @@ public class ProductController {
 
     @Resource(name="productService")
     private ProductService productService;
+
+    @Resource(name="stockService")
+    private StockService stockService;
 
     /**
      *
@@ -610,6 +615,82 @@ public class ProductController {
         List<PackageJsonBean> returnArray = new ArrayList<PackageJsonBean>();
         for (ProductPackage pkg : resultPageBean.getList()){
             returnArray.add(PackageJsonBeanUtil.toJsonBean(pkg));
+        }
+        returnPage.setList(returnArray);
+
+        return ResponseMsgBeanFactory.getResponseBean(
+                true,
+                returnPage
+        );
+    }
+
+    @RequestMapping(value = "/update_stock/{product_id}",
+            method = RequestMethod.POST)
+    @CrossOrigin
+    public @ResponseBody ResponseBean updateStock(@PathVariable String product_id, StockJsonBean stockJsonBean){
+        Stock stock = StockJsonBeanUtil.toEntityBean(stockJsonBean, stockService);
+        if(stock == null){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "2210",
+                    "该产品不存在，产品ID：" + product_id
+            );
+        }else{
+            stockService.updateStock(stock);
+            return ResponseMsgBeanFactory.getSuccessResponseBean("库存更新成功!");
+        }
+    }
+
+    @RequestMapping(value = "/list_stocks",
+            method = RequestMethod.GET)
+    @CrossOrigin
+    public @ResponseBody ResponseBean listStocks(@RequestParam(value="page", required=true) int page,
+                                                 @RequestParam(value="page_size", required=true) int page_size,
+                                                 @RequestParam(value="product_name", required=false) String name,
+                                                 @RequestParam(value="product_type", required=false) String type,
+                                                 @RequestParam(value="product_serialno", required=false) String serialno){
+        ProductQueryBean queryBean = new ProductQueryBean();
+        queryBean.setPage(page);
+        queryBean.setPage_size(page_size);
+
+        queryBean.setName(name);
+        queryBean.setType(type);
+        queryBean.setSerialno(serialno);
+
+        SearchCriteria sc = new SearchCriteria();
+        if(queryBean.getName() != null &&
+                !queryBean.getName().isEmpty()){
+            sc.addSearchCriterialItem("name",
+                    new SearchCriteriaItem("productName", queryBean.getName(), SearchConditionEnum.Like)
+            );
+        }
+
+        if(queryBean.getSerialno() != null &&
+                !queryBean.getSerialno().isEmpty()){
+            sc.addSearchCriterialItem("serialno",
+                    new SearchCriteriaItem("serialno", queryBean.getSerialno(), SearchConditionEnum.Like)
+            );
+        }
+
+        if(queryBean.getType() != null &&
+                !queryBean.getType().isEmpty()){
+            ProductType productType = productTypeService.findProductTypeByProductTypeName(queryBean.getType());
+            if(productType != null) {
+                sc.addSearchCriterialItem("type",
+                        new SearchCriteriaItem("productTypeId", productType.getProductTypeId(), SearchConditionEnum.Equal)
+                );
+            }
+        }
+
+        Page<Stock> resultPageBean = stockService.queryStocksForPage(queryBean.getPage(), queryBean.getPage_size(), sc);
+        Page<StockJsonBean> returnPage = new Page<StockJsonBean>();
+
+        returnPage.setTotalRecords(resultPageBean.getTotalRecords());
+        returnPage.setPageNo(resultPageBean.getPageNo());
+        returnPage.setPageSize(resultPageBean.getPageSize());
+
+        List<StockJsonBean> returnArray = new ArrayList<StockJsonBean>();
+        for (Stock stock : resultPageBean.getList()){
+            returnArray.add(StockJsonBeanUtil.toJsonBean(stock));
         }
         returnPage.setList(returnArray);
 
