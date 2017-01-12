@@ -5,18 +5,37 @@
  */
 package com.spstudio.modules.sp.service;
 
+import com.spstudio.common.search.Page;
+import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.sp.entity.ServiceProvider;
+import com.spstudio.modules.sp.entity.ServiceProviderType;
+
+import java.util.List;
 
 /**
  *
  * @author wewezhu
  */
 public interface ServiceProviderService {
-     public ServiceProvider addServiceProvider(ServiceProvider sp);
+    public List<ServiceProviderType> listServiceProviderTypes();
+
+    public ServiceProviderType findServiceProviderTypeById(String spTypeId);
+
+    public ServiceProviderType findServiceProviderTypeByType(String spType);
+
+    public ServiceProviderType addServiceProviderType(ServiceProviderType spType);
+
+    public boolean removeServiceProviderType(ServiceProviderType type);
+
+    public ServiceProvider findServiceProviderByMemberId(String spId);
+
+    public ServiceProvider addServiceProvider(ServiceProvider sp);
     
     public ServiceProvider updateServiceProvider(ServiceProvider sp);
     
-    public ServiceProvider deleteServiceProvider(ServiceProvider sp);
+    public ServiceProvider removeServiceProvider(ServiceProvider sp);
+
+    public Page<ServiceProvider> queryForPage(int currentPage, int pageSize, SearchCriteria sc);
     
     public void zapServiceProvider(ServiceProvider sp);
 }

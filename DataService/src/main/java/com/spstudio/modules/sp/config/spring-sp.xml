@@ -9,12 +9,15 @@
     <bean id="serviceProviderDAO" class="ServiceProviderDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
+    <bean id="serviceProviderTypeDAO" class="ServiceProviderTypeDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
     <bean id="serviceProviderServiceBase" class="ServiceProviderServiceImpl">
         <property name="serviceProviderDAO" ref="serviceProviderDAO"></property>
+        <property name="serviceProviderTypeDAO" ref="serviceProviderTypeDAO"></property>
     </bean>
     <bean id="serviceProviderService" parent="transactionProxy">
         <property name="target" ref="serviceProviderServiceBase"></property>
     </bean>
-
    
 </beans>

@@ -17,13 +17,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * 供应商，简单的理解为company。
+ * 实质应该理解为一个自由职业人的松散联盟
  * @author wewezhu
  */
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name="T_Vender")
 public class Vender {
     

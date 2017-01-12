@@ -5,9 +5,15 @@
  */
 package com.spstudio.modules.sp.service.impl;
 
+import com.spstudio.common.search.Page;
+import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.sp.dao.ServiceProviderTypeDAO;
+import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.sp.dao.ServiceProviderDAO;
 import com.spstudio.modules.sp.entity.ServiceProvider;
+
+import java.util.List;
 
 /**
  *
@@ -16,12 +22,52 @@ import com.spstudio.modules.sp.entity.ServiceProvider;
 public class ServiceProviderServiceImpl implements ServiceProviderService {
     private ServiceProviderDAO serviceProviderDAO;
 
+    private ServiceProviderTypeDAO serviceProviderTypeDAO;
+
     public ServiceProviderDAO getServiceProviderDAO() {
         return serviceProviderDAO;
     }
 
     public void setServiceProviderDAO(ServiceProviderDAO serviceProviderDAO) {
         this.serviceProviderDAO = serviceProviderDAO;
+    }
+
+    public ServiceProviderTypeDAO getServiceProviderTypeDAO() {
+        return serviceProviderTypeDAO;
+    }
+
+    public void setServiceProviderTypeDAO(ServiceProviderTypeDAO serviceProviderTypeDAO) {
+        this.serviceProviderTypeDAO = serviceProviderTypeDAO;
+    }
+
+    @Override
+    public List<ServiceProviderType> listServiceProviderTypes() {
+        return serviceProviderTypeDAO.listServiceProviderType();
+    }
+
+    @Override
+    public ServiceProviderType findServiceProviderTypeById(String spTypeId) {
+        return serviceProviderTypeDAO.findServiceProviderTypeById(spTypeId);
+    }
+
+    @Override
+    public ServiceProviderType findServiceProviderTypeByType(String spType) {
+        return serviceProviderTypeDAO.findServiceProviderTypeByType(spType);
+    }
+
+    @Override
+    public ServiceProviderType addServiceProviderType(ServiceProviderType spType) {
+        return serviceProviderTypeDAO.addServiceProviderType(spType);
+    }
+
+    @Override
+    public boolean removeServiceProviderType(ServiceProviderType type) {
+        return serviceProviderTypeDAO.removeServiceProviderType(type);
+    }
+
+    @Override
+    public ServiceProvider findServiceProviderByMemberId(String spId) {
+        return serviceProviderDAO.findServiceProviderById(spId);
     }
 
     @Override
@@ -35,15 +81,18 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     }
 
     @Override
-    public ServiceProvider deleteServiceProvider(ServiceProvider sp) {
-        return serviceProviderDAO.deleteServiceProvider(sp);
+    public ServiceProvider removeServiceProvider(ServiceProvider sp) {
+        return serviceProviderDAO.removeServiceProvider(sp);
+    }
+
+    @Override
+    public Page<ServiceProvider> queryForPage(int currentPage, int pageSize, SearchCriteria sc) {
+        return null;
     }
 
     @Override
     public void zapServiceProvider(ServiceProvider sp) {
         serviceProviderDAO.zapServiceProvider(sp);
     }
-    
-    
-    
+
 }
