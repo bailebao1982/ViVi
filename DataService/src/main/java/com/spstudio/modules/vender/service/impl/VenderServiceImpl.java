@@ -24,12 +24,20 @@ public class VenderServiceImpl implements VenderService{
     public void setVenderDAO(VenderDAO venderDAO) {
         this.venderDAO = venderDAO;
     }
-    
-    
+
+    @Override
+    public Vender findVenderById(String venderId) {
+        return venderDAO.findVenderById(venderId);
+    }
+
+    @Override
+    public Vender findVenderByNo(String venderNo) {
+        return venderDAO.findVenderByNo(venderNo);
+    }
+
     @Override
     public Vender addNewVender(Vender vender) {
         return venderDAO.addNewVender(vender);
-        
     }
 
     @Override

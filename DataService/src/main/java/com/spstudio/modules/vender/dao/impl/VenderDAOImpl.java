@@ -7,7 +7,10 @@ package com.spstudio.modules.vender.dao.impl;
 
 import com.spstudio.modules.vender.dao.VenderDAO;
 import com.spstudio.modules.vender.entity.Vender;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+
+import java.util.List;
 
 /**
  *
@@ -24,7 +27,29 @@ public class VenderDAOImpl implements VenderDAO{
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-    
+
+    @Override
+    public Vender findVenderById(String venderId) {
+        String hql = "from Vender where venderId = :vender_id and deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("vender_id", venderId);
+        List<Vender> list = query.list();
+        if(list.size() > 0)
+            return list.get(0);
+        return null;
+    }
+
+    @Override
+    public Vender findVenderByNo(String venderNo) {
+        String hql = "from Vender where businessNO = :vender_no and deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("vender_no", venderNo);
+        List<Vender> list = query.list();
+        if(list.size() > 0)
+            return list.get(0);
+        return null;
+    }
+
     @Override
     public Vender addNewVender(Vender vender) {
         this.sessionFactory.getCurrentSession().saveOrUpdate(vender);

@@ -12,6 +12,10 @@ import com.spstudio.modules.vender.entity.Vender;
  * @author wewezhu
  */
 public interface VenderDAO {
+    public Vender findVenderById(String venderId);
+
+    public Vender findVenderByNo(String venderNo);
+
     public Vender addNewVender(Vender vender);
     
     public Vender updateVender(Vender vender);
@@ -21,7 +25,4 @@ public interface VenderDAO {
     public void zapVender(Vender vender);
     
     public Vender confirmVender(Vender vender);
-    
-    
-    
 }
