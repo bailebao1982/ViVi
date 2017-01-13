@@ -627,7 +627,7 @@ public class ProductController {
     @RequestMapping(value = "/update_stock/{product_id}",
             method = RequestMethod.POST)
     @CrossOrigin
-    public @ResponseBody ResponseBean updateStock(@PathVariable String product_id, StockJsonBean stockJsonBean){
+    public @ResponseBody ResponseBean updateStock(@PathVariable String product_id, @RequestBody StockJsonBean stockJsonBean){
         Stock stock = StockJsonBeanUtil.toEntityBean(stockJsonBean, stockService);
         if(stock == null){
             return ResponseMsgBeanFactory.getErrorResponseBean(

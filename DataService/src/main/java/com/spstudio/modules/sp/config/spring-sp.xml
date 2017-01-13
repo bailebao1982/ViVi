@@ -6,13 +6,13 @@
     <!-- - - - - - - - - - - - - -->
     <!-- ServiceProvider related configuration -->
     <!-- ServiceProvider DAO Config -->
-    <bean id="serviceProviderDAO" class="ServiceProviderDAOImpl">
+    <bean id="serviceProviderDAO" class="com.spstudio.modules.sp.dao.impl.ServiceProviderDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="serviceProviderTypeDAO" class="ServiceProviderTypeDAOImpl">
+    <bean id="serviceProviderTypeDAO" class="com.spstudio.modules.sp.dao.impl.ServiceProviderTypeDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="serviceProviderServiceBase" class="ServiceProviderServiceImpl">
+    <bean id="serviceProviderServiceBase" class="com.spstudio.modules.sp.service.impl.ServiceProviderServiceImpl">
         <property name="serviceProviderDAO" ref="serviceProviderDAO"></property>
         <property name="serviceProviderTypeDAO" ref="serviceProviderTypeDAO"></property>
     </bean>

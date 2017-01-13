@@ -9,6 +9,7 @@ import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.dao.MemberDAO;
 import com.spstudio.common.search.SearchCriteria;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -92,7 +93,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public List<Member> queryForPage(int offset, int length, SearchCriteria criteria) {
-        List<Member> entitylist = null;
+        List<Member> entitylist = new ArrayList<Member>();
         try{
             StringBuffer queryString = new StringBuffer();
             queryString.append("from Member where deleteFlag = 0");

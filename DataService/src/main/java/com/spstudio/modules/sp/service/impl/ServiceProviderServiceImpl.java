@@ -92,7 +92,20 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public Page<ServiceProvider> queryForPage(int currentPage, int pageSize, SearchCriteria sc) {
-        return null;
+        Page<ServiceProvider> page = new Page<ServiceProvider>();
+        //当前页开始记录
+        int offset = page.countOffset(currentPage,pageSize);
+        //分页查询结果集
+        List<ServiceProvider> list = serviceProviderDAO.queryForPage(offset, pageSize,sc);
+        //总记录数
+        int allRow = list.size();
+
+        page.setPageNo(currentPage);
+        page.setPageSize(pageSize);
+        page.setTotalRecords(allRow);
+        page.setList(list);
+
+        return page;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class ServiceProviderController {
             method = RequestMethod.PUT,
             headers="Accept=application/json")
     @CrossOrigin
-    public @ResponseBody ResponseBean addEmployeeType(CommonTypeJsonBean employeeTypeJsonBean){
+    public @ResponseBody ResponseBean addEmployeeType(@RequestBody CommonTypeJsonBean employeeTypeJsonBean){
         ServiceProviderType spType = EmployeeTypeJsonBeanUtil.toEntityBean(employeeTypeJsonBean);
         serviceProviderService.addServiceProviderType(spType);
         return ResponseMsgBeanFactory.getSuccessResponseBean("添加员工类型成功");
@@ -126,7 +126,7 @@ public class ServiceProviderController {
             method = RequestMethod.PUT,
             headers="Accept=application/json")
     @CrossOrigin
-    public @ResponseBody ResponseBean addEmployee(EmployeeJsonBean employeeJsonBean){
+    public @ResponseBody ResponseBean addEmployee(@RequestBody EmployeeJsonBean employeeJsonBean){
         final String defaultVenderNo = "viva";
 
         Vender vivaVender = venderService.findVenderByNo(defaultVenderNo); // hard code to viva as currently we only have one vender
@@ -173,7 +173,7 @@ public class ServiceProviderController {
             method = RequestMethod.POST,
             headers="Accept=application/json")
     @CrossOrigin
-    public @ResponseBody ResponseBean batDelEmployee(EmployeeIdListBean employeeIdList){
+    public @ResponseBody ResponseBean batDelEmployee(@RequestBody EmployeeIdListBean employeeIdList){
         boolean result = serviceProviderService.removeServiceProviderInList(employeeIdList.getEmployee_id_list());
         if(result){
             return ResponseMsgBeanFactory.getSuccessResponseBean("员工列表删除成功!");
@@ -189,7 +189,7 @@ public class ServiceProviderController {
             method = RequestMethod.POST,
             headers="Accept=application/json")
     @CrossOrigin
-    public @ResponseBody ResponseBean updateEmployee(@PathVariable String employee_id, EmployeeJsonBean employeeJsonBean){
+    public @ResponseBody ResponseBean updateEmployee(@PathVariable String employee_id, @RequestBody EmployeeJsonBean employeeJsonBean){
         ServiceProvider sp = serviceProviderService.findServiceProviderById(employee_id);
         if(sp != null){
             final String defaultVenderNo = "viva";

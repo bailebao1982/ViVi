@@ -12,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,7 +94,7 @@ public class ServiceProviderDAOImpl implements ServiceProviderDAO {
 
     @Override
     public List<ServiceProvider> queryForPage(int offset, int length, SearchCriteria criteria) {
-        List<ServiceProvider> entitylist = null;
+        List<ServiceProvider> entitylist = new ArrayList<ServiceProvider>();
         try{
             StringBuffer queryString = new StringBuffer();
             queryString.append("from ServiceProvider where deleteFlag = 0");

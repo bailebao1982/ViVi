@@ -30,15 +30,17 @@ public class ServiceExceptionLogAspect {
     }
 
     @Around("serviceAspect()")
-    public void doAroundTask(ProceedingJoinPoint pjp) throws Throwable {
+    public Object doAroundTask(ProceedingJoinPoint pjp) throws Throwable {
        logger.warn("Entering.." + pjp.getSignature().getDeclaringTypeName()+ "." + pjp.getSignature().getName());
         try {
-            pjp.proceed();
+            return pjp.proceed();
         } catch (Throwable ex) {
+
             System.out.println("error in around");
             throw ex;
+        }finally {
+            logger.warn("Exiting.." + pjp.getSignature().getDeclaringTypeName()+ "." + pjp.getSignature().getName());
         }
-        logger.warn("Exiting.." + pjp.getSignature().getDeclaringTypeName()+ "." + pjp.getSignature().getName());
     }
 
     //@AfterThrowing(pointcut = "serviceAspect()", throwing = "e")

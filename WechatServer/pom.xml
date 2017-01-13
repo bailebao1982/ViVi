@@ -323,7 +323,7 @@
         </dependency>
         <dependency>
             <groupId>spstudio</groupId>
-            <artifactId>pstudio.member.service</artifactId>
+            <artifactId>spstudio.data.service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
