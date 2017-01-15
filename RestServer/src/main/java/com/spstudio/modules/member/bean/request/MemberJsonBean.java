@@ -36,6 +36,8 @@ public class MemberJsonBean {
     private String member_email;
     
     private String member_birthday;
+    
+    private String member_profilepic;
 
     public MemberJsonBean(){
     }
@@ -144,5 +146,14 @@ public class MemberJsonBean {
         this.member_birthday = member_birthday;
     }
 
+    public String getMember_profilepic() {
+        return member_profilepic;
+    }
+
+    public void setMember_profilepic(String member_profilepic) {
+        this.member_profilepic = member_profilepic;
+    }
+
+    
 
 }

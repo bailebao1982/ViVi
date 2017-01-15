@@ -23,6 +23,8 @@ public class EmployeeJsonBean {
     private String employee_address;
 
     private String employee_note;
+    
+    private String employee_profilePic;
 
     public String getEmployee_name() {
         return employee_name;
@@ -103,4 +105,15 @@ public class EmployeeJsonBean {
     public void setEmployee_note(String employee_note) {
         this.employee_note = employee_note;
     }
+
+    public String getEmployee_profilePic() {
+        return employee_profilePic;
+    }
+
+    public void setEmployee_profilePic(String employee_profilePic) {
+        this.employee_profilePic = employee_profilePic;
+    }
+    
+    
+    
 }

@@ -5,6 +5,7 @@
  */
 package com.spstudio.modules.member.bean.request;
 
+import com.spstudio.modules.common.bean.util.ImageUtils;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.service.MemberTypeService;
 
@@ -31,6 +32,9 @@ public class MemberJsonBeanUtil {
         memberJsonBean.setMember_wechat(member.getWeixinId());
         memberJsonBean.setMember_type(member.getMemberType().getTypeName());
         memberJsonBean.setMember_email(member.getEmail());
+
+        
+        memberJsonBean.setMember_profilepic(ImageUtils.byteToString(member.getProfilePicture()));
         
         return memberJsonBean;
     }
@@ -65,6 +69,8 @@ public class MemberJsonBeanUtil {
         }
 
         member.setWeixinId(memberJsonBean.getMember_wechat());
+        
+        member.setProfilePicture(ImageUtils.stringToByte(memberJsonBean.getMember_profilepic()));
         return member;
     }
 }
