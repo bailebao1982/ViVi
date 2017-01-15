@@ -1,6 +1,6 @@
 package com.spstudio.modules.serviceprovider.bean;
 
-import com.spstudio.modules.common.bean.util.ImageUtils;
+import com.spstudio.common.image.ImageUtils;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;

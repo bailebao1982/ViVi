@@ -5,7 +5,7 @@
  */
 package com.spstudio.modules.member.bean.request;
 
-import com.spstudio.modules.common.bean.util.ImageUtils;
+import com.spstudio.common.image.ImageUtils;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.service.MemberTypeService;
 
