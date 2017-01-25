@@ -1,5 +1,6 @@
 package com.spstudio.modules.serviceprovider.bean;
 
+import com.spstudio.common.image.ImageUtils;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;
@@ -32,6 +33,7 @@ public class EmployeeJsonBeanUtil {
         employeeJsonBean.setEmployee_birthday(spBean.getSpBirthDay().toString());
         employeeJsonBean.setEmployee_address(spBean.getSpAddress());
 
+        employeeJsonBean.setEmployee_profilePic(ImageUtils.byteToString(spBean.getProfilePicture()));
         return employeeJsonBean;
     }
 
@@ -41,7 +43,7 @@ public class EmployeeJsonBeanUtil {
         spBean.setSpName(employeeJsonBean.getEmployee_name());
         spBean.setSpNote(employeeJsonBean.getEmployee_note());
         spBean.setSpAddress(employeeJsonBean.getEmployee_address());
-
+        spBean.setProfilePicture(ImageUtils.stringToByte(employeeJsonBean.getEmployee_profilePic()));
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if(employeeJsonBean.getEmployee_birthday() != null &&
                 !employeeJsonBean.getEmployee_birthday().isEmpty()){

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+   
+    <bean id="permissionDAO" class="com.spstudio.modules.permission.dao.impl.PermissionDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="permissionServiceBase" class="com.spstudio.modules.permission.service.impl.PermissionServiceImpl">
+        <property name="permissionDAO" ref="permissionDAO"></property>
+    </bean>
+    <bean id="permissionService" parent="transactionProxy">
+        <property name="target" ref="permissionServiceBase"></property>
+    </bean>
+    
+</beans>

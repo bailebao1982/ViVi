@@ -5,6 +5,7 @@
  */
 package com.spstudio.uc.level.one;
 
+import com.spstudio.common.image.ImageUtils;
 import com.spstudio.junit.JUnit4ClassRunner;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.service.MemberService;
@@ -17,6 +18,7 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(JUnit4ClassRunner.class)  
 @ContextConfiguration(locations = {"classpath:com/spstudio/common/config/spring-service.xml","classpath:com/spstudio/modules/member/config/spring-member.xml"})  
 //@Transactional  
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) 
+//@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) 
 public class TestJUnitTest {
     private static Member member;
     
@@ -58,6 +60,7 @@ public class TestJUnitTest {
 
     //1. Add New Member
      @Test
+     //@Rollback(true)
      public void testAddNewMember() {
          member = new Member();
          member.setMemberName("TestName");
@@ -66,8 +69,17 @@ public class TestJUnitTest {
          member.setSex("Male");
          member.setMobile("149994033");
          
+         byte[] uncompressByte = ImageUtils.loadFile();
+         System.out.println(uncompressByte.length);
+         byte[] compressByte = ImageUtils.compress(uncompressByte);
+         System.out.println(compressByte.length);
+         member.setProfilePicture(compressByte);
         memberService.addMember(member);
         Member findMember = memberService.findMemberByMemberId(member.getMemberId());
+        byte[] picByte = findMember.getProfilePicture();
+        
+        byte[] uncompressed = ImageUtils.uncompress(picByte);
+        ImageUtils.writeFile(uncompressed);
         assertNotNull(findMember);
         
      }
