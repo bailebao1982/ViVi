@@ -8,9 +8,7 @@ package com.spstudio.uc.level.one;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.entity.MemberType;
-import com.spstudio.modules.member.service.MemberAssetService;
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.member.service.MemberTypeService;
 import com.spstudio.modules.product.entity.PackageProductMapping;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
@@ -27,7 +25,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
@@ -53,11 +51,7 @@ public class TestBasicUseCase {
     private static SessionFactory sessionFactory;
     
     private static ProductService productService;
-    
-    private static MemberTypeService memberTypeService;
-    
-    private static MemberAssetService memberAssetService;
-    
+
     private static MemberService memeberService;
     
     private static SaleService salesService;
@@ -88,10 +82,8 @@ public class TestBasicUseCase {
          ApplicationContext factory = new FileSystemXmlApplicationContext( new String[]{"src/main/java/com/spstudio/common/config/spring-*.xml","src/main/java/com/spstudio/modules/*/config/spring-*.xml"});
         sessionFactory = (SessionFactory) factory.getBean("sessionFactory");
         productService = (ProductService)factory.getBean("productService");
-        memberTypeService = (MemberTypeService)factory.getBean("memberTypeService");
         memeberService = (MemberService)factory.getBean("memberService");
         salesService = (SaleService)factory.getBean("saleService");
-        memberAssetService = (MemberAssetService)factory.getBean("memberAssetService");
         workOrderService = (WorkOrderService)factory.getBean("workOrderService");
     }
     
@@ -169,14 +161,16 @@ public class TestBasicUseCase {
      //3. Add New Sales, verify member asset has create as well.
      //@Test
      public void testAddNewSale(){
+         /*
          saleRec = new Sales();
          saleRec.setMember(member);
          saleRec.setProduct(product);
          saleRec.setSaler("TestSaler");
          saleRec.setSalesCount(100);
-         
+
          saleRec = salesService.addSalesRecord(saleRec);
          assertNotNull(saleRec);
+          */
          
      }
      
@@ -184,8 +178,8 @@ public class TestBasicUseCase {
      //@Test
      public void testAddNewMemberSet(){
          
-         asset = memberAssetService.addMemeberDepositAsset(member, 1000);
-         assertNotNull(asset);
+//         asset = memeberService.addMemeberDepositAsset(member, 1000);
+//         assertNotNull(asset);
      }
      
      //@Test
