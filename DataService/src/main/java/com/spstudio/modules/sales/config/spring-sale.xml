@@ -5,13 +5,21 @@
 
     <!-- - - - - - - - - - - - - -->
     <!-- Sale related configuration -->
-    <!-- Product DAO Config -->
+    <!-- Sale DAO Config -->
     <bean id="saleDAO" class="com.spstudio.modules.sales.dao.impl.SaleDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
+
+    <!-- Sale DAO Config -->
+    <bean id="saleDiscountDAO" class="com.spstudio.modules.sales.dao.impl.SaleDiscountDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+
     <bean id="saleServiceBase" class="com.spstudio.modules.sales.service.impl.SaleServiceImpl">
         <property name="saleDAO" ref="saleDAO"></property>
-        <property name="memberAssetDAO" ref="memberAssetDAO"></property>
+        <property name="memberService" ref="memberService"></property>
+        <property name="stockService" ref="stockService"></property>
+        <property name="configService" ref="configService"></property>
     </bean>
     <bean id="saleService" parent="transactionProxy">
         <property name="target" ref="saleServiceBase"></property>

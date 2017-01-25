@@ -15,22 +15,22 @@
     http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 
     <!-- 配置数据源 -->
-    <!--bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
         <property name="url" value="jdbc:mysql://60.205.59.199/vivi"></property>
         <property name="username" value="root"></property>
         <property name="password" value="Ouoiq5RMV141"></property>
-    </bean-->
+    </bean>
     <aop:aspectj-autoproxy/>
    <context:component-scan base-package="com.spstudio.common.log" />
     
     
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-        <property name="url" value="jdbc:mysql://localhost/vivi"></property>
-        <property name="username" value="root"></property>
-        <property name="password" value="zhuwei1982"></property>
-    </bean>
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>-->
+        <!--<property name="url" value="jdbc:mysql://localhost/vivi"></property>-->
+        <!--<property name="username" value="root"></property>-->
+        <!--<property name="password" value="111111"></property>-->
+    <!--</bean>-->
 
     <!-- 配置SessionFactory -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -73,6 +73,18 @@
                 <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
+    </bean>
+
+
+    <!-- System configuration bean -->
+    <bean id="systemConfigDAO" class="com.spstudio.common.service.dao.impl.SystemConfigDAOImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+    </bean>
+    <bean id="systemConfigServiceBase" class="com.spstudio.common.service.impl.SystemConfigServiceImpl">
+        <property name="configDAO" ref="systemConfigDAO"></property>
+    </bean>
+    <bean id="configService" parent="transactionProxy">
+        <property name="target" ref="systemConfigServiceBase"></property>
     </bean>
 
 </beans>

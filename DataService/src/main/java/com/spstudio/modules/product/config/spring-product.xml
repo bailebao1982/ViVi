@@ -5,26 +5,23 @@
 
     <!-- - - - - - - - - - - - - -->
     <!-- Product related configuration -->
+
     <!-- Product DAO Config -->
     <bean id="productDAO" class="com.spstudio.modules.product.dao.impl.ProductDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
-    </bean>
-    <bean id="productServiceBase" class="com.spstudio.modules.product.service.impl.ProductServiceImpl">
-        <property name="productDAO" ref="productDAO"></property>
-        <property name="stockDAO" ref="stockDAO"></property>
-    </bean>
-    <bean id="productService" parent="transactionProxy">
-        <property name="target" ref="productServiceBase"></property>
     </bean>
 
     <!-- Product Type DAO Config -->
     <bean id="productTypeDAO" class="com.spstudio.modules.product.dao.impl.ProductTypeDAOImpl">
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
-    <bean id="productTypeServiceBase" class="com.spstudio.modules.product.service.impl.ProductTypeServiceImpl">
+
+    <bean id="productServiceBase" class="com.spstudio.modules.product.service.impl.ProductServiceImpl">
+        <property name="productDAO" ref="productDAO"></property>
+        <property name="stockDAO" ref="stockDAO"></property>
         <property name="productTypeDAO" ref="productTypeDAO"></property>
     </bean>
-    <bean id="productTypeService" parent="transactionProxy">
-        <property name="target" ref="productTypeServiceBase"></property>
+    <bean id="productService" parent="transactionProxy">
+        <property name="target" ref="productServiceBase"></property>
     </bean>
 </beans>

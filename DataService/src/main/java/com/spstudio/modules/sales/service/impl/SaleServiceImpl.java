@@ -68,9 +68,25 @@ public class SaleServiceImpl implements SaleService {
         this.saleDiscountDAO = saleDiscountDAO;
     }
 
+    public MemberService getMemberService() {
+        return memberService;
+    }
+
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    public StockService getStockService() {
+        return stockService;
+    }
+
+    public void setStockService(StockService stockService) {
+        this.stockService = stockService;
+    }
+
     /*
-     * Config operations
-     */
+         * Config operations
+         */
     SystemConfigService configService;
 
     public SystemConfigService getConfigService() {
