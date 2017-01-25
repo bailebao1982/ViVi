@@ -2,7 +2,6 @@ package com.spstudio.wxserver.modules.member.controller;
 
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.member.service.MemberTypeService;
 import com.spstudio.wxserver.common.controller.WxBaseController;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -27,9 +26,6 @@ public class MemberController extends WxBaseController {
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private MemberTypeService memberTypeService;
 
     @Autowired
     protected WxMpService wxMpService;

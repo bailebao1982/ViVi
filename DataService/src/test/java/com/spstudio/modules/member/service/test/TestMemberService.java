@@ -6,7 +6,6 @@
 package com.spstudio.modules.member.service.test;
 
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.member.service.MemberTypeService;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.AfterClass;

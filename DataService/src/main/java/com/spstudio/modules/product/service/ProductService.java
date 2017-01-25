@@ -9,6 +9,8 @@ import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductType;
+
 import java.util.List;
 
 
@@ -58,4 +60,19 @@ public interface ProductService {
     public Product onStoreShelf(Product prodct);
     
     public Product takeOffStoreShelf(Product product);
+
+    /**
+     * Product type service
+     */
+    public List<ProductType> getAllProductTypes();
+
+    public ProductType findProductTypeByProductTypeId(String productTypeId);
+
+    public ProductType findProductTypeByProductTypeName(String typeName);
+
+    public ProductType addProductType(ProductType productType);
+
+    public boolean zapProductType(ProductType productType);
+
+    public ProductType updateProductType(ProductType productType);
 }

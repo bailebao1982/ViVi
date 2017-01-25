@@ -37,6 +37,8 @@ public class MemberJsonBean {
     
     private String member_birthday;
 
+    private int    member_bonusPoint;
+
     public MemberJsonBean(){
     }
 
@@ -144,5 +146,11 @@ public class MemberJsonBean {
         this.member_birthday = member_birthday;
     }
 
+    public int getMember_bonusPoint() {
+        return member_bonusPoint;
+    }
 
+    public void setMember_bonusPoint(int member_bonusPoint) {
+        this.member_bonusPoint = member_bonusPoint;
+    }
 }

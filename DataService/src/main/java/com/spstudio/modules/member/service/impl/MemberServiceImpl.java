@@ -5,12 +5,29 @@
  */
 package com.spstudio.modules.member.service.impl;
 
+import com.spstudio.common.service.SystemConfigService;
+import com.spstudio.common.service.entity.SystemConfig;
+import com.spstudio.modules.member.bean.DepositMemberTypeBean;
+import com.spstudio.modules.member.bean.DepositMemberTypeBeanUtil;
+import com.spstudio.modules.member.config.Configuration;
+import com.spstudio.modules.member.dao.MemberAssetDAO;
+import com.spstudio.modules.member.dao.MemberBonusPointDAO;
 import com.spstudio.modules.member.dao.MemberDAO;
+import com.spstudio.modules.member.dao.MemberTypeDAO;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.member.entity.MemberAsset;
+import com.spstudio.modules.member.entity.MemberBonusPoint;
+import com.spstudio.modules.member.entity.MemberType;
+import com.spstudio.modules.member.service.AssetType;
 import com.spstudio.modules.member.service.MemberService;
-import java.util.List;
+import com.spstudio.modules.product.entity.PackageProductMapping;
+import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  *
@@ -18,6 +35,16 @@ import java.util.List;
  */
 public class MemberServiceImpl implements MemberService {
     private MemberDAO memberDAO;
+
+    private MemberBonusPointDAO bonusPointDAO;
+
+    public MemberBonusPointDAO getBonusPointDAO() {
+        return bonusPointDAO;
+    }
+
+    public void setBonusPointDAO(MemberBonusPointDAO bonusPointDAO) {
+        this.bonusPointDAO = bonusPointDAO;
+    }
 
     public MemberDAO getMemberDAO() {
         return memberDAO;
@@ -80,5 +107,310 @@ public class MemberServiceImpl implements MemberService {
     public void zapMember(Member member) {
        memberDAO.zapMember(member);
     }
-    
+
+    private MemberBonusPoint _createBonusPoint(Member member, int point){
+        MemberBonusPoint bonusPoint = new MemberBonusPoint();
+        bonusPoint.setMember(member);
+        bonusPoint.setBonusPoint(point);
+
+        bonusPointDAO.addBonusPointRecord(bonusPoint);
+
+        return bonusPoint;
+    }
+
+    @Override
+    public void increaseBonusPoint(Member member, int point) {
+        MemberBonusPoint bonusPoint = bonusPointDAO.findBonusPointOfMemeber(member);
+        if(bonusPoint == null){
+            _createBonusPoint(member, point);
+            return ;
+        }
+        bonusPoint.setBonusPoint(bonusPoint.getBonusPoint() + point);
+        bonusPointDAO.updateBonusPoint(bonusPoint);
+    }
+
+    @Override
+    public int getBonusPoint(Member member) {
+        MemberBonusPoint bonusPoint = bonusPointDAO.findBonusPointOfMemeber(member);
+        if(bonusPoint == null){
+            _createBonusPoint(member, 0);
+            return 0;
+        }
+        return bonusPoint.getBonusPoint();
+    }
+
+    @Override
+    public void updateBonusPoint(Member member, int newPoint) {
+        MemberBonusPoint bonusPoint = bonusPointDAO.findBonusPointOfMemeber(member);
+        if(bonusPoint == null){
+            _createBonusPoint(member, newPoint);
+            return;
+        }
+        bonusPoint.setBonusPoint(newPoint);
+        bonusPointDAO.updateBonusPoint(bonusPoint);
+    }
+
+
+    //
+    // Member Type Service
+    //
+    private MemberTypeDAO memberTypeDAO;
+
+    public MemberTypeDAO getMemberTypeDAO() {
+        return memberTypeDAO;
+    }
+
+    public void setMemberTypeDAO(MemberTypeDAO memberTypeDAO) {
+        this.memberTypeDAO = memberTypeDAO;
+    }
+
+    @Override
+    public void addMemberType(MemberType type) {
+        memberTypeDAO.addMemberType(type);
+    }
+
+    @Override
+    public List<MemberType> listAllMemberType() {
+        return memberTypeDAO.listMemberType();
+    }
+
+    @Override
+    public MemberType findMemberTypeById(String memberTypeId) {
+        return memberTypeDAO.findMemberTypeById(memberTypeId);
+    }
+
+    @Override
+    public MemberType findMemberTypeByType(String memberType) {
+        return memberTypeDAO.findMemberTypeByType(memberType);
+    }
+
+    @Override
+    public boolean removeMemberType(MemberType type) {
+        return memberTypeDAO.removeMemberType(type);
+    }
+
+    @Override
+    public boolean updateMemberType(MemberType member) {
+        return memberTypeDAO.updateMemberType(member);
+    }
+
+
+    //
+    // Member Asset Service
+    //
+    private MemberAssetDAO memberAssetDAO;
+
+    public MemberAssetDAO getMemberAssetDAO() {
+        return memberAssetDAO;
+    }
+
+    public void setMemberAssetDAO(MemberAssetDAO memberAssetDAO) {
+        this.memberAssetDAO = memberAssetDAO;
+    }
+
+    private MemberAsset _getAsset(Member member, int assetType , Product product, ProductPackage pkg, int deposit, int count){
+        MemberAsset asset = new MemberAsset();
+
+        asset.setProduct(product);
+        asset.setProductPackage(pkg);
+        asset.setDeposit(deposit);
+
+        asset.setAssetType(assetType);
+        asset.setMember(member);
+        asset.setCount(count);
+
+        return asset;
+    }
+
+    @Override
+    public List<MemberAsset> findAssetOfMember(Member member) {
+        return memberAssetDAO.findAssetOfMember(member);
+    }
+
+    @Override
+    public MemberAsset getDepositAssetOfMember(Member member) {
+        return memberAssetDAO.findDepositAssetOfMember(member);
+    }
+
+    @Override
+    public MemberAsset addProductAsset(Member member, Product product, int count) {
+        MemberAsset asset = _getAsset(member, AssetType.ASSET_PRODUCT_TYPE.ordinal(), product, null, 0, count);
+        return memberAssetDAO.addAsset(asset);
+    }
+
+    @Override
+    public List<MemberAsset> addPackageAsset(Member member, ProductPackage productPackage, int count) {
+        List<MemberAsset> listProducts = new ArrayList<MemberAsset>();
+
+        Iterator iter = productPackage.getProductMappingSet().iterator();
+        while (iter.hasNext()){
+            PackageProductMapping mapping = (PackageProductMapping)iter.next();
+
+            MemberAsset asset =  _getAsset(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), mapping.getProduct(), productPackage, 0, mapping.getCount() * count);
+            MemberAsset retAsset = memberAssetDAO.addAsset(asset);
+
+            listProducts.add(retAsset);
+        }
+        return listProducts;
+    }
+
+    @Override
+    public MemberAsset addDepositAsset(Member member, int deposit) {
+        MemberAsset asset =  _getAsset(member, AssetType.ASSET_DEPOSIT_TYPE.ordinal(), null, null, deposit, 0);
+        return memberAssetDAO.addAsset(asset);
+    }
+
+    @Override
+    public boolean removeDepositAsset(MemberAsset asset) {
+        if(asset.getAssetType() == AssetType.ASSET_PACKAGE_TYPE.ordinal()){
+            return false;
+        }else{
+            return  memberAssetDAO.removeAsset(asset);
+        }
+    }
+
+    @Override
+    public boolean removeProductAsset(MemberAsset asset) {
+        return removeDepositAsset(asset);
+    }
+
+    @Override
+    public boolean removePackageAsset(String packageId) {
+        return memberAssetDAO.removePackageAsset(packageId);
+    }
+
+    @Override
+    public boolean removeAssetList(List<String> assetIdList) {
+        return  memberAssetDAO.removeAssetList(assetIdList);
+    }
+
+    @Override
+    public boolean removeAssetOfMember(Member member) {
+        return memberAssetDAO.removeAssetOfMember(member);
+    }
+
+    @Override
+    public MemberAsset updateProductAsset(MemberAsset asset) {
+        if(asset.getAssetType() == AssetType.ASSET_PACKAGE_TYPE.ordinal()){
+            return null;
+        }else{
+            return  memberAssetDAO.updateAsset(asset);
+        }
+    }
+
+    @Override
+    public MemberAsset updateDepositAsset(MemberAsset asset) {
+        return updateProductAsset(asset);
+    }
+
+    @Override
+    public List<MemberAsset> updatePackageAsset(String packageId, int count) {
+        return memberAssetDAO.updatePackageAsset(packageId, count);
+    }
+
+    @Override
+    public boolean zapProductAsset(MemberAsset asset) {
+        if(asset.getAssetType() != AssetType.ASSET_PACKAGE_TYPE.ordinal()){
+            memberAssetDAO.zapAsset(asset);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean zapDepositAsset(MemberAsset asset) {
+        return zapProductAsset(asset);
+    }
+
+    @Override
+    public boolean zapPackageAsset(String packageId){
+        return memberAssetDAO.zapPackageAsset(packageId);
+    }
+
+    @Override
+    public boolean zapAssetOfMember(Member member) {
+        return memberAssetDAO.removeAssetOfMember(member);
+    }
+
+    // Member Config service
+
+    SystemConfigService configService;
+
+    public SystemConfigService getConfigService() {
+        return configService;
+    }
+
+    public void setConfigService(SystemConfigService configService) {
+        this.configService = configService;
+    }
+
+    private List<DepositMemberTypeBean> depositMemberTypeBeanList = null;
+
+    class DMTBeanComparator implements Comparator {
+        public int compare(Object arg0, Object arg1) {
+            DepositMemberTypeBean bean0 = (DepositMemberTypeBean)arg0;
+            DepositMemberTypeBean bean1 = (DepositMemberTypeBean)arg1;
+
+            return bean0.getDeposit() >= bean1.getDeposit() ? 1 : -1;
+        }
+    }
+
+    @Override
+    public MemberType getDepositMemberTypeRank(int deposit) {
+        if(depositMemberTypeBeanList == null ||
+                depositMemberTypeBeanList.size() == 0){
+            depositMemberTypeBeanList = new ArrayList<DepositMemberTypeBean>();
+
+            List<SystemConfig> configs = configService.findModuleConfig(
+                    Configuration.MEMBER_MODULE_NAME,
+                    Configuration.CONFIG_DEPOST_MEMBERTYPE);
+
+            for (SystemConfig config : configs){
+                DepositMemberTypeBean bean = DepositMemberTypeBeanUtil.toBean(config, this);
+                if(bean != null){
+                    depositMemberTypeBeanList.add(bean);
+                }
+            }
+
+            Collections.sort(depositMemberTypeBeanList, new DMTBeanComparator());
+        }
+
+        int idx = 0;
+        for(; idx < depositMemberTypeBeanList.size(); idx++){
+            DepositMemberTypeBean bean = depositMemberTypeBeanList.get(idx);
+            if(deposit < bean.getDeposit()){
+                break;
+            }
+        }
+        idx = idx--;
+        if(idx < 0) return null;
+        return depositMemberTypeBeanList.get(idx).getMemberType();
+    }
+
+    @Override
+    @Transactional
+    public boolean createDepositMemberTypeRank(List<DepositMemberTypeBean> beanList){
+        Collections.sort(beanList, new DMTBeanComparator());
+
+        List<SystemConfig> configList = new ArrayList<>();
+        for (DepositMemberTypeBean bean: beanList){
+            SystemConfig config = DepositMemberTypeBeanUtil.toEntity(bean);
+            configList.add(config);
+        }
+
+        // delete the original first
+        configService.zapModuleConfig(
+                Configuration.MEMBER_MODULE_NAME,
+                Configuration.CONFIG_DEPOST_MEMBERTYPE
+        );
+
+        depositMemberTypeBeanList = null;
+
+        for(SystemConfig config: configList){
+            configService.addConfig(config);
+        }
+        depositMemberTypeBeanList = beanList;
+
+        return true;
+    }
 }

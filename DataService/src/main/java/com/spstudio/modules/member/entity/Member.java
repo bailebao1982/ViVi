@@ -26,7 +26,6 @@ import org.hibernate.annotations.GenericGenerator;
        uniqueConstraints={@UniqueConstraint(columnNames={"mobile"})}
 )
 public class Member {
-    
     @Id  
     @GeneratedValue(generator="system-uuid")  
     @GenericGenerator(name = "system-uuid",strategy="uuid")  

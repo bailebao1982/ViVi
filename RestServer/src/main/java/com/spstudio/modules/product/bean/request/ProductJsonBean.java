@@ -15,6 +15,8 @@ public class ProductJsonBean {
 
     private String product_uom;
 
+    private int    product_unitBonus;
+
     private String product_price;
 
     private String product_description;
@@ -95,5 +97,11 @@ public class ProductJsonBean {
         this.product_uom = product_uom;
     }
 
+    public int getProduct_unitBonus() {
+        return product_unitBonus;
+    }
 
+    public void setProduct_unitBonus(int product_unitBonus) {
+        this.product_unitBonus = product_unitBonus;
+    }
 }

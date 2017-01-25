@@ -55,7 +55,7 @@ public class Product {
     @Column(length=32)
     private String uom;
 
-    // ??
+    // 积分值，指明这商品能产生的积分值
     @Column
     private int bonusePoint;
 

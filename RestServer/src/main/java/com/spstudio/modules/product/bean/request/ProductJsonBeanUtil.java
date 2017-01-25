@@ -2,7 +2,7 @@ package com.spstudio.modules.product.bean.request;
 
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductType;
-import com.spstudio.modules.product.service.ProductTypeService;
+import com.spstudio.modules.product.service.ProductService;
 
 /**
  * Created by Soul on 2017/1/1.
@@ -20,11 +20,12 @@ public class ProductJsonBeanUtil {
         jsonBean.setProduct_description(product.getDescription());
         jsonBean.setProduct_create_date(product.getCreationDate().toString());
         jsonBean.setProduct_available(product.isAvailable());
+        jsonBean.setProduct_unitBonus(product.getBonusePoint());
 
         return jsonBean;
     }
 
-    public static Product toEntityBean(ProductJsonBean productJsonBean, ProductTypeService service){
+    public static Product toEntityBean(ProductJsonBean productJsonBean, ProductService service){
         Product product = new Product();
         try {
             product.setUnitPrice(Float.valueOf(productJsonBean.getProduct_price()));
@@ -37,6 +38,7 @@ public class ProductJsonBeanUtil {
         product.setUom(productJsonBean.getProduct_uom());
         product.setDescription(productJsonBean.getProduct_description());
         product.setAvailable(productJsonBean.isProduct_available());
+        product.setBonusePoint(productJsonBean.getProduct_unitBonus());
 
         String productType = productJsonBean.getProduct_type();
         if(!productType.isEmpty()){

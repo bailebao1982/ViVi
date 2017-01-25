@@ -6,7 +6,7 @@
 package com.spstudio.modules.member.bean.request;
 
 import com.spstudio.modules.member.entity.Member;
-import com.spstudio.modules.member.service.MemberTypeService;
+import com.spstudio.modules.member.service.MemberService;
 
 /**
  *
@@ -31,17 +31,17 @@ public class MemberJsonBeanUtil {
         memberJsonBean.setMember_wechat(member.getWeixinId());
         memberJsonBean.setMember_type(member.getMemberType().getTypeName());
         memberJsonBean.setMember_email(member.getEmail());
-        
+
         return memberJsonBean;
     }
     
-    public static Member toEntityBean(MemberJsonBean memberJsonBean, MemberTypeService service){
+    public static Member toEntityBean(MemberJsonBean memberJsonBean, MemberService service){
         Member member = new Member();
         //member.setMemberId(memberJsonBean.getMember_id());
         member.setAddress(memberJsonBean.getMember_address());
 
         if(memberJsonBean.getMember_birthday() != null &&
-           memberJsonBean.getMember_birthday() != "")
+           !memberJsonBean.getMember_birthday().isEmpty())
             member.setBirthDay(java.sql.Date.valueOf(memberJsonBean.getMember_birthday()));
 
 //        if(memberJsonBean.getMember_inputdate() != null &&
