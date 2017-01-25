@@ -18,8 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/sysconfig")
 public class SystemConfigController {
-    @Resource(name="systemConfigService")
-    private SystemConfigService systemConfigService;
+    @Resource(name="configService")
+    private SystemConfigService configService;
 
     @RequestMapping(value = "/list_config",
             method = RequestMethod.GET,
@@ -27,7 +27,7 @@ public class SystemConfigController {
     @CrossOrigin
     public @ResponseBody
     ResponseBean listConfigs(@RequestParam(value="module", required=true) String config_module){
-        List<SystemConfig> configs = systemConfigService.findModuleConfigs(config_module);
+        List<SystemConfig> configs = configService.findModuleConfigs(config_module);
         List<SysConfigJsonBean> sysConfigJsonBeenList = new ArrayList<SysConfigJsonBean>();
         for (SystemConfig sysCfg : configs){
             sysConfigJsonBeenList.add(SysConfigJsonBeanUtil.toJsonBean(sysCfg));
@@ -45,7 +45,7 @@ public class SystemConfigController {
     public @ResponseBody
     ResponseBean updateConfig(@RequestBody SysConfigJsonBean sysConfigJson){
         SystemConfig sysConfig = SysConfigJsonBeanUtil.toEntityBean(sysConfigJson);
-        List<SystemConfig> targetCfgs = systemConfigService.findModuleConfig(sysConfig.getConfigModule(),
+        List<SystemConfig> targetCfgs = configService.findModuleConfig(sysConfig.getConfigModule(),
                                              sysConfig.getConfigKey());
         boolean updated = false;
         for (SystemConfig cfg: targetCfgs){
@@ -53,7 +53,7 @@ public class SystemConfigController {
                     sysConfigJson.getConfig_condition()
             )){
                 cfg.setConfigValue(sysConfigJson.getConfig_value());
-                systemConfigService.updateConfig(cfg);
+                configService.updateConfig(cfg);
                 updated = true;
                 break;
             }

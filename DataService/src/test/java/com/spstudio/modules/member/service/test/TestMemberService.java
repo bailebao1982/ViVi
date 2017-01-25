@@ -23,8 +23,6 @@ public class TestMemberService {
     
     private static SessionFactory sessionFactory;
     
-    private static MemberTypeService memberTypeService;
-    
     private static MemberService memeberService;
     
     public TestMemberService() {
@@ -43,7 +41,6 @@ public class TestMemberService {
         System.out.println("setUp()...");
         ApplicationContext factory = new FileSystemXmlApplicationContext( new String[]{"src/main/java/com/spstudio/common/config/spring-*.xml","src/main/java/com/spstudio/modules/*/config/spring-*.xml"});
         sessionFactory = (SessionFactory) factory.getBean("sessionFactory");
-        memberTypeService = (MemberTypeService)factory.getBean("memberTypeService");
         memeberService = (MemberService)factory.getBean("memberService");
         
     }

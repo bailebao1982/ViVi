@@ -8,7 +8,6 @@ package com.spstudio.modules.permission.service.impl;
 import com.spstudio.modules.permission.dao.PermissionDAO;
 import com.spstudio.modules.permission.service.PermissionService;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 
@@ -17,21 +16,21 @@ import javax.servlet.http.HttpSession;
  * @author wewezhu
  */
 public class PermissionServiceImpl implements PermissionService{
-    private PermissionDAO loginDao;  
+    private PermissionDAO permissionDAO;
 
-    public PermissionDAO getLoginDao() {
-        return loginDao;
+    public PermissionDAO getPermissionDAO() {
+        return permissionDAO;
     }
 
-    public void setLoginDao(PermissionDAO loginDao) {
-        this.loginDao = loginDao;
+    public void setPermissionDAO(PermissionDAO permissionDAO) {
+        this.permissionDAO = permissionDAO;
     }
     
     
     @Override  
     public Map<String, Object> login(Map<String, Object> params) {  
         Map<String,Object> resMap = new HashMap<>();  
-        boolean findUser = loginDao.login(params);  
+        boolean findUser = permissionDAO.login(params);
         if(!findUser){  
             resMap.put("resCode", MessageContent.MSG_CODE_ERROR);  
             resMap.put("resMsg",MessageContent.MSG_USERNAMEORPASSWORDWRONG);  

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController  
 @RequestMapping(value = "/login" , method = {RequestMethod.GET,RequestMethod.POST}, headers="Accept=application/json")  
 public class LoginController {
-    @Resource(name="memberService")
+    @Resource(name="permissionService")
     private PermissionService permissionService;
      
      @RequestMapping(value = "/ssmlogin")  
