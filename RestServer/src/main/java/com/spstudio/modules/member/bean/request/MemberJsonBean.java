@@ -39,6 +39,8 @@ public class MemberJsonBean {
     
     private String member_profilepic;
 
+    private int    member_bonusPoint;
+
     public MemberJsonBean(){
     }
 
@@ -146,6 +148,10 @@ public class MemberJsonBean {
         this.member_birthday = member_birthday;
     }
 
+    public int getMember_bonusPoint() {
+        return member_bonusPoint;
+    }
+
     public String getMember_profilepic() {
         return member_profilepic;
     }
@@ -154,6 +160,7 @@ public class MemberJsonBean {
         this.member_profilepic = member_profilepic;
     }
 
-    
-
+    public void setMember_bonusPoint(int member_bonusPoint) {
+        this.member_bonusPoint = member_bonusPoint;
+    }
 }

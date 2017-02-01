@@ -72,7 +72,11 @@ public class StockDAOImpl implements StockDAO{
            throw new StockNotEnoughException();
         }else{
            if(this.isStockEnoughForDecrease(product, num)){
-               stock.setInventory(stock.getInventory()-num);
+                if(stock.isinfinite()){
+                    return stock;
+                }
+
+               stock.setInventory(stock.getInventory() - num);
                this.sessionFactory.getCurrentSession().saveOrUpdate(stock);
                return stock;
            }else{
@@ -100,9 +104,9 @@ public class StockDAOImpl implements StockDAO{
 
     @Override
     public boolean isStockEnoughForDecrease(Product product, int num) {
-         Stock stock = this.findStockByProduct(product);
+       Stock stock = this.findStockByProduct(product);
        if(stock != null){
-           return stock.getInventory() > num;
+           return stock.isinfinite() || stock.getInventory() > num;
         }else{
            stock = new Stock();
            stock.setProduct(product);

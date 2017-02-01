@@ -1,9 +1,9 @@
-package com.spstudio.modules.product.bean.request;
+package com.spstudio.modules.common.bean;
 
 /**
- * Created by Soul on 2017/1/4.
+ * Created by Soul on 2017/1/24.
  */
-public class SimpleProductJsonBean {
+public class Select2OptionJsonBean {
     private String id;
     private String text;
 

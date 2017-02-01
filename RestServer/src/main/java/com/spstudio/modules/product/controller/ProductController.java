@@ -7,13 +7,16 @@ import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.search.SearchCriteriaItem;
+import com.spstudio.modules.common.bean.Select2OptionJsonBean;
+import com.spstudio.modules.common.bean.Select2RequestBean;
+import com.spstudio.modules.common.bean.Select2ResponseJsonBean;
+import com.spstudio.modules.common.bean.Select2ResponseJsonBeanUtil;
 import com.spstudio.modules.product.bean.request.*;
 import com.spstudio.modules.product.entity.PackageProductMapping;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.product.entity.ProductType;
 import com.spstudio.modules.product.service.ProductService;
-import com.spstudio.modules.product.service.ProductTypeService;
 
 import com.spstudio.modules.stock.entity.Stock;
 import com.spstudio.modules.stock.service.StockService;
@@ -37,9 +40,6 @@ public class ProductController {
      */
     private static final Logger logger = Logger.getLogger(ProductController.class.getName());
 
-    @Resource(name="productTypeService")
-    private ProductTypeService productTypeService;
-
     @Resource(name="productService")
     private ProductService productService;
 
@@ -57,7 +57,7 @@ public class ProductController {
     @CrossOrigin
     public @ResponseBody
     ResponseBean listProductType(){
-        List<ProductType> productTypes = productTypeService.getAllProductTypes();
+        List<ProductType> productTypes = productService.getAllProductTypes();
         return ResponseMsgBeanFactory.getResponseBean(
                 true,
                 productTypes
@@ -76,7 +76,7 @@ public class ProductController {
             );
         }else {
             ProductType newProductType = ProductTypeJsonBeanUtil.toEntityBean(productTypeJson);
-            productTypeService.addProductType(newProductType);
+            productService.addProductType(newProductType);
             return ResponseMsgBeanFactory.getSuccessResponseBean("产品类型创建成功");
         }
     }
@@ -87,9 +87,9 @@ public class ProductController {
     @CrossOrigin
     public @ResponseBody ResponseBean delProductType(@PathVariable String product_type_id){
 
-        ProductType productType = productTypeService.findProductTypeByProductTypeId(product_type_id);
+        ProductType productType = productService.findProductTypeByProductTypeId(product_type_id);
         if(productType != null){
-            productTypeService.zapProductType(productType);
+            productService.zapProductType(productType);
             return ResponseMsgBeanFactory.getSuccessResponseBean("产品类型删除成功");
         }else{
             return ResponseMsgBeanFactory.getErrorResponseBean(
@@ -111,7 +111,7 @@ public class ProductController {
                     "错误：产品必要的信息丢失。请检查 产品名称，产品编码"
             );
         }else{
-            Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productTypeService);
+            Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productService);
             if(product == null){
                 return ResponseMsgBeanFactory.getErrorResponseBean(
                         "2020",
@@ -167,7 +167,7 @@ public class ProductController {
     public @ResponseBody ResponseBean updateProduct(@RequestBody ProductJsonBean productJsonBean,
                                                     @PathVariable String product_id,
                                                     Model model){
-        Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productTypeService);
+        Product product = ProductJsonBeanUtil.toEntityBean(productJsonBean, productService);
         if(product == null){
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "2020",
@@ -217,9 +217,37 @@ public class ProductController {
     @RequestMapping(value = "/list_products_for_select",
             method = RequestMethod.GET)
     @CrossOrigin
-    public @ResponseBody List<SimpleProductJsonBean> listProducts(){
+    public @ResponseBody List<Select2OptionJsonBean> listProducts(){
         List<Product> allProducts = productService.getAllProducts();
         return SimpleProductJsonBeanUtil.toJsonBeanList(allProducts);
+    }
+
+    @RequestMapping(value = "/list_products_for_select2",
+            method = RequestMethod.GET)
+    @CrossOrigin
+    public @ResponseBody Select2ResponseJsonBean listProductItems(@RequestBody Select2RequestBean requestBean){
+        SearchCriteria sc = new SearchCriteria();
+        if(requestBean.getQuery() != null &&
+                !requestBean.getQuery().isEmpty()){
+            sc.addSearchCriterialItem("name",
+                    new SearchCriteriaItem("productName", requestBean.getQuery(), SearchConditionEnum.Like)
+            );
+        }
+
+        Page<Product> resultPageBean = productService.queryProductsForPage(
+                requestBean.getPage(),
+                requestBean.getPage_size(),
+                sc);
+
+        List<Select2OptionJsonBean> productJsonBeanList =
+                SimpleProductJsonBeanUtil.toJsonBeanList(resultPageBean.getList());
+
+        Select2ResponseJsonBean returnBean = Select2ResponseJsonBeanUtil.toJsonBean(
+            resultPageBean.getTotalRecords(),
+            productJsonBeanList
+        );
+
+        return returnBean;
     }
 
     @RequestMapping(value = "/list_products",
@@ -281,7 +309,7 @@ public class ProductController {
 
         if(queryBean.getType() != null &&
            !queryBean.getType().isEmpty()){
-            ProductType productType = productTypeService.findProductTypeByProductTypeName(queryBean.getType());
+            ProductType productType = productService.findProductTypeByProductTypeName(queryBean.getType());
             if(productType != null) {
                 sc.addSearchCriterialItem("type",
                         new SearchCriteriaItem("productTypeId", productType.getProductTypeId(), SearchConditionEnum.Equal)
@@ -527,7 +555,15 @@ public class ProductController {
     @RequestMapping(value = "/list_packages_for_select",
             method = RequestMethod.GET)
     @CrossOrigin
-    public @ResponseBody List<SimplePackageJsonBean> listPackagesForSelect(){
+    public @ResponseBody List<Select2OptionJsonBean> listPackagesForSelect(){
+        List<ProductPackage> packages = productService.getAllPackages();
+        return SimplePackageJsonBeanUtil.toJsonBeanList(packages);
+    }
+
+    @RequestMapping(value = "/list_packages_for_select2",
+            method = RequestMethod.GET)
+    @CrossOrigin
+    public @ResponseBody List<Select2OptionJsonBean> listPackagesForSelect2(){
         List<ProductPackage> packages = productService.getAllPackages();
         return SimplePackageJsonBeanUtil.toJsonBeanList(packages);
     }
@@ -673,7 +709,7 @@ public class ProductController {
 
         if(queryBean.getType() != null &&
                 !queryBean.getType().isEmpty()){
-            ProductType productType = productTypeService.findProductTypeByProductTypeName(queryBean.getType());
+            ProductType productType = productService.findProductTypeByProductTypeName(queryBean.getType());
             if(productType != null) {
                 sc.addSearchCriterialItem("type",
                         new SearchCriteriaItem("productTypeId", productType.getProductTypeId(), SearchConditionEnum.Equal)

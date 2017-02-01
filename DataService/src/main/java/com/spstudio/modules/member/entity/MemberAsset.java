@@ -7,22 +7,21 @@ package com.spstudio.modules.member.entity;
 
 
 import com.spstudio.modules.product.entity.Product;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+
+import com.spstudio.modules.product.entity.ProductPackage;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.Date;
 
 /**
  *
  * @author wewezhu
  */
 @Entity
-@Table(name="T_MemberAsset")
+@Table(name="T_MemberAsset",
+        uniqueConstraints={@UniqueConstraint(columnNames={"memberId", "assetType"})})
 public class MemberAsset {
     
     @Id  
@@ -33,17 +32,97 @@ public class MemberAsset {
     
     @ManyToOne(cascade = { CascadeType.DETACH })
     @JoinColumn(name = "memberId") 
-    private Member memeber;
-    
+    private Member member;
+
+    /**
+     * assetType:
+     * 0 ---- product
+     * 1 ---- package
+     * 2 ---- deposit
+     */
+    @Column
+    private int assetType;
+
+    // 产品
     @ManyToOne(cascade = { CascadeType.DETACH})
     @JoinColumn(name = "productId")
     private Product product;
-    
-    @Column
+
+    // 套餐
+    @ManyToOne(cascade = { CascadeType.DETACH})
+    @JoinColumn(name = "productPackageId")
+    private ProductPackage productPackage;
+
+    // 存款
+    @Column(columnDefinition = "int default 0")
     private int deposit;
-    
-    @Column
+
+    // 数量
+    @Column(columnDefinition = "int default 0")
     private int count;
+
+    @Column(columnDefinition = "int default 0")
+    private int deleteFlag;
+
+    public int getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(int deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    @Column(updatable = false)
+    private Date creationDate;
+
+    @Column
+    private Date lastUpdateDate;
+
+    @Column(length=32)
+    private String creator;
+
+    @Column(length=32)
+    private String lastUpdateBy;
+
+    public ProductPackage getProductPackage() {
+        return productPackage;
+    }
+
+    public void setProductPackage(ProductPackage productPackage) {
+        this.productPackage = productPackage;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
 
     public String getMemberAssetId() {
         return memberAssetId;
@@ -53,13 +132,12 @@ public class MemberAsset {
         this.memberAssetId = memberAssetId;
     }
 
-    
-    public Member getMemeber() {
-        return memeber;
+    public Member getMember() {
+        return member;
     }
 
-    public void setMemeber(Member memeber) {
-        this.memeber = memeber;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public Product getProduct() {
@@ -86,7 +164,11 @@ public class MemberAsset {
         this.count = count;
     }
 
-    
-    
-    
+    public int getAssetType() {
+        return assetType;
+    }
+
+    public void setAssetType(int assetType) {
+        this.assetType = assetType;
+    }
 }

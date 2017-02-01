@@ -38,10 +38,10 @@ public class MemberTypeDAOImpl implements MemberTypeDAO {
     }
 
     @Override
-    public MemberType findMemberTypeById(String memberId) {
+    public MemberType findMemberTypeById(String memberTypeId) {
         String hql = "from MemberType as membertype where membertype.memberTypeId = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
-        query.setString("id", memberId);
+        query.setString("id", memberTypeId);
         List<MemberType> list = query.list();
         if(list.size() > 0)
             return list.get(0);

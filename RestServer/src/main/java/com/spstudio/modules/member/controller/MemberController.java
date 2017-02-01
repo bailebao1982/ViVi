@@ -10,10 +10,15 @@ package com.spstudio.modules.member.controller;
 import com.spstudio.common.response.ResponseMsgBeanFactory;
 import com.spstudio.common.response.SuccessMessageBean;
 import com.spstudio.common.response.ResponseBean;
+import com.spstudio.modules.common.bean.Select2OptionJsonBean;
+import com.spstudio.modules.common.bean.Select2RequestBean;
+import com.spstudio.modules.common.bean.Select2ResponseJsonBean;
+import com.spstudio.modules.common.bean.Select2ResponseJsonBeanUtil;
+import com.spstudio.modules.member.bean.request.MemberJsonBean;
 import com.spstudio.modules.member.bean.request.*;
 import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.entity.MemberType;
-import com.spstudio.modules.member.service.MemberTypeService;
 import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
@@ -36,10 +41,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-    
-    @Resource(name="memberTypeService")
-    private MemberTypeService memberTypeService;
-
     @Resource(name="memberService")
     private MemberService memberService;
 
@@ -56,7 +57,7 @@ public class MemberController {
             headers="Accept=application/json")
     @CrossOrigin
     public @ResponseBody ResponseBean listMemberType(){
-        List<MemberType> memberTypes = memberTypeService.listAllMemberType();
+        List<MemberType> memberTypes = memberService.listAllMemberType();
 
         return ResponseMsgBeanFactory.getResponseBean(
                 true,
@@ -71,7 +72,7 @@ public class MemberController {
     public @ResponseBody ResponseBean addMemberType(@RequestBody MemberTypeJsonBean memberTypeJson){
 
         MemberType newMemberType = MemberTypeJsonBeanUtil.toEntityBean(memberTypeJson);
-        memberTypeService.addMemberType(newMemberType);
+        memberService.addMemberType(newMemberType);
         return ResponseMsgBeanFactory.getSuccessResponseBean("会员类型创建成功");
     }
 
@@ -81,9 +82,9 @@ public class MemberController {
     @CrossOrigin
     public @ResponseBody ResponseBean delMemberType(@PathVariable String member_type_id){
 
-        MemberType newMemberType = memberTypeService.findMemberTypeById(member_type_id);
+        MemberType newMemberType = memberService.findMemberTypeById(member_type_id);
         if(newMemberType != null){
-            memberTypeService.removeMemberType(newMemberType);
+            memberService.removeMemberType(newMemberType);
             return ResponseMsgBeanFactory.getSuccessResponseBean("会员类型删除成功");
         }else{
             return ResponseMsgBeanFactory.getErrorResponseBean(
@@ -105,10 +106,13 @@ public class MemberController {
                     "错误：会员必要的信息丢失。请检查 名称，手机号码"
             );
         }else{
-            Member newMember = MemberJsonBeanUtil.toEntityBean(member, memberTypeService);
+            Member newMember = MemberJsonBeanUtil.toEntityBean(member, memberService);
             newMember.setCreationDate(new java.sql.Date(new Date().getTime()));
             try{
                 memberService.addMember(newMember);
+                int bonusPoint = member.getMember_bonusPoint();
+                memberService.increaseBonusPoint(newMember, bonusPoint);
+
                 return ResponseMsgBeanFactory.getSuccessResponseBean("会员创建成功");
             }catch (DataIntegrityViolationException ex){
                 return ResponseMsgBeanFactory.getErrorResponseBean(
@@ -126,9 +130,11 @@ public class MemberController {
     public @ResponseBody ResponseBean updateMember(@RequestBody MemberJsonBean memberJson,
                                                      @PathVariable String member_id){
         // Something might be wrong here
-        Member updateMember = MemberJsonBeanUtil.toEntityBean(memberJson, memberTypeService);
+        Member updateMember = MemberJsonBeanUtil.toEntityBean(memberJson, memberService);
         updateMember.setMemberId(member_id);
         if(memberService.updateMember(updateMember)){
+            int bonusPoint = memberJson.getMember_bonusPoint();
+            memberService.updateBonusPoint(updateMember, bonusPoint);
             return ResponseMsgBeanFactory.getSuccessResponseBean("会员信息更新成功");
         }else{
             return ResponseMsgBeanFactory.getErrorResponseBean(
@@ -181,6 +187,9 @@ public class MemberController {
         Member member = memberService.findMemberByMemberId(member_id);
         if(member != null){
             MemberJsonBean responseMemberJsonBean = MemberJsonBeanUtil.toJsonBean(member);
+            int bonusPoint = memberService.getBonusPoint(member);
+            responseMemberJsonBean.setMember_bonusPoint(bonusPoint);
+
             return ResponseMsgBeanFactory.getResponseBean(
                     true,
                     responseMemberJsonBean
@@ -236,7 +245,7 @@ public class MemberController {
 
         if(queryBean.getType() != null &&
            !queryBean.getType().isEmpty()) {
-            MemberType membType = memberTypeService.findMemberTypeByType(queryBean.getType());
+            MemberType membType = memberService.findMemberTypeByType(queryBean.getType());
             if(membType != null) {
                 sc.addSearchCriterialItem("type",
                         new SearchCriteriaItem("memberTypeId", membType.getMemberTypeId(), SearchConditionEnum.Equal)
@@ -265,7 +274,12 @@ public class MemberController {
 
         ArrayList<MemberJsonBean> returnArray = new ArrayList<MemberJsonBean>();
         for (Member memb : resultPageBean.getList()){
-            returnArray.add(MemberJsonBeanUtil.toJsonBean(memb));
+            int bonusPoint = memberService.getBonusPoint(memb);
+
+            MemberJsonBean responseMemberJsonBean = MemberJsonBeanUtil.toJsonBean(memb);
+            responseMemberJsonBean.setMember_bonusPoint(bonusPoint);
+
+            returnArray.add(responseMemberJsonBean);
         }
         returnPage.setList(returnArray);
 
@@ -275,6 +289,33 @@ public class MemberController {
         );
     }
 
+    @RequestMapping(value = "/list_memebers_for_select2",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody Select2ResponseJsonBean listMemebersForSelect2(
+            @RequestBody Select2RequestBean requestBean){
+        SearchCriteria sc = new SearchCriteria();
+        if(requestBean.getQuery() != null &&
+                !requestBean.getQuery().isEmpty())
+            sc.addSearchCriterialItem("name",
+                    new SearchCriteriaItem("memberName", requestBean.getQuery(), SearchConditionEnum.Like)
+            );
+
+        Page<Member> resultPageBean = memberService.queryForPage(requestBean.getPage(), requestBean.getPage_size(), sc);
+
+        List<Select2OptionJsonBean> productJsonBeanList =
+                SimpleMemberJsonBeanUtil.toJsonBeanList(resultPageBean.getList());
+
+        Select2ResponseJsonBean returnBean = Select2ResponseJsonBeanUtil.toJsonBean(
+                resultPageBean.getTotalRecords(),
+                productJsonBeanList
+        );
+
+        return returnBean;
+    }
+
+
     @RequestMapping(value = "/test",
             method = RequestMethod.GET,
             headers="Accept=application/json")
@@ -282,4 +323,59 @@ public class MemberController {
         return ResponseMsgBeanFactory.getSuccessResponseBean("测试成功");
     }
 
+    // Member Asset related
+    @RequestMapping(value = "/list_memeber_assets",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody ResponseBean listMemberAssets(
+            @RequestParam(value="page", required=true) int page,
+            @RequestParam(value="page_size", required=true) int page_size,
+            @RequestParam(value="member_name", required=false) String member_name){
+        SearchCriteria sc = new SearchCriteria();
+        if(member_name!= null &&
+          !member_name.isEmpty())
+            sc.addSearchCriterialItem("name",
+                    new SearchCriteriaItem("memberName", member_name, SearchConditionEnum.Like)
+            );
+
+        Page<Member> resultPageBean = memberService.queryForPage(page, page_size, sc);
+
+        List<MemberAssetListJsonBean> memberAssetListJsonBean = new ArrayList<MemberAssetListJsonBean>();
+        for (Member memb : resultPageBean.getList()){
+            MemberAssetListJsonBean assetListJsonBean = new MemberAssetListJsonBean();
+            MemberJsonBean responseMemberJsonBean = MemberJsonBeanUtil.toJsonBean(memb);
+
+            int bonusPoint = memberService.getBonusPoint(memb);
+            responseMemberJsonBean.setMember_bonusPoint(bonusPoint);
+
+            assetListJsonBean.setAsset_member(responseMemberJsonBean);
+
+            List<MemberAssetJsonBean> assetList = new ArrayList<MemberAssetJsonBean>();
+            List<MemberAsset> memberAssets = memberService.findAssetOfMember(memb);
+            for (MemberAsset asset : memberAssets){
+                MemberAssetJsonBean memberAssetJsonBean = MemberAssetJsonBeanUtil.toJsonBean(asset);
+                assetList.add(memberAssetJsonBean);
+            }
+
+            assetListJsonBean.setAssets(assetList);
+
+            memberAssetListJsonBean.add(assetListJsonBean);
+        }
+
+
+
+        Page<MemberAssetListJsonBean> returnPage = new Page<MemberAssetListJsonBean>();
+
+        returnPage.setTotalRecords(resultPageBean.getTotalRecords());
+        returnPage.setPageNo(resultPageBean.getPageNo());
+        returnPage.setPageSize(resultPageBean.getPageSize());
+
+        returnPage.setList(memberAssetListJsonBean);
+
+        return ResponseMsgBeanFactory.getResponseBean(
+                true,
+                returnPage
+        );
+    }
 }

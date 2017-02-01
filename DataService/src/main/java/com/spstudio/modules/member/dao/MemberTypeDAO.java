@@ -12,7 +12,7 @@ public interface MemberTypeDAO {
 
     public List<MemberType> listMemberType();
 
-    public MemberType findMemberTypeById(String memberId);
+    public MemberType findMemberTypeById(String memberTypeId);
 
     public MemberType findMemberTypeByType(String memberType);
 
