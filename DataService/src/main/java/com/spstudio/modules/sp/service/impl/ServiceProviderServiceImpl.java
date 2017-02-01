@@ -7,11 +7,15 @@ package com.spstudio.modules.sp.service.impl;
 
 import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.permission.dao.PermissionDAO;
+import com.spstudio.modules.permission.entity.LoginUser;
+import com.spstudio.modules.permission.service.impl.SysContent;
 import com.spstudio.modules.sp.dao.ServiceProviderTypeDAO;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.sp.dao.ServiceProviderDAO;
 import com.spstudio.modules.sp.entity.ServiceProvider;
+import java.util.Date;
 
 import java.util.List;
 
@@ -23,6 +27,8 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     private ServiceProviderDAO serviceProviderDAO;
 
     private ServiceProviderTypeDAO serviceProviderTypeDAO;
+    
+    private PermissionDAO permissionDAO;
 
     public ServiceProviderDAO getServiceProviderDAO() {
         return serviceProviderDAO;
@@ -40,6 +46,16 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         this.serviceProviderTypeDAO = serviceProviderTypeDAO;
     }
 
+    public PermissionDAO getPermissionDAO() {
+        return permissionDAO;
+    }
+
+    public void setPermissionDAO(PermissionDAO permissionDAO) {
+        this.permissionDAO = permissionDAO;
+    }
+
+    
+    
     @Override
     public List<ServiceProviderType> listServiceProviderTypes() {
         return serviceProviderTypeDAO.listServiceProviderType();
@@ -77,7 +93,15 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public ServiceProvider addServiceProvider(ServiceProvider sp) {
-        return serviceProviderDAO.addServiceProvider(sp);
+        sp = serviceProviderDAO.addServiceProvider(sp);
+        LoginUser loginUser = new LoginUser();
+        loginUser.setCreationTime(new Date(System.currentTimeMillis()));
+        loginUser.setLoginCount(0);
+        loginUser.setLoginPassword(SysContent.DEFAULT_PWD);
+        loginUser.setLoginUser(sp.getSpName());
+        loginUser.setMemberId(sp.getServiceProviderId());
+        permissionDAO.addLoginUser(loginUser);
+        return sp;
     }
 
     @Override

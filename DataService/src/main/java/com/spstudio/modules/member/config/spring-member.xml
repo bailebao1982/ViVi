@@ -33,6 +33,7 @@
     </bean>
     <bean id="memberServiceBase" class="com.spstudio.modules.member.service.impl.MemberServiceImpl">
         <property name="memberDAO" ref="memberDAO"></property>
+        <property name="permissionDAO" ref="permissionDAO"></property>
     </bean>
     <bean id="memberService" parent="transactionProxy">
         <property name="target" ref="memberServiceBase"></property>
