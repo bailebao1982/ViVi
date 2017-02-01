@@ -5,10 +5,16 @@
  */
 package com.spstudio.modules.permission.controller;
 
+import com.spstudio.modules.permission.entity.LoginUser;
+import com.spstudio.modules.permission.entity.Privilege;
+import com.spstudio.modules.permission.service.PermissionService;
 import com.spstudio.modules.permission.service.impl.MessageContent;
 import com.spstudio.modules.permission.service.impl.SysContent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,6 +30,10 @@ import org.springframework.stereotype.Component;
 @Aspect  
 @Component("LoginControlAspect") 
 public class LoginControlAspect {
+    
+     @Resource(name="memberService")
+    private PermissionService permissionService;
+    
      private static Logger logger = Logger.getLogger(LoginControlAspect.class);  
      
      @Around("@annotation(com.spstudio.modules.permission.controller.UserSessionValidator)")
@@ -37,8 +47,22 @@ public class LoginControlAspect {
   
         HttpSession session = SysContent.getSession();  
         if (session.getAttribute("username") != null) {  
-            try {  
-                result = pjp.proceed(args);  
+            try {
+                //Logic to check user priviledge
+                Privilege checkingFuncationPrivilege = permissionService.findPrivilegeByFuncationName(methodName);
+                
+                String userName = (String)session.getAttribute("username");
+                LoginUser loginUser = permissionService.getLoginUserByLoginName(userName);
+                
+                
+                Set<Privilege> permissionedPrivileges = permissionService.listPrivilegsByLoginUser(loginUser);
+                if(permissionedPrivileges.contains(checkingFuncationPrivilege)){
+                        result = pjp.proceed(args);
+                }
+                else{
+                    //TODO need change to return http 403 permission issue.
+                    throw new Exception("no permission");
+                }
             } catch (Throwable e) {  
                 e.printStackTrace();  
             }  
