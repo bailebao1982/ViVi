@@ -33,7 +33,7 @@ public class SystemConfigDAOImpl implements SystemConfigDAO {
 
     @Override
     public List<SystemConfig> listModuleConfigs(String module) {
-        String hql = "from SytemConfig where configModule=:config_module";
+        String hql = "from SystemConfig where configModule=:config_module";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("config_module", module);
         List<SystemConfig> configList = query.list();
@@ -45,7 +45,7 @@ public class SystemConfigDAOImpl implements SystemConfigDAO {
 
     @Override
     public List<SystemConfig> findModuleConfig(String module, String configKey) {
-        String hql = "from SytemConfig where configModule=:config_module and configKey=:config_key";
+        String hql = "from SystemConfig where configModule=:config_module and configKey=:config_key";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("config_module", module);
         query.setParameter("config_key", configKey);
@@ -83,7 +83,7 @@ public class SystemConfigDAOImpl implements SystemConfigDAO {
 
     @Override
     public boolean zapModuleConfig(String module, String configKey){
-        String hql = "delete from SytemConfig where configModule=:config_module and configKey=:config_key";
+        String hql = "delete from SystemConfig where configModule=:config_module and configKey=:config_key";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("config_module", module);
         query.setParameter("config_key", configKey);

@@ -225,26 +225,32 @@ public class ProductController {
     @RequestMapping(value = "/list_products_for_select2",
             method = RequestMethod.GET)
     @CrossOrigin
-    public @ResponseBody Select2ResponseJsonBean listProductItems(@RequestBody Select2RequestBean requestBean){
+    public @ResponseBody Select2ResponseJsonBean listProductItems(@RequestParam String query,  @RequestParam int page, @RequestParam int page_size){
         SearchCriteria sc = new SearchCriteria();
-        if(requestBean.getQuery() != null &&
-                !requestBean.getQuery().isEmpty()){
+        if(query != null &&
+                !query.isEmpty()){
             sc.addSearchCriterialItem("name",
-                    new SearchCriteriaItem("productName", requestBean.getQuery(), SearchConditionEnum.Like)
+                    new SearchCriteriaItem("productName", query, SearchConditionEnum.Like)
             );
         }
 
         Page<Product> resultPageBean = productService.queryProductsForPage(
-                requestBean.getPage(),
-                requestBean.getPage_size(),
+                page,
+                page_size,
                 sc);
 
-        List<Select2OptionJsonBean> productJsonBeanList =
-                SimpleProductJsonBeanUtil.toJsonBeanList(resultPageBean.getList());
+        List<Select2OptionJsonBean> jsonBeanList = new ArrayList<Select2OptionJsonBean>();
+        for (Product product : resultPageBean.getList()){
+            Select2OptionJsonBean jsonBean = new Select2OptionJsonBean();
+            String text = String.format("%s:%s", product.getSerialno(), product.getProductName());
+            jsonBean.setId(product.getProductId());
+            jsonBean.setText(text);
+            jsonBeanList.add(jsonBean);
+        }
 
         Select2ResponseJsonBean returnBean = Select2ResponseJsonBeanUtil.toJsonBean(
             resultPageBean.getTotalRecords(),
-            productJsonBeanList
+                jsonBeanList
         );
 
         return returnBean;
@@ -563,9 +569,41 @@ public class ProductController {
     @RequestMapping(value = "/list_packages_for_select2",
             method = RequestMethod.GET)
     @CrossOrigin
-    public @ResponseBody List<Select2OptionJsonBean> listPackagesForSelect2(){
-        List<ProductPackage> packages = productService.getAllPackages();
-        return SimplePackageJsonBeanUtil.toJsonBeanList(packages);
+    public @ResponseBody Select2ResponseJsonBean listPackagesForSelect2(@RequestParam(value="query", required = false) String query,
+                                                                            @RequestParam(value="page", required=true) int page,
+                                                                            @RequestParam(value="page_size", required=true) int page_size){
+        SearchCriteria sc = new SearchCriteria();
+        if(query != null &&
+           !query.isEmpty()){
+            sc.addSearchCriterialItem("name",
+                    new SearchCriteriaItem("packageName", query, SearchConditionEnum.Like)
+            );
+        }
+
+        Page<ProductPackage> resultPageBean = productService.queryPackagesForPage(page, page_size, sc);
+
+        Select2ResponseJsonBean returnBean = Select2ResponseJsonBeanUtil.toJsonBean(
+                resultPageBean.getTotalRecords(),
+                SimplePackageJsonBeanUtil.toJsonBeanList(resultPageBean.getList())
+        );
+
+        return returnBean;
+    }
+
+    @RequestMapping(value = "/update_stock/{product_id}",
+            method = RequestMethod.POST)
+    @CrossOrigin
+    public @ResponseBody ResponseBean updateStock(@PathVariable String product_id, @RequestBody StockJsonBean stockJsonBean){
+        Stock stock = StockJsonBeanUtil.toEntityBean(stockJsonBean, stockService);
+        if(stock == null){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "2210",
+                    "该产品不存在，产品ID：" + product_id
+            );
+        }else{
+            stockService.updateStock(stock);
+            return ResponseMsgBeanFactory.getSuccessResponseBean("库存更新成功!");
+        }
     }
 
     @RequestMapping(value = "/list_packages",
@@ -602,14 +640,14 @@ public class ProductController {
 
         SearchCriteria sc = new SearchCriteria();
         if(queryBean.getName() != null &&
-           !queryBean.getName().isEmpty()){
+                !queryBean.getName().isEmpty()){
             sc.addSearchCriterialItem("name",
                     new SearchCriteriaItem("packageName", queryBean.getName(), SearchConditionEnum.Like)
             );
         }
 
         if(queryBean.getSerialno() != null &&
-           !queryBean.getSerialno().isEmpty()){
+                !queryBean.getSerialno().isEmpty()){
             sc.addSearchCriterialItem("serialNo",
                     new SearchCriteriaItem("serialNo", queryBean.getSerialno(), SearchConditionEnum.Equal)
             );
@@ -628,14 +666,14 @@ public class ProductController {
         }
 
         if(queryBean.getStart_date() != null &&
-           !queryBean.getStart_date().isEmpty()){
+                !queryBean.getStart_date().isEmpty()){
             sc.addSearchCriterialItem("start_date",
                     new SearchCriteriaItem("effectiveStartDate", String.valueOf(queryBean.getPrice_end()), SearchConditionEnum.SmallOrEqual)
             );
         }
 
         if(queryBean.getEnd_date() != null &&
-           !queryBean.getEnd_date().isEmpty()){
+                !queryBean.getEnd_date().isEmpty()){
             sc.addSearchCriterialItem("end_date",
                     new SearchCriteriaItem("effectiveEndDate", String.valueOf(queryBean.getPrice_end()), SearchConditionEnum.LargeOrEqual)
             );
@@ -658,22 +696,6 @@ public class ProductController {
                 true,
                 returnPage
         );
-    }
-
-    @RequestMapping(value = "/update_stock/{product_id}",
-            method = RequestMethod.POST)
-    @CrossOrigin
-    public @ResponseBody ResponseBean updateStock(@PathVariable String product_id, @RequestBody StockJsonBean stockJsonBean){
-        Stock stock = StockJsonBeanUtil.toEntityBean(stockJsonBean, stockService);
-        if(stock == null){
-            return ResponseMsgBeanFactory.getErrorResponseBean(
-                    "2210",
-                    "该产品不存在，产品ID：" + product_id
-            );
-        }else{
-            stockService.updateStock(stock);
-            return ResponseMsgBeanFactory.getSuccessResponseBean("库存更新成功!");
-        }
     }
 
     @RequestMapping(value = "/list_stocks",

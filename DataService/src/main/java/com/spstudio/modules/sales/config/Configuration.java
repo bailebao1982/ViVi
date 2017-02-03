@@ -5,7 +5,7 @@ package com.spstudio.modules.sales.config;
  */
 public class Configuration {
     public final static String SALE_MODULE_NAME = "SALE";
-    public final static String CONFIG_GLOBAL_DEPOST_BONUSRATE = "GLOBAL-DEPOST-BONUS_RATE";
-    public final static String CONFIG_MEMBER_TYPE_DEPOST_BONUSRATE = "MT-DEPOST-BONUS_RATE";
+    public final static String CONFIG_GLOBAL_DEPOSIT_BONUSRATE = "GLOBAL-DEPOSIT-BONUS_RATE"; // 全局积分百分比
+    public final static String CONFIG_MEMBER_TYPE_DEPOSIT_BONUSRATE = "MT-DEPOSIT-BONUS_RATE"; // 全局会员类型积分百分比
 
 }

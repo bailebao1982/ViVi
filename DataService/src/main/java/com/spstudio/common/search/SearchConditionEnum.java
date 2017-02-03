@@ -15,7 +15,8 @@ public enum SearchConditionEnum{
     Large(">"),
     SmallOrEqual("<="),
     Small("<"),
-    Like(" like ");
+    Like(" like "),
+    In(" in ");
     
     private final String condition;
     

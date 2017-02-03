@@ -6,12 +6,15 @@ import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.search.SearchCriteriaItem;
+import com.spstudio.common.utils.StringUtils;
 import com.spstudio.modules.member.bean.request.MemberJsonBean;
 import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.member.entity.MemberType;
 import com.spstudio.modules.member.service.AssetType;
 import com.spstudio.modules.member.service.MemberService;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.product.entity.ProductType;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.sale.bean.*;
 import com.spstudio.modules.sales.entity.SaleDiscount;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Soul on 2017/1/17.
@@ -188,7 +192,6 @@ public class SaleController {
     public @ResponseBody ResponseBean searchSalesByCondition(
             @RequestParam(value="page", required=true) int page,
             @RequestParam(value="page_size", required=true) int page_size,
-            @RequestParam(value="member_id", required=false) String member_id,
             @RequestParam(value="member_name", required=false) String member_name,
             @RequestParam(value="asset_type", required=false, defaultValue = "-1") int asset_type,
             @RequestParam(value="product_id", required=false) String product_id,
@@ -198,17 +201,24 @@ public class SaleController {
             @RequestParam(value="sale_end_date", required=false) String sale_end_date
     ){
         SearchCriteria sc = new SearchCriteria();
-        if(member_id != null &&
-                !member_id.isEmpty())
-            sc.addSearchCriterialItem("memberId",
-                    new SearchCriteriaItem("memberId", member_id, SearchConditionEnum.Equal)
-            );
-
         if(member_name != null &&
-                !member_name.isEmpty())
-            sc.addSearchCriterialItem("memberName",
-                    new SearchCriteriaItem("memberId", member_id, SearchConditionEnum.Equal)
+                !member_name.isEmpty()) {
+            SearchCriteria member_sc = new SearchCriteria();
+            member_sc.addSearchCriterialItem("memberName",
+                    new SearchCriteriaItem("memberName", member_name, SearchConditionEnum.Like)
             );
+            Page<Member> members = memberService.queryForPage(page, page_size, member_sc);
+            List<String> member_id_list = new ArrayList<String>();
+            member_id_list.add("''");
+            for (Member member: members.getList()){
+                member_id_list.add("'" + member.getMemberId() + "'");
+            }
+
+            String content = org.apache.commons.lang.StringUtils.join(member_id_list, ",");
+            sc.addSearchCriterialItem("memberId",
+                    new SearchCriteriaItem("memberId", content, SearchConditionEnum.In)
+            );
+        }
 
         AssetType assetType = AssetType.fromInteger(asset_type);
         switch (assetType){
@@ -222,7 +232,7 @@ public class SaleController {
             case ASSET_PRODUCT_TYPE: {
                 // 查询产品购买记录
                 sc.addSearchCriterialItem("saleType",
-                        new SearchCriteriaItem("saleType", String.valueOf(assetType), SearchConditionEnum.Equal)
+                        new SearchCriteriaItem("saleType", String.valueOf(assetType.ordinal()), SearchConditionEnum.Equal)
                 );
                 if(product_id != null &&
                         !product_id.isEmpty())
@@ -234,7 +244,7 @@ public class SaleController {
             case ASSET_PACKAGE_TYPE: {
                 // 查询套餐购买记录
                 sc.addSearchCriterialItem("saleType",
-                        new SearchCriteriaItem("saleType", String.valueOf(assetType), SearchConditionEnum.Equal)
+                        new SearchCriteriaItem("saleType", String.valueOf(assetType.ordinal()), SearchConditionEnum.Equal)
                 );
                 if(package_id != null &&
                         !package_id.isEmpty())
@@ -267,13 +277,13 @@ public class SaleController {
         if(sale_start_date !=null &&
                 !sale_start_date.isEmpty())
             sc.addSearchCriterialItem("start_date",
-                    new SearchCriteriaItem("salesDate", sale_start_date, SearchConditionEnum.SmallOrEqual)
+                    new SearchCriteriaItem("salesDate", sale_start_date, SearchConditionEnum.LargeOrEqual)
             );
 
         if(sale_end_date != null &&
                 !sale_end_date.isEmpty())
             sc.addSearchCriterialItem("end_date",
-                    new SearchCriteriaItem("salesDate", sale_end_date, SearchConditionEnum.LargeOrEqual)
+                    new SearchCriteriaItem("salesDate", sale_end_date, SearchConditionEnum.SmallOrEqual)
             );
 
 
@@ -363,7 +373,7 @@ public class SaleController {
                     "删除折扣失败，无此折扣，Id：" + discount_id
             );
         }else{
-            float discountVal = discountJsonBean.getDiscount_type();
+            float discountVal = discountJsonBean.getDiscount_value();
             discount.setDiscountValue(discountVal);
             saleService.updateDiscount(discount);
             return ResponseMsgBeanFactory.getSuccessResponseBean(
@@ -373,7 +383,7 @@ public class SaleController {
     }
 
     @RequestMapping(value = "/del_discount/{discount_id}",
-            method = RequestMethod.PUT,
+            method = RequestMethod.DELETE,
             headers="Accept=application/json")
     @CrossOrigin
     public @ResponseBody ResponseBean removeDiscount(@PathVariable String discount_id){
@@ -399,7 +409,7 @@ public class SaleController {
     }
 
     @RequestMapping(value = "/list_discount",
-            method = RequestMethod.PUT,
+            method = RequestMethod.GET,
             headers="Accept=application/json")
     @CrossOrigin
     public @ResponseBody ResponseBean listDiscounts(
@@ -408,32 +418,45 @@ public class SaleController {
             @RequestParam(value="member_type_id", required=false) String member_type_id,
             @RequestParam(value="discount_type", required=false, defaultValue = "-1") int discount_type,
             @RequestParam(value="product_id", required=false) String product_id,
-            @RequestParam(value="product_type_id", required=false) String product_type_id){
+            @RequestParam(value="product_type_serialno", required=false) String product_type_serialno){
         SearchCriteria sc = new SearchCriteria();
         if(member_type_id != null && !member_type_id.isEmpty()) {
-            sc.addSearchCriterialItem("memberTypeId",
-                    new SearchCriteriaItem("memberTypeId", member_type_id, SearchConditionEnum.Equal)
-            );
+            MemberType memberType = memberService.findMemberTypeByType(member_type_id);
+            if(memberType != null) {
+                sc.addSearchCriterialItem("memberTypeId",
+                        new SearchCriteriaItem("memberTypeId", memberType.getMemberTypeId(), SearchConditionEnum.Equal)
+                );
+            }
         }
 
         DiscountType discountType = DiscountType.fromInteger(discount_type);
         switch (discountType){
             case PRODUCT_DISCOUNT: {
                 if(product_id != null && !product_id.isEmpty()) {
-                    sc.addSearchCriterialItem("productId",
-                            new SearchCriteriaItem("productId", product_id, SearchConditionEnum.Equal)
-                    );
+                    Product product = productService.findProductByProductId(product_id);
+                    if(product != null){
+                        sc.addSearchCriterialItem("productId",
+                                new SearchCriteriaItem("productId", product.getProductId(), SearchConditionEnum.Equal)
+                        );
+                    }
                 }
                 break;
             }
             case PRODUCT_TYPE_DISCOUNT: {
-                if(product_type_id != null && !product_type_id.isEmpty()) {
-                    sc.addSearchCriterialItem("productTypeId",
-                            new SearchCriteriaItem("productTypeId", product_type_id, SearchConditionEnum.Equal)
-                    );
+                if(product_type_serialno != null && !product_type_serialno.isEmpty()) {
+                    ProductType productType = productService.findProductTypeByProductTypeName(product_type_serialno);
+                    if(productType != null) {
+                        sc.addSearchCriterialItem("productTypeId",
+                                new SearchCriteriaItem("productTypeId", productType.getProductTypeId(), SearchConditionEnum.Equal)
+                        );
+                    }
                 }
                 break;
             }
+            case ALL_DISCOUNTS:{
+                break;
+            }
+
         }
 
         Page<SaleDiscount> resultPageBean = saleService.queryDiscountForPage(page, page_size, sc);

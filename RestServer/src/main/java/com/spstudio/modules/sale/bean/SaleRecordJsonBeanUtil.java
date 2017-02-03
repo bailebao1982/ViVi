@@ -31,6 +31,7 @@ public class SaleRecordJsonBeanUtil {
 
         jsonBean.setSaler(saleBean.getSaler());
         jsonBean.setSale_date(saleBean.getSalesDate().toString());
+        jsonBean.setSale_count(saleBean.getSalesCount());
         jsonBean.setSale_payment_method(saleBean.getPaymentMethodType());
         jsonBean.setSale_price(saleBean.getPrice());
 

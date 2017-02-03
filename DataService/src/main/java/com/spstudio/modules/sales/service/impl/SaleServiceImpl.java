@@ -98,10 +98,11 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
+    // 获得全局积分百分比
     public Float getGlobalDepositRate(){
         SystemConfig config = configService.findModuleSingleConfig(
                 Configuration.SALE_MODULE_NAME,
-                Configuration.CONFIG_GLOBAL_DEPOST_BONUSRATE);
+                Configuration.CONFIG_GLOBAL_DEPOSIT_BONUSRATE);
         if(config == null){
             return 0.0f;
         }
@@ -118,12 +119,12 @@ public class SaleServiceImpl implements SaleService {
     public void createOrUpdateGlobalDepositRate(Float depositRate){
         SystemConfig config = configService.findModuleSingleConfig(
                 Configuration.SALE_MODULE_NAME,
-                Configuration.CONFIG_GLOBAL_DEPOST_BONUSRATE);
+                Configuration.CONFIG_GLOBAL_DEPOSIT_BONUSRATE);
         if(config == null){
             config = new SystemConfig();
 
             config.setConfigModule(Configuration.SALE_MODULE_NAME);
-            config.setConfigName(Configuration.CONFIG_GLOBAL_DEPOST_BONUSRATE);
+            config.setConfigName(Configuration.CONFIG_GLOBAL_DEPOSIT_BONUSRATE);
         }
         config.setConfigValue(String.valueOf(depositRate));
 
@@ -131,10 +132,11 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
+    // 根据会员类型获得积分百分比
     public Float getDepositRate(MemberType memberType) {
         List<SystemConfig> configs = configService.findModuleConfig(
                 Configuration.SALE_MODULE_NAME,
-                Configuration.CONFIG_MEMBER_TYPE_DEPOST_BONUSRATE);
+                Configuration.CONFIG_MEMBER_TYPE_DEPOSIT_BONUSRATE);
 
         if(configs == null || configs.size() == 0){
             return getGlobalDepositRate();
@@ -161,13 +163,13 @@ public class SaleServiceImpl implements SaleService {
     public void createOrUpdateDepositRate(MemberType memberType, Float depositRate) {
         SystemConfig config = configService.findModuleSingleConfig(
                 Configuration.SALE_MODULE_NAME,
-                Configuration.CONFIG_MEMBER_TYPE_DEPOST_BONUSRATE);
+                Configuration.CONFIG_MEMBER_TYPE_DEPOSIT_BONUSRATE);
 
         if(config == null){
             config = new SystemConfig();
 
             config.setConfigModule(Configuration.SALE_MODULE_NAME);
-            config.setConfigName(Configuration.CONFIG_MEMBER_TYPE_DEPOST_BONUSRATE);
+            config.setConfigName(Configuration.CONFIG_MEMBER_TYPE_DEPOSIT_BONUSRATE);
         }
         config.setConfigCondition(ConfigConditions.EQUAL + memberType.getMemberTypeId());
         config.setConfigValue(String.valueOf(depositRate));
@@ -258,7 +260,7 @@ public class SaleServiceImpl implements SaleService {
                                         int deposit,
                                         String saler,
                                         PaymentMethodType type) {
-        Sales saleRec = _getNewSaleRecord(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), null, null, null, deposit, 0, 0, saler, type.ordinal());
+        Sales saleRec = _getNewSaleRecord(member, AssetType.ASSET_DEPOSIT_TYPE.ordinal(), null, null, null, deposit, 1, deposit, saler, type.ordinal());
         Sales retSale = saleDAO.addSalesRecord(saleRec);
         return retSale;
     }
@@ -457,7 +459,7 @@ public class SaleServiceImpl implements SaleService {
 
         // this will generate bonus point
         float bonusRate = getDepositRate(member.getMemberType());
-        int bonusPoint = (int)bonusRate * deposit;
+        int bonusPoint = (int)(bonusRate * (float) deposit);
         if(bonusPoint > 0){
             memberService.increaseBonusPoint(member, bonusPoint);
         }

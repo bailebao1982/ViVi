@@ -17,6 +17,7 @@
 
     <bean id="saleServiceBase" class="com.spstudio.modules.sales.service.impl.SaleServiceImpl">
         <property name="saleDAO" ref="saleDAO"></property>
+        <property name="saleDiscountDAO" ref="saleDiscountDAO"></property>
         <property name="memberService" ref="memberService"></property>
         <property name="stockService" ref="stockService"></property>
         <property name="configService" ref="configService"></property>

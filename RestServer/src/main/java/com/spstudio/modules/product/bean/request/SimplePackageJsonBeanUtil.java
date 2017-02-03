@@ -12,7 +12,7 @@ import java.util.List;
 public class SimplePackageJsonBeanUtil {
     public static Select2OptionJsonBean toJsonBean(ProductPackage pkg) {
         Select2OptionJsonBean jsonBean = new Select2OptionJsonBean();
-        jsonBean.setId(pkg.getSerialNo());
+        jsonBean.setId(pkg.getProductPackageId());
         jsonBean.setText(pkg.getPackageName());
         return jsonBean;
     }

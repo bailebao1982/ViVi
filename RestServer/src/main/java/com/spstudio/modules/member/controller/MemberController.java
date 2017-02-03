@@ -294,15 +294,16 @@ public class MemberController {
             headers="Accept=application/json")
     @CrossOrigin
     public @ResponseBody Select2ResponseJsonBean listMemebersForSelect2(
-            @RequestBody Select2RequestBean requestBean){
+            @RequestParam(value="query", required = false) String query,
+            @RequestParam(value="page", required=true) int page,
+            @RequestParam(value="page_size", required=true) int page_size){
         SearchCriteria sc = new SearchCriteria();
-        if(requestBean.getQuery() != null &&
-                !requestBean.getQuery().isEmpty())
+        if(query != null && !query.isEmpty())
             sc.addSearchCriterialItem("name",
-                    new SearchCriteriaItem("memberName", requestBean.getQuery(), SearchConditionEnum.Like)
+                    new SearchCriteriaItem("memberName", query, SearchConditionEnum.Like)
             );
 
-        Page<Member> resultPageBean = memberService.queryForPage(requestBean.getPage(), requestBean.getPage_size(), sc);
+        Page<Member> resultPageBean = memberService.queryForPage(page, page_size, sc);
 
         List<Select2OptionJsonBean> productJsonBeanList =
                 SimpleMemberJsonBeanUtil.toJsonBeanList(resultPageBean.getList());

@@ -9,6 +9,8 @@ import com.spstudio.modules.product.service.ProductService;
  */
 public class ProductJsonBeanUtil {
     public static ProductJsonBean toJsonBean(Product product) {
+        if(product == null) return null;
+
         ProductJsonBean jsonBean = new ProductJsonBean();
 
         jsonBean.setProduct_id(product.getProductId());

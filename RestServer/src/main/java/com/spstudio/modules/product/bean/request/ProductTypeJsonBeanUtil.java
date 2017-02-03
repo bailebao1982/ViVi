@@ -9,6 +9,7 @@ import com.spstudio.modules.product.entity.ProductType;
 public class ProductTypeJsonBeanUtil {
     public static ProductTypeJsonBean toJsonBean(ProductType productType) {
         ProductTypeJsonBean jsonBean = new ProductTypeJsonBean();
+        jsonBean.setProduct_type_id(productType.getProductTypeId());
         jsonBean.setProduct_type_name(productType.getTypeName());
         jsonBean.setProduct_type_description(productType.getDescription());
         return jsonBean;

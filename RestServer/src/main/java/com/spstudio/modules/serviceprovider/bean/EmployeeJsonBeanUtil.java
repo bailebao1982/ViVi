@@ -33,7 +33,10 @@ public class EmployeeJsonBeanUtil {
         employeeJsonBean.setEmployee_birthday(spBean.getSpBirthDay().toString());
         employeeJsonBean.setEmployee_address(spBean.getSpAddress());
 
-        employeeJsonBean.setEmployee_profilePic(ImageUtils.byteToString(spBean.getProfilePicture()));
+        byte[] profilePics = spBean.getProfilePicture();
+        if(profilePics!= null && profilePics.length > 0) {
+            employeeJsonBean.setEmployee_profilePic(ImageUtils.byteToString(profilePics));
+        }
         return employeeJsonBean;
     }
 
@@ -43,7 +46,9 @@ public class EmployeeJsonBeanUtil {
         spBean.setSpName(employeeJsonBean.getEmployee_name());
         spBean.setSpNote(employeeJsonBean.getEmployee_note());
         spBean.setSpAddress(employeeJsonBean.getEmployee_address());
-        spBean.setProfilePicture(ImageUtils.stringToByte(employeeJsonBean.getEmployee_profilePic()));
+        String profilePic = employeeJsonBean.getEmployee_profilePic();
+        if(profilePic != null && !profilePic.isEmpty())
+            spBean.setProfilePicture(ImageUtils.stringToByte(profilePic));
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if(employeeJsonBean.getEmployee_birthday() != null &&
                 !employeeJsonBean.getEmployee_birthday().isEmpty()){

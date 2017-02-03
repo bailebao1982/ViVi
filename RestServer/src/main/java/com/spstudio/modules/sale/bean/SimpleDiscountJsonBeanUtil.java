@@ -21,7 +21,7 @@ public class SimpleDiscountJsonBeanUtil {
             return null;
         }
 
-        MemberType memberType = memberService.findMemberTypeById(jsonBean.getDiscount_member_type_id());
+        MemberType memberType = memberService.findMemberTypeByType(jsonBean.getDiscount_member_type());
         if(memberType == null){
             return null;
         }
@@ -32,7 +32,7 @@ public class SimpleDiscountJsonBeanUtil {
 
         switch (discountType){
             case PRODUCT_DISCOUNT: {
-                Product product = productService.findProductByProductId(jsonBean.getDiscount_product_id());
+                Product product = productService.findProductByProductId(jsonBean.getDiscount_product());
                 if(product != null) {
                     discountBean.setProduct(product);
                 }else {
@@ -41,7 +41,7 @@ public class SimpleDiscountJsonBeanUtil {
                 break;
             }
             case PRODUCT_TYPE_DISCOUNT: {
-                ProductType productType = productService.findProductTypeByProductTypeId(jsonBean.getDiscount_product_type_id());
+                ProductType productType = productService.findProductTypeByProductTypeName(jsonBean.getDiscount_product_type());
                 if(productType != null) {
                     discountBean.setProductType(productType);
                 }else{

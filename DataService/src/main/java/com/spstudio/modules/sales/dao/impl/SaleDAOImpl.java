@@ -120,7 +120,7 @@ public class SaleDAOImpl implements SaleDAO {
                 queryString.append(criteria.getItemMap().get(key).getSearchCriteriaItem());
             }
 
-            queryString.append(" order by salesDate");
+            queryString.append(" order by salesDate desc");
 
             Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
             query.setFirstResult(offset);
@@ -147,7 +147,8 @@ public class SaleDAOImpl implements SaleDAO {
 
             Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
 
-            result = (Integer)query.uniqueResult();
+            Long rows = (Long)query.uniqueResult();
+            result = rows.intValue();
         }catch(RuntimeException ex){
             throw ex;
         }

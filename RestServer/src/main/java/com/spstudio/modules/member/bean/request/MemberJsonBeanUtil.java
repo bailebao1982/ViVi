@@ -33,8 +33,10 @@ public class MemberJsonBeanUtil {
         memberJsonBean.setMember_type(member.getMemberType().getTypeName());
         memberJsonBean.setMember_email(member.getEmail());
 
-        
-        memberJsonBean.setMember_profilepic(ImageUtils.byteToString(member.getProfilePicture()));
+        byte[] profilePics = member.getProfilePicture();
+        if(profilePics!= null && profilePics.length > 0){
+            memberJsonBean.setMember_profilepic(ImageUtils.byteToString(profilePics));
+        }
 
         return memberJsonBean;
     }
@@ -69,8 +71,11 @@ public class MemberJsonBeanUtil {
         }
 
         member.setWeixinId(memberJsonBean.getMember_wechat());
-        
-        member.setProfilePicture(ImageUtils.stringToByte(memberJsonBean.getMember_profilepic()));
+
+        String profilePic = memberJsonBean.getMember_profilepic();
+        if(profilePic != null && !profilePic.isEmpty())
+            member.setProfilePicture(ImageUtils.stringToByte(profilePic));
+
         return member;
     }
 }

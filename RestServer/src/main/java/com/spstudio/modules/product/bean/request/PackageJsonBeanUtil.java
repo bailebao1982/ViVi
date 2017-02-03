@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class PackageJsonBeanUtil {
     public static PackageJsonBean toJsonBean(ProductPackage pkg) {
+        if(pkg == null) return null;
+
         PackageJsonBean packageJsonBean = new PackageJsonBean();
 
         packageJsonBean.setPackage_id(pkg.getProductPackageId());

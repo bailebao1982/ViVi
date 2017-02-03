@@ -136,7 +136,7 @@ public class SaleDiscountDAOImpl implements SaleDiscountDAO {
         Integer result = 0;
         try{
             StringBuilder queryString = new StringBuilder();
-            queryString.append("select count(1) from SaleDiscount");
+            queryString.append("select count(1) from SaleDiscount where 1=1 ");
 
             for(String key:criteria.getItemMap().keySet()){
                 queryString.append(" and ");
@@ -145,7 +145,8 @@ public class SaleDiscountDAOImpl implements SaleDiscountDAO {
 
             Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
 
-            result = (Integer)query.uniqueResult();
+            Long rows = (Long)query.uniqueResult();
+            result = rows.intValue();
         }catch(RuntimeException ex){
             throw ex;
         }

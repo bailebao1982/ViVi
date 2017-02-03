@@ -20,8 +20,7 @@ import java.util.Date;
  * @author wewezhu
  */
 @Entity
-@Table(name="T_MemberAsset",
-        uniqueConstraints={@UniqueConstraint(columnNames={"memberId", "assetType"})})
+@Table(name="T_MemberAsset")
 public class MemberAsset {
     
     @Id  

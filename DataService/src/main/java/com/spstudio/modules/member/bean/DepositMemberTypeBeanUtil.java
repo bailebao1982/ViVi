@@ -27,6 +27,8 @@ public class DepositMemberTypeBeanUtil {
             String memberTypeId = config.getConfigValue();
             MemberType memberType = service.findMemberTypeById(memberTypeId);
             typeBean.setMemberType(memberType);
+
+            return typeBean;
         }
         return null;
     }
@@ -36,7 +38,7 @@ public class DepositMemberTypeBeanUtil {
 
         config.setConfigModule(Configuration.MEMBER_MODULE_NAME);
         config.setConfigEntity(Configuration.ENTITY_MEMBER_TYPE);
-        config.setConfigName(Configuration.CONFIG_DEPOST_MEMBERTYPE);
+        config.setConfigKey(Configuration.CONFIG_DEPOST_MEMBERTYPE);
 
         config.setConfigValue(bean.getMemberType().getMemberTypeId());
         config.setConfigCondition(String.valueOf(bean.getDeposit()));

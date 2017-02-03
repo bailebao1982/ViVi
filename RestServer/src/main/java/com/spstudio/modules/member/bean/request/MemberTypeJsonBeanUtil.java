@@ -10,6 +10,7 @@ import java.util.Date;
 public class MemberTypeJsonBeanUtil {
     public static MemberTypeJsonBean toJsonBean(MemberType member){
         MemberTypeJsonBean memberTypeJsonBean = new MemberTypeJsonBean();
+        memberTypeJsonBean.setMember_type_id(member.getMemberTypeId());
         memberTypeJsonBean.setMember_type_name(member.getTypeName());
         memberTypeJsonBean.setMember_type_description(member.getDescription());
         return memberTypeJsonBean;

@@ -245,7 +245,6 @@ public class MemberServiceImpl implements MemberService {
         Iterator iter = productPackage.getProductMappingSet().iterator();
         while (iter.hasNext()){
             PackageProductMapping mapping = (PackageProductMapping)iter.next();
-
             MemberAsset asset =  _getAsset(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), mapping.getProduct(), productPackage, 0, mapping.getCount() * count);
             MemberAsset retAsset = memberAssetDAO.addAsset(asset);
 
@@ -382,7 +381,7 @@ public class MemberServiceImpl implements MemberService {
                 break;
             }
         }
-        idx = idx--;
+        idx--;
         if(idx < 0) return null;
         return depositMemberTypeBeanList.get(idx).getMemberType();
     }

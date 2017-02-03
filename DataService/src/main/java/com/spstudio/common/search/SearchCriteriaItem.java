@@ -54,16 +54,25 @@ public class SearchCriteriaItem {
         StringBuffer item = new StringBuffer();
         item.append(leftItem);
         item.append(sc.getCondition());
-        
-        if(!sc.equals(SearchConditionEnum.Like))
-            item.append("'");
-        else
+
+        if(sc.equals(SearchConditionEnum.In)){
+            item.append("(");
+        }else if(sc.equals(SearchConditionEnum.Like)){
             item.append("'%");
-        item.append(rightItem);
-        if(!sc.equals(SearchConditionEnum.Like))
+        }else {
             item.append("'");
-        else
+        }
+
+        item.append(rightItem);
+
+
+        if(sc.equals(SearchConditionEnum.In)){
+            item.append(")");
+        }else if(sc.equals(SearchConditionEnum.Like)){
             item.append("%'");
+        }else {
+            item.append("'");
+        }
         
         return item.toString();
     }
