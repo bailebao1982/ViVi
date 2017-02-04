@@ -41,7 +41,7 @@ public class MemberControllerTest {
     @Resource(name="memberService")
     private MemberService memberService2;
        
-    @InjectMocks
+    @Resource
     MemberController memberController;
     
      @Before
