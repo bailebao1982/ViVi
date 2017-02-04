@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component("LoginControlAspect") 
 public class LoginControlAspect {
     
-     @Resource(name="memberService")
+     @Resource(name="permissionService")
     private PermissionService permissionService;
     
      private static Logger logger = Logger.getLogger(LoginControlAspect.class);  
