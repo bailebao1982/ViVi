@@ -29,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(JUnit4ClassRunner.class)  
 @ContextConfiguration(locations = {"classpath:com/spstudio/common/config/spring-service.xml","classpath:com/spstudio/modules/member/config/spring-member.xml"})  
-//@Transactional  
-//@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) 
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true) 
+@Transactional
 public class TestJUnitTest {
     private static Member member;
     
@@ -60,7 +60,7 @@ public class TestJUnitTest {
 
     //1. Add New Member
      @Test
-     //@Rollback(true)
+     @Rollback(true)
      public void testAddNewMember() {
          member = new Member();
          member.setMemberName("TestName");

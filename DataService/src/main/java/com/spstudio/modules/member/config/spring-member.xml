@@ -29,10 +29,14 @@
     <!-- Member Service Configuration -->
     <bean id="memberServiceBase" class="com.spstudio.modules.member.service.impl.MemberServiceImpl">
         <property name="memberDAO" ref="memberDAO"></property>
+
         <property name="memberAssetDAO" ref="memberAssetDAO"></property>
         <property name="memberTypeDAO" ref="memberTypeDAO"></property>
         <property name="bonusPointDAO" ref="memberBonusPointDAO"></property>
          <property name="configService" ref="configService"></property>
+
+        <property name="permissionDAO" ref="permissionDAO"></property>
+
     </bean>
     <bean id="memberService" parent="transactionProxy">
         <property name="target" ref="memberServiceBase"></property>
