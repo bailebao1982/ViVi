@@ -5,6 +5,7 @@
  */
 package com.spstudio.controller.test;
 
+import com.spstudio.common.exception.GlobalExceptionController;
 import com.spstudio.modules.member.controller.MemberController;
 import com.spstudio.modules.member.service.MemberService;
 import javax.annotation.Resource;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -38,8 +41,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class MemberControllerTest {
     private MockMvc mockMvc;
     
-    @Resource(name="memberService")
-    private MemberService memberService2;
+    private MockHttpSession session; 
        
     @Resource
     MemberController memberController;
@@ -47,14 +49,19 @@ public class MemberControllerTest {
      @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(memberController).setControllerAdvice(new GlobalExceptionController()).build();
+        this.session = new MockHttpSession(); 
+        this.session.setAttribute("username", "Test1");
+        this.session.setAttribute("password", "666");
     }
     
      @Test
     public void findAll_ShouldAddTodoEntriesToModelAndRenderTodoListView() throws Exception {
-        assertNotNull(memberService2);
-        mockMvc.perform(get("/member/list_member_type"))
-                .andExpect(status().isOk());
+        
+        MvcResult result = mockMvc.perform(get("/member/list_member_type").session(session))
+                .andExpect(status().isOk()).andReturn();
+        
+        System.out.println(result.getResponse().getContentAsString());
         /** mockMvc.perform(get("/"))
                  .andExpect(status().isOk())
                  .andExpect(view().name("todo/list"))

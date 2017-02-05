@@ -24,6 +24,7 @@ import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.search.SearchCriteriaItem;
 import com.spstudio.modules.member.service.MemberService;
+import com.spstudio.modules.permission.controller.UserSessionValidator;
 
 import javax.annotation.Resource;
 
@@ -43,7 +44,7 @@ import java.util.List;
 public class MemberController {
     @Resource(name="memberService")
     private MemberService memberService;
-
+    
     public MemberService getMemberService() {
         return memberService;
     }
@@ -56,6 +57,7 @@ public class MemberController {
             method = RequestMethod.GET,
             headers="Accept=application/json")
     @CrossOrigin
+    //@UserSessionValidator
     public @ResponseBody ResponseBean listMemberType(){
         List<MemberType> memberTypes = memberService.listAllMemberType();
 
