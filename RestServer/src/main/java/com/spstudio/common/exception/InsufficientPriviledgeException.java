@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.spstudio.modules.permission.controller;
+package com.spstudio.common.exception;
 
 /**
  *
  * @author wewezhu
  */
-public class SessionTimeOutException extends Exception{
-    
-    public SessionTimeOutException(String errorMsg){
-        super(errorMsg);
+public class InsufficientPriviledgeException extends GenericException{
+    public InsufficientPriviledgeException(String code,String message){
+        super(code,message);
     }
 }
