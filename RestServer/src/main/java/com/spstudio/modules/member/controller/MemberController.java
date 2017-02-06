@@ -16,6 +16,7 @@ import com.spstudio.modules.common.bean.Select2ResponseJsonBean;
 import com.spstudio.modules.common.bean.Select2ResponseJsonBeanUtil;
 import com.spstudio.modules.member.bean.request.MemberJsonBean;
 import com.spstudio.modules.member.bean.request.*;
+import com.spstudio.modules.member.bean.response.MemberDepositBean;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.entity.MemberType;
@@ -325,7 +326,7 @@ public class MemberController {
     }
 
     // Member Asset related
-    @RequestMapping(value = "/list_memeber_assets",
+    @RequestMapping(value = "/list_member_assets",
             method = RequestMethod.GET,
             headers="Accept=application/json")
     @CrossOrigin
@@ -378,5 +379,63 @@ public class MemberController {
                 true,
                 returnPage
         );
+    }
+
+    @RequestMapping(value = "/load_member_deposit/{member_id}",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    public @ResponseBody ResponseBean loadMemberDeposit(@PathVariable String member_id){
+        Member member = memberService.findMemberByMemberId(member_id);
+        if(member != null){
+            MemberAsset asset = memberService.getDepositAssetOfMember(member);
+            if(asset != null){
+                int deposit = asset.getDeposit();
+
+                MemberDepositBean depositBean = new MemberDepositBean();
+                depositBean.setDeposit(deposit);
+                depositBean.setMember(MemberJsonBeanUtil.toJsonBean(member));
+
+                return ResponseMsgBeanFactory.getResponseBean(
+                        true,
+                        depositBean
+                );
+
+            }else{
+                return ResponseMsgBeanFactory.getErrorResponseBean(
+                        "1106",
+                        "该会员无充值信息， 会员ID：" + member_id
+                );
+            }
+        }else {
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "1006",
+                    "会员信息删除失败，无法找到会员ID：" + member_id
+            );
+        }
+    }
+
+    @RequestMapping(value = "/load_member_bonusponit/{member_id}",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    public @ResponseBody ResponseBean loadMemberBonusPoint(@PathVariable String member_id){
+        Member member = memberService.findMemberByMemberId(member_id);
+        if(member != null){
+            int bonuspoint = memberService.getBonusPoint(member);
+
+
+            MemberBonusPointJsonBean bonusPointJsonBean = new MemberBonusPointJsonBean();
+            bonusPointJsonBean.setMember_bonus_point(bonuspoint);
+            bonusPointJsonBean.setMember(MemberJsonBeanUtil.toJsonBean(member));
+
+            return ResponseMsgBeanFactory.getResponseBean(
+                    true,
+                    bonusPointJsonBean
+            );
+        }else {
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "1006",
+                    "会员信息删除失败，无法找到会员ID：" + member_id
+            );
+        }
     }
 }

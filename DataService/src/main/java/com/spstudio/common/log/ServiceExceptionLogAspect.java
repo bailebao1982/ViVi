@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class ServiceExceptionLogAspect {
 
-    private static final Logger logger = Logger.getLogger(ServiceExceptionLogAspect.class);
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(ServiceExceptionLogAspect.class);
 
     @Pointcut("execution(* com.spstudio.modules.*.service.impl.*.*(..))")
     public void serviceAspect() {

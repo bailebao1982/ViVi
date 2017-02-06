@@ -31,10 +31,10 @@ import org.springframework.stereotype.Component;
 @Component("LoginControlAspect") 
 public class LoginControlAspect {
     
-     @Resource(name="memberService")
+     @Resource(name="permissionService")
     private PermissionService permissionService;
-    
-     private static Logger logger = Logger.getLogger(LoginControlAspect.class);  
+
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(LoginControlAspect.class);
      
      @Around("@annotation(com.spstudio.modules.permission.controller.UserSessionValidator)")
       public Object sessionTimeOutAdvice(ProceedingJoinPoint pjp) throws SessionTimeOutException{  
