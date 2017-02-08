@@ -18,15 +18,20 @@ import com.spstudio.modules.product.entity.ProductType;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.sale.bean.*;
 import com.spstudio.modules.sales.entity.SaleDiscount;
+import com.spstudio.modules.sales.exception.InsufficientBonusPointException;
+import com.spstudio.modules.sales.exception.InsufficientDepositException;
 import com.spstudio.modules.sales.service.DiscountType;
 import com.spstudio.modules.sales.service.PaymentMethodType;
 import com.spstudio.modules.sales.entity.Sales;
 import com.spstudio.modules.sales.service.SaleService;
+import com.spstudio.modules.stock.exceptions.StockNotEnoughException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.spstudio.modules.sales.service.PaymentMethodType.PAYMENT_METHOD_DEPOSIT;
 
 /**
  * Created by Soul on 2017/1/17.
@@ -54,6 +59,30 @@ public class SaleController {
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "4101",
                     "错误：创建销售记录失败"
+            );
+        }
+    }
+
+    private ResponseBean _exception2Response(Exception ex){
+        if(ex instanceof InsufficientBonusPointException){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4112",
+                    "会员积分不足抵扣"
+            );
+        }else if(ex instanceof InsufficientDepositException){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4113",
+                    "会员余额不足"
+            );
+        }else if (ex instanceof StockNotEnoughException){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4114",
+                    "库存数量不足"
+            );
+        }else{
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4115",
+                    ex.getMessage()
             );
         }
     }
@@ -103,20 +132,26 @@ public class SaleController {
                     }
 
                     if(!paymentMethodType.equals(PaymentMethodType.PAYMENT_METHOD_CASH) &&
-                            !paymentMethodType.equals(PaymentMethodType.PAYMENT_METHOD_DEPOSIT)){
+                            !paymentMethodType.equals(PAYMENT_METHOD_DEPOSIT)){
                         return ResponseMsgBeanFactory.getErrorResponseBean(
                                 "4200",
                                 "错误：不支持该付款方式"
                         );
                     }
 
-                    boolean result = saleService.BuyPackage(
-                            paymentMethodType,
-                            member,
-                            prdtPackage,
-                            saleRecordJsonBean.getSale_count(),
-                            saler);
-                    return _result2Response(result);
+                    try {
+                        saleService.BuyPackage(
+                                paymentMethodType,
+                                member,
+                                prdtPackage,
+                                saleRecordJsonBean.getSale_count(),
+                                saleRecordJsonBean.getSale_price(),
+                                saler);
+                        return _result2Response(true);
+                    }catch (Exception ex){
+                        return _exception2Response(ex);
+                    }
+
                     //break;
                 }
                 case ASSET_PRODUCT_TYPE: {
@@ -130,7 +165,7 @@ public class SaleController {
                     }
 
                     if(!paymentMethodType.equals(PaymentMethodType.PAYMENT_METHOD_CASH) &&
-                       !paymentMethodType.equals(PaymentMethodType.PAYMENT_METHOD_DEPOSIT) &&
+                       !paymentMethodType.equals(PAYMENT_METHOD_DEPOSIT) &&
                        !paymentMethodType.equals(PaymentMethodType.PAYMENT_METHOD_BONUSPOINT)){
                         return ResponseMsgBeanFactory.getErrorResponseBean(
                                 "4200",
@@ -138,14 +173,18 @@ public class SaleController {
                         );
                     }
 
-                    boolean result = saleService.BuyProduct(
-                            paymentMethodType,
-                            member,
-                            product,
-                            saleRecordJsonBean.getSale_count(),
-                            saler);
-                    return _result2Response(result);
-
+                    try{
+                        saleService.BuyProduct(
+                                paymentMethodType,
+                                member,
+                                product,
+                                saleRecordJsonBean.getSale_count(),
+                                saleRecordJsonBean.getSale_price(),
+                                saler);
+                        return _result2Response(true);
+                    }catch (Exception ex){
+                        return _exception2Response(ex);
+                    }
                    // break;
                 }
                 default:{
@@ -475,6 +514,114 @@ public class SaleController {
         return ResponseMsgBeanFactory.getResponseBean(
                 true,
                 returnPage
+        );
+    }
+
+    @RequestMapping(value = "/get_product_price/{product_id}",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody ResponseBean getProductPrice(
+            @PathVariable String product_id,
+            @RequestParam(value="count", required=true) int count,
+            @RequestParam(value="member_id", required=true) String member_id,
+            @RequestParam(value="sale_payment_method", required=true) int sale_payment_method){
+
+        Product product = productService.findProductByProductId(product_id);
+        if(product == null){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4106",
+                    "错误：未能识别产品，product id:" + product_id
+            );
+        }
+
+        Member member = null;
+        PaymentMethodType paymentMethodType = PaymentMethodType.fromInteger(sale_payment_method);
+        if(paymentMethodType.equals(PAYMENT_METHOD_DEPOSIT)){
+            member = memberService.findMemberByMemberId(member_id);
+            if(member == null){
+                return ResponseMsgBeanFactory.getErrorResponseBean(
+                        "4216",
+                        "未能找到该用户，member id:" + member_id
+                );
+            }
+        }
+
+        float price = saleService.GetProductPrice(paymentMethodType, member, product, count);
+        float discount = saleService.GetProductDiscount(paymentMethodType, member, product);
+
+        SalePriceJsonBean salePriceJsonBean = new SalePriceJsonBean();
+        salePriceJsonBean.setPrice(price);
+        salePriceJsonBean.setDiscount(discount);
+        salePriceJsonBean.setUnit_price(product.getUnitPrice());
+        salePriceJsonBean.setCount(count);
+
+
+        return ResponseMsgBeanFactory.getResponseBean(
+                true,
+                salePriceJsonBean
+        );
+    }
+
+    @RequestMapping(value = "/get_product_bonus_point/{product_id}",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody ResponseBean getProductBonusPoint(
+            @PathVariable String product_id,
+            @RequestParam(value="count", required=true) int count){
+        // Get bonus point directly
+        Product product = productService.findProductByProductId(product_id);
+        if(product == null){
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4106",
+                    "错误：未能识别产品，product id:" + product_id
+            );
+        }
+
+        int bonusPoint = saleService.GetProductBonusPoint(product, count);
+
+        SalePriceJsonBean salePriceJsonBean = new SalePriceJsonBean();
+        salePriceJsonBean.setPrice(bonusPoint);
+        salePriceJsonBean.setDiscount(1.0f);
+        salePriceJsonBean.setUnit_price(product.getBonusePoint());
+        salePriceJsonBean.setCount(count);
+
+
+        return ResponseMsgBeanFactory.getResponseBean(
+                true,
+                salePriceJsonBean
+        );
+    }
+
+    @RequestMapping(value = "/get_package_price/{package_id}",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody ResponseBean getPackagePrice(
+            @PathVariable String package_id,
+            @RequestParam(value="count", required=true) int count){
+            // calculate package price directly
+        ProductPackage prdtPackage = productService.findProductPackageByPackageId(package_id);
+
+        if(prdtPackage == null) {
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "4105",
+                    "错误：未能识别套餐，package id:" + package_id
+            );
+        }
+
+        int price = saleService.GetPackagePrice(prdtPackage, count);
+
+        SalePriceJsonBean salePriceJsonBean = new SalePriceJsonBean();
+        salePriceJsonBean.setPrice(price);
+        salePriceJsonBean.setDiscount(1.0f);
+        salePriceJsonBean.setUnit_price(prdtPackage.getUnitPrice());
+        salePriceJsonBean.setCount(count);
+
+        return ResponseMsgBeanFactory.getResponseBean(
+                true,
+                salePriceJsonBean
         );
     }
 }

@@ -24,10 +24,13 @@ import com.spstudio.modules.sales.dao.SaleDAO;
 import com.spstudio.modules.sales.dao.SaleDiscountDAO;
 import com.spstudio.modules.sales.entity.SaleDiscount;
 import com.spstudio.modules.sales.entity.Sales;
+import com.spstudio.modules.sales.exception.InsufficientBonusPointException;
+import com.spstudio.modules.sales.exception.InsufficientDepositException;
 import com.spstudio.modules.sales.service.PaymentMethodType;
 import com.spstudio.modules.sales.service.SaleService;
 import com.spstudio.modules.stock.exceptions.StockNotEnoughException;
 import com.spstudio.modules.stock.service.StockService;
+import org.apache.commons.lang3.Validate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
@@ -249,9 +252,10 @@ public class SaleServiceImpl implements SaleService {
     private Sales _addProductPackageSaleRecord(Member member,
                                                ProductPackage pkg,
                                                int count,
+                                               float price,
                                                String saler,
                                                PaymentMethodType type) {
-        Sales saleRec = _getNewSaleRecord(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), null, null, pkg, 0, count, 0, saler, type.ordinal());
+        Sales saleRec = _getNewSaleRecord(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), null, null, pkg, 0, count, price, saler, type.ordinal());
         Sales retSale = saleDAO.addSalesRecord(saleRec);
         return retSale;
     }
@@ -470,109 +474,134 @@ public class SaleServiceImpl implements SaleService {
     /**
      * Buy product and pay with cash
      */
-    @Transactional(rollbackFor=Exception.class)
-    private boolean _buyProductPayWithCash(Member member, Product product, int count, String saler){
-        boolean isEnoughStock = _checkStock(product, count);
-        if(isEnoughStock){
-            try {
-                // decrease stock first
-                stockService.decreaseStockNum(product, count);
-                // should not add discount logic
-                float price = product.getUnitPrice() * count;
+    private void _buyProductPayWithCash(Member member, Product product, int count, String saler)
+            throws StockNotEnoughException{
 
-                // add record
-                _addProductSaleRecord(member, product, count, 0, price, saler, PaymentMethodType.PAYMENT_METHOD_CASH);
-                // add memeber asset
-                memberService.addProductAsset(member, product, count);
-                return true;
-            } catch (StockNotEnoughException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
+        float price = this.GetProductPrice(
+                PaymentMethodType.PAYMENT_METHOD_CASH,
+                null,
+                product,
+                1);
+        _buyProductPayWithCash(member, product, count, price, saler);
+    }
+
+    @Transactional(rollbackFor=Exception.class)
+    private void _buyProductPayWithCash(Member member, Product product, int count, float price, String saler)
+            throws StockNotEnoughException{
+//        boolean isEnoughStock = _checkStock(product, count);
+//        if(isEnoughStock){
+        // decrease stock first
+        stockService.decreaseStockNum(product, count);
+
+        // add record
+        _addProductSaleRecord(member, product, count, 0, price, saler, PaymentMethodType.PAYMENT_METHOD_CASH);
+        // add memeber asset
+        memberService.addProductAsset(member, product, count);
+//        }else{
+//            throw new StockNotEnoughException();
+//        }
     }
 
     /**
      * Buy package and pay with cash
      */
     @Transactional(rollbackFor=Exception.class)
-    private boolean _buyPackagePayWithCash(Member member, ProductPackage pkg, int count, String saler){
-        boolean isEnoughStock = _checkStock(pkg, count);
-        if(isEnoughStock){
-            try {
-                // decrease stock first
-                Iterator iter = pkg.getProductMappingSet().iterator();
-                while (iter.hasNext()){
-                    PackageProductMapping mapping = (PackageProductMapping)iter.next();
-                    stockService.decreaseStockNum(mapping.getProduct(), mapping.getCount() * count);
-                }
-
-                // add record
-                _addProductPackageSaleRecord(member, pkg, count, saler, PaymentMethodType.PAYMENT_METHOD_CASH);
-                // add memeber asset
-                memberService.addPackageAsset(member, pkg, count);
-                return true;
-            } catch (StockNotEnoughException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
+    private void _buyPackagePayWithCash(Member member, ProductPackage pkg, int count, String saler)
+            throws StockNotEnoughException{
+        float price = this.GetPackagePrice(pkg, count);
+        _buyPackagePayWithCash(member, pkg, count, price, saler);
     }
 
+    @Transactional(rollbackFor=Exception.class)
+    private void _buyPackagePayWithCash(Member member, ProductPackage pkg, int count, float price, String saler)
+            throws StockNotEnoughException{
+//        boolean isEnoughStock = _checkStock(pkg, count);
+//        if(isEnoughStock){
+//          try {
+        // decrease stock first
+        Iterator iter = pkg.getProductMappingSet().iterator();
+        while (iter.hasNext()){
+            PackageProductMapping mapping = (PackageProductMapping)iter.next();
+            stockService.decreaseStockNum(mapping.getProduct(), mapping.getCount() * count);
+        }
+
+        // add record
+        _addProductPackageSaleRecord(member, pkg, count, price, saler, PaymentMethodType.PAYMENT_METHOD_CASH);
+        // add memeber asset
+        memberService.addPackageAsset(member, pkg, count);
+//                return true;
+//            } catch (StockNotEnoughException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return false;
+    }
     /**
      * Buy product and pay with deposit
      */
+    private void _buyProductPayWithDeposit(Member member, Product product, int count, String saler)
+            throws StockNotEnoughException, InsufficientDepositException{
+
+        float price = this.GetProductPrice(
+                PaymentMethodType.PAYMENT_METHOD_DEPOSIT,
+                member,
+                product,
+                count
+        );
+        _buyProductPayWithDeposit(member, product, count, price, saler);
+    }
+
     @Transactional(rollbackFor=Exception.class)
-    private boolean _buyProductPayWithDeposit(Member member, Product product, int count, String saler){
-        SaleDiscount discount = saleDiscountDAO.getDiscountByProduct(product, member.getMemberType());
+    private void _buyProductPayWithDeposit(Member member, Product product, int count, float price, String saler)
+            throws StockNotEnoughException, InsufficientDepositException{
 
-        // Discount logic
-        float rawPrice = product.getUnitPrice() * count;
-        int price = (int)rawPrice;
-        if(discount != null && discount.getDiscountValue() < 1.0f){
-            price = (int)(rawPrice * discount.getDiscountValue());
+        //boolean isEnoughStock = _checkStock(product, count);
+        boolean isEnoughDeposit = _checkDeposit(member, (int)price);
+
+        if(isEnoughDeposit){
+            //try {
+            // decrease stock
+            stockService.decreaseStockNum(product, count);
+
+            // decrease deposit
+            MemberAsset depositAsset = memberService.getDepositAssetOfMember(member);
+            int deposit = (depositAsset == null) ? 0: depositAsset.getDeposit();
+            depositAsset.setDeposit(deposit - (int)price);
+            memberService.updateDepositAsset(depositAsset);
+
+            // add record
+            this._addProductSaleRecord(member, product, count, (int)price, 0.0f, saler, PaymentMethodType.PAYMENT_METHOD_DEPOSIT);
+
+            // add memeber asset
+            memberService.addProductAsset(member, product, count);
+
+//            } catch (StockNotEnoughException e) {
+//                e.printStackTrace();
+//                return false;
+//            }
+        }else{
+            throw new InsufficientDepositException();
         }
-
-        boolean isEnoughStock = _checkStock(product, count);
-        boolean isEnoughDeposit = _checkDeposit(member, price);
-
-        if(isEnoughDeposit && isEnoughStock){
-            try {
-                // decrease stock
-                stockService.decreaseStockNum(product, count);
-
-                // decrease deposit
-                MemberAsset depositAsset = memberService.getDepositAssetOfMember(member);
-                int deposit = (depositAsset == null) ? 0: depositAsset.getDeposit();
-                depositAsset.setDeposit(deposit - price);
-                memberService.updateDepositAsset(depositAsset);
-
-                // add record
-                this._addProductSaleRecord(member, product, count, price, 0.0f, saler, PaymentMethodType.PAYMENT_METHOD_DEPOSIT);
-
-                // add memeber asset
-                memberService.addProductAsset(member, product, count);
-
-                return true;
-            } catch (StockNotEnoughException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        return false;
     }
 
     /**
      * Buy package and pay with deposit
      */
     @Transactional(rollbackFor=Exception.class)
-    private boolean _buyPackagePayWithDeposit(Member member, ProductPackage pkg, int count, String saler){
-        boolean isEnoughStock = _checkStock(pkg, count);
+    private void _buyPackagePayWithDeposit(Member member, ProductPackage pkg, int count, String saler)
+        throws StockNotEnoughException, InsufficientDepositException{
+        float price = GetPackagePrice(pkg, count);
+        _buyPackagePayWithDeposit(member, pkg, count, price, saler);
+    }
+
+    @Transactional(rollbackFor=Exception.class)
+    private void _buyPackagePayWithDeposit(Member member, ProductPackage pkg, int count, float price, String saler)
+        throws StockNotEnoughException, InsufficientDepositException {
+        //boolean isEnoughStock = _checkStock(pkg, count);
         boolean isEnoughDeposit = _checkDeposit(member, pkg, count);
 
-        if(isEnoughDeposit && isEnoughStock){
-            try {
+        if(isEnoughDeposit){
+//            try {
                 // decrease stock first
                 Iterator iter = pkg.getProductMappingSet().iterator();
                 while (iter.hasNext()){
@@ -583,40 +612,48 @@ public class SaleServiceImpl implements SaleService {
                 // decrease deposit
                 MemberAsset depositAsset = memberService.getDepositAssetOfMember(member);
                 int deposit = (depositAsset == null) ? 0: depositAsset.getDeposit();
-                depositAsset.setDeposit(deposit - pkg.getUnitPrice() * count);
+                int cost = this.GetPackagePrice(pkg, count);
+                depositAsset.setDeposit(deposit - cost);
                 memberService.updateDepositAsset(depositAsset);
 
                 // add record
-                _addProductPackageSaleRecord(member, pkg, count, saler, PaymentMethodType.PAYMENT_METHOD_DEPOSIT);
+                _addProductPackageSaleRecord(member, pkg, count, price, saler, PaymentMethodType.PAYMENT_METHOD_DEPOSIT);
 
                 // add memeber asset
                 memberService.addPackageAsset(member, pkg, count);
 
-                return true;
-            } catch (StockNotEnoughException e) {
-                e.printStackTrace();
-                return false;
-            }
+//                return true;
+//            } catch (StockNotEnoughException e) {
+//                e.printStackTrace();
+//                return false;
+//            }
+        }else{
+            throw new InsufficientDepositException();
         }
-
-        return false;
     }
 
     /**
      * Buy product and pay with bonus point
      */
     @Transactional(rollbackFor=Exception.class)
-    private boolean _buyProductPayWithBonusPoint(Member member, Product product, int count, String saler){
-        boolean isEnoughStock = _checkStock(product, count);
+    private void _buyProductPayWithBonusPoint(Member member, Product product, int count, String saler)
+            throws StockNotEnoughException, InsufficientBonusPointException{
+        int cost = this.GetProductBonusPoint(product, count);
+        _buyProductPayWithBonusPoint(member, product, count, cost, saler);
+    }
+
+    @Transactional(rollbackFor=Exception.class)
+    private void _buyProductPayWithBonusPoint(Member member, Product product, int count, int cost, String saler)
+        throws StockNotEnoughException, InsufficientBonusPointException{
+
         boolean isEnoughBonusPoint = _checkBonusPoint(member, product, count);
-        if(isEnoughStock && isEnoughBonusPoint){
-            try {
+        if(isEnoughBonusPoint){
                 // decrease stock
                 stockService.decreaseStockNum(product, count);
 
                 // decrease bonus point
                 int bp = memberService.getBonusPoint(member);
-                int restBp = bp - (product.getBonusePoint() * count);
+                int restBp = bp - cost;
                 memberService.updateBonusPoint(member, restBp);
 
                 // add record
@@ -624,14 +661,9 @@ public class SaleServiceImpl implements SaleService {
 
                 // add memeber asset
                 memberService.addProductAsset(member, product, count);
-
-                return true;
-            } catch (StockNotEnoughException e) {
-                e.printStackTrace();
-                return false;
-            }
+        }else{
+            throw new InsufficientBonusPointException();
         }
-        return false;
     }
 
     @Override
@@ -640,36 +672,116 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public boolean BuyProduct(PaymentMethodType type, Member member, Product product, int count, String saler) {
+    public void BuyProduct(PaymentMethodType type, Member member, Product product, int count, String saler)
+        throws StockNotEnoughException, InsufficientDepositException, InsufficientBonusPointException{
         switch (type){
             case PAYMENT_METHOD_CASH:
-                return _buyProductPayWithCash(member, product, count, saler);
+                _buyProductPayWithCash(member, product, count, saler);
+                break;
             case PAYMENT_METHOD_BONUSPOINT:
-                return _buyProductPayWithBonusPoint(member, product, count, saler);
+                _buyProductPayWithBonusPoint(member, product, count, saler);
+                break;
             case PAYMENT_METHOD_DEPOSIT:
-                return _buyProductPayWithDeposit(member, product, count, saler);
+                _buyProductPayWithDeposit(member, product, count, saler);
+                break;
         }
-        return false;
     }
 
     @Override
-    public boolean BuyProduct(PaymentMethodType type, Member member, Product product, int count, float price, String saler){
-        return false;
-    }
-
-    @Override
-    public boolean BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, String saler) {
+    public void BuyProduct(PaymentMethodType type, Member member, Product product, int count, float price, String saler)
+            throws StockNotEnoughException, InsufficientDepositException, InsufficientBonusPointException{
         switch (type){
             case PAYMENT_METHOD_CASH:
-                return _buyPackagePayWithCash(member, pkg, count, saler);
+                _buyProductPayWithCash(member, product, count, price, saler);
+                break;
+            case PAYMENT_METHOD_BONUSPOINT:
+                int cost = (int)price;
+                _buyProductPayWithBonusPoint(member, product, count, cost, saler);
+                break;
             case PAYMENT_METHOD_DEPOSIT:
-                return _buyPackagePayWithDeposit(member, pkg, count, saler);
+                _buyProductPayWithDeposit(member, product, count, price, saler);
+                break;
         }
-        return false;
     }
 
     @Override
-    public boolean BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, float price, String saler){
-        return false;
+    public void BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, String saler)
+        throws StockNotEnoughException, InsufficientDepositException{
+        switch (type){
+            case PAYMENT_METHOD_CASH: {
+                _buyPackagePayWithCash(member, pkg, count, saler);
+                break;
+            }
+            case PAYMENT_METHOD_DEPOSIT: {
+                _buyPackagePayWithDeposit(member, pkg, count, saler);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, float price, String saler)
+            throws StockNotEnoughException, InsufficientDepositException{
+        switch (type){
+            case PAYMENT_METHOD_CASH: {
+                _buyPackagePayWithCash(member, pkg, count, price, saler);
+                break;
+            }
+            case PAYMENT_METHOD_DEPOSIT: {
+                _buyPackagePayWithDeposit(member, pkg, count, price, saler);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public float GetProductPrice(PaymentMethodType type, Member member, Product product, int count){
+        Validate.notNull(product, "product should not be null");
+        switch (type){
+            case PAYMENT_METHOD_CASH: {
+                // should not add discount logic
+                float price = product.getUnitPrice() * count;
+                return price;
+            }
+            case PAYMENT_METHOD_DEPOSIT: {
+                Validate.notNull(member, "member should not be null");
+                SaleDiscount discount = saleDiscountDAO.getDiscountByProduct(product, member.getMemberType());
+                // Discount logic
+                float rawPrice = product.getUnitPrice() * count;
+                float price = rawPrice;
+                if(discount != null && discount.getDiscountValue() < 1.0f){
+                    price = rawPrice * discount.getDiscountValue();
+                }
+                return price;
+            }
+            default:
+                return 0.0f;
+        }
+    }
+
+    @Override
+    public float GetProductDiscount(PaymentMethodType type, Member member, Product product){
+        Validate.notNull(product, "product should not be null");
+        switch (type){
+            case PAYMENT_METHOD_DEPOSIT: {
+                Validate.notNull(member, "member should not be null");
+                SaleDiscount discount = saleDiscountDAO.getDiscountByProduct(product, member.getMemberType());
+                return discount.getDiscountValue();
+            }
+            default:
+                return 1.0f;
+        }
+    }
+
+    @Override
+    public int GetProductBonusPoint(Product product, int count){
+        Validate.notNull(product, "product should not be null");
+        return product.getBonusePoint() * count;
+    }
+
+    @Override
+    public int GetPackagePrice(ProductPackage pkg, int count){
+        Validate.notNull(pkg, "package should not be null");
+        return pkg.getUnitPrice() * count;
     }
 }

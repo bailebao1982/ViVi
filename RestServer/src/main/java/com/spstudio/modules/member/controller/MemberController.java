@@ -386,6 +386,7 @@ public class MemberController {
     @RequestMapping(value = "/load_member_deposit/{member_id}",
             method = RequestMethod.GET,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean loadMemberDeposit(@PathVariable String member_id){
         Member member = memberService.findMemberByMemberId(member_id);
         if(member != null){
@@ -401,11 +402,14 @@ public class MemberController {
                         true,
                         depositBean
                 );
-
             }else{
-                return ResponseMsgBeanFactory.getErrorResponseBean(
-                        "1106",
-                        "该会员无充值信息， 会员ID：" + member_id
+                MemberDepositBean depositBean = new MemberDepositBean();
+                depositBean.setDeposit(0);
+                depositBean.setMember(MemberJsonBeanUtil.toJsonBean(member));
+
+                return ResponseMsgBeanFactory.getResponseBean(
+                        true,
+                        depositBean
                 );
             }
         }else {
@@ -419,6 +423,7 @@ public class MemberController {
     @RequestMapping(value = "/load_member_bonusponit/{member_id}",
             method = RequestMethod.GET,
             headers="Accept=application/json")
+    @CrossOrigin
     public @ResponseBody ResponseBean loadMemberBonusPoint(@PathVariable String member_id){
         Member member = memberService.findMemberByMemberId(member_id);
         if(member != null){

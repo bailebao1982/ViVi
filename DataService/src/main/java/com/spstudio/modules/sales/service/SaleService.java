@@ -14,6 +14,9 @@ import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.product.entity.ProductType;
 import com.spstudio.modules.sales.entity.SaleDiscount;
 import com.spstudio.modules.sales.entity.Sales;
+import com.spstudio.modules.sales.exception.InsufficientBonusPointException;
+import com.spstudio.modules.sales.exception.InsufficientDepositException;
+import com.spstudio.modules.stock.exceptions.StockNotEnoughException;
 
 import java.util.List;
 
@@ -91,17 +94,23 @@ public interface SaleService {
      */
     public boolean BuyDeposit(Member member, int deposit, String saler);
 
-    public boolean BuyProduct(PaymentMethodType type, Member member, Product product, int count, String saler);
-    public boolean BuyProduct(PaymentMethodType type, Member member, Product product, int count, float price, String saler);
+    public void BuyProduct(PaymentMethodType type, Member member, Product product, int count, String saler)
+            throws StockNotEnoughException, InsufficientDepositException, InsufficientBonusPointException;
 
-    //public boolean BuyProductPayWithCash(Member member, Product product, int count, String saler);
-    //public boolean BuyProductPayWithDeposit(Member member, Product product, int count, String saler);
-    //public boolean BuyProductPayWithBonusPoint(Member member, Product product, int count, String saler);
+    public void BuyProduct(PaymentMethodType type, Member member, Product product, int count, float price, String saler)
+            throws StockNotEnoughException, InsufficientDepositException, InsufficientBonusPointException;
 
-    public boolean BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, String saler);
-    public boolean BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, float price, String saler);
+    public void BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, String saler)
+            throws StockNotEnoughException, InsufficientDepositException;
 
-    //public boolean BuyPackagePayWithCash(Member member, ProductPackage pkg, int count, String saler);
-    //public boolean BuyPackagePayWithDeposit(Member member, ProductPackage pkg, int count, String saler);
+    public void BuyPackage(PaymentMethodType type, Member member, ProductPackage pkg, int count, float price, String saler)
+            throws StockNotEnoughException, InsufficientDepositException;
 
+    public float GetProductPrice(PaymentMethodType type, Member member, Product product, int count);
+
+    public float GetProductDiscount(PaymentMethodType type, Member member, Product product);
+
+    public int GetProductBonusPoint(Product product, int count);
+
+    public int GetPackagePrice(ProductPackage pkg, int count);
 }
