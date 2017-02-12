@@ -444,7 +444,7 @@ public class SaleServiceImpl implements SaleService {
         _addDepositSaleRecord(member, deposit, saler, PaymentMethodType.PAYMENT_METHOD_CASH);
 
         // add memeber asset
-        memberService.addDepositAsset(member, deposit);
+        memberService.increaseOrAddDepositAsset(member, deposit);
 
         // this will cause member type change
         MemberType newMemberType = memberService.getDepositMemberTypeRank(deposit);

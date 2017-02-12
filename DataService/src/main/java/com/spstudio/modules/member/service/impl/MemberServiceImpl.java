@@ -285,6 +285,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberAsset increaseOrAddDepositAsset(Member member, int deposit){
+        MemberAsset depositAsset = memberAssetDAO.findDepositAssetOfMember(member);
+        if(depositAsset != null){
+            int newDeposit = depositAsset.getDeposit() + deposit;
+            depositAsset.setDeposit(newDeposit);
+            return memberAssetDAO.updateAsset(depositAsset);
+        }else{
+            return addDepositAsset(member, deposit);
+        }
+    }
+
+    @Override
     public boolean removeDepositAsset(MemberAsset asset) {
         if(asset.getAssetType() == AssetType.ASSET_PACKAGE_TYPE.ordinal()){
             return false;

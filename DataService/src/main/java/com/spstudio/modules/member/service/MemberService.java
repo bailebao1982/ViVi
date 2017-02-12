@@ -58,6 +58,8 @@ public interface MemberService {
     public MemberAsset getDepositAssetOfMember(Member member);
 
     public MemberAsset addDepositAsset(Member member,int deposit);
+    public MemberAsset increaseOrAddDepositAsset(Member member, int deposit);
+
     public MemberAsset addProductAsset(Member member, Product product, int count);
     public List<MemberAsset> addPackageAsset(Member member, ProductPackage productPackage, int count);
 
