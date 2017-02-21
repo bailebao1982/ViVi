@@ -184,14 +184,14 @@ public class TestBasicUseCase {
      
      //@Test
      public void testAddNewWorkOrder(){
-         workOrder = new WorkOrder();
-         workOrder.setConsumeProduct(product);
-         Set<Member> customers = new LinkedHashSet<Member>();
-         customers.add(member);
-         workOrder.setCustomers(customers);
-         workOrder.setCreateDate(new Date(System.currentTimeMillis()));
-         workOrderService.addWorkOrder(workOrder);
-         
-         assertNotNull(workOrder);
+//         workOrder = new WorkOrder();
+//         workOrder.setConsumeProduct(product);
+//         Set<Member> customers = new LinkedHashSet<Member>();
+//         customers.add(member);
+//         workOrder.setCustomers(customers);
+//         workOrder.setCreateDate(new Date(System.currentTimeMillis()));
+//         workOrderService.addWorkOrder(workOrder);
+//
+//         assertNotNull(workOrder);
      }
 }

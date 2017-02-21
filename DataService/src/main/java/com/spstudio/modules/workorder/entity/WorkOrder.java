@@ -4,24 +4,11 @@ import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.product.entity.Product;
 
 
-import java.sql.Time;
 import java.util.Date;
-import java.util.Set;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
+import com.spstudio.modules.product.entity.ProductPackage;
+import com.spstudio.modules.sp.entity.ServiceProvider;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -36,18 +23,35 @@ public class WorkOrder {
     @GenericGenerator(name = "system-uuid",strategy="uuid")  
     String workOrderId;
     
-    @Column(name = "registerDate", columnDefinition="DATETIME")
-    @Temporal(TemporalType.DATE)
-    Date registerDate;
-    
-    
-    @ManyToMany(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
-    @JoinTable(name = "member_workorder", 
-	   joinColumns = {@JoinColumn(name = "workOrderId")}, 
-	   inverseJoinColumns = {@JoinColumn(name = "memberId")})        
-    Set<Member> customers;
+//    @Column(name = "registerDate", columnDefinition="DATETIME")
+//    @Temporal(TemporalType.DATE)
+//    Date registerDate;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST,  
+//    @ManyToMany(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
+//    @JoinTable(name = "member_workorder",
+//            joinColumns = {@JoinColumn(name = "workOrderId")},
+//            inverseJoinColumns = {@JoinColumn(name = "memberId")})
+//    // 可能存在一种工单以班级的形式为多个consumer开放，只要有一个人confirm了就可以了
+//  Set<Member> customers;
+
+    @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+    @JoinColumn(name="memberId",referencedColumnName="memberId")
+    Member customer;
+
+//    @ManyToMany(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "serviceProviderId")
+//    // 可能存在一种服务是多个service provider为一个人服务
+//    Set<ServiceProvider> serviceProviders;
+
+    @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+    @JoinColumn(name="serviceProviderId",referencedColumnName="serviceProviderId")
+    ServiceProvider serviceProvider;
+
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, optional = true)
+    @JoinColumn(name = "productPackageId", nullable = true)
+    ProductPackage fromPackage;
+
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH })
     @JoinColumn(name = "productId")
     Product consumeProduct;
@@ -56,21 +60,40 @@ public class WorkOrder {
     String comment;
 
     @Column(length=32)
-    String Rate;
+    int Rate;   // 打分
 
+    // employee create work order
+    @Column(name = "serviceDate", columnDefinition="DATETIME")
+    @Temporal(TemporalType.DATE)
+    Date serviceDate;
+
+    // employee create work order
     @Column(name = "createDate", columnDefinition="DATETIME")
     @Temporal(TemporalType.DATE)
     Date createDate;
 
-    @Column(length=32)
-    String Status;
-
-    @Column(name = "confirmTime", columnDefinition="DATETIME")
+    // consumer confirm work order
+    @Column(name = "confirmDate", columnDefinition="DATETIME")
     @Temporal(TemporalType.DATE)
-    Date confirmTime;
+    Date confirmDate;
+
+    // when will the work order lose effect
+    @Column(name = "effectiveEndDate", columnDefinition="DATETIME")
+    @Temporal(TemporalType.DATE)
+    Date effectiveEndDate;
+
+    // UNCONFIRMED, CONFIRMED
+    @Column(columnDefinition = "int default 0")
+    int Status; // 0: UNCONFIRMED, 1: CONFIRMED
 
     @Column(length=32)
     String serviceLocation;
+
+    @Column(length=32)
+    String confirmComment;
+
+    @Column(columnDefinition = "int default 0")
+    int deleteFlag;
     
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -97,21 +120,13 @@ public class WorkOrder {
     @Column(name = "SNAPSHOT5", columnDefinition = "BLOB",nullable=true)
     private byte[] snapshot5;
     
-    public Date getRegisterDate() {
-        return registerDate;
-    }
-
-    public void setRegisterDate(Date registerDate) {
-        this.registerDate = registerDate;
-    }
-
-    public Set<Member> getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(Set<Member> customers) {
-        this.customers = customers;
-    }
+//    public Date getRegisterDate() {
+//        return registerDate;
+//    }
+//
+//    public void setRegisterDate(Date registerDate) {
+//        this.registerDate = registerDate;
+//    }
 
     public Product getConsumeProduct() {
         return consumeProduct;
@@ -129,11 +144,11 @@ public class WorkOrder {
         this.comment = comment;
     }
 
-    public String getRate() {
+    public int getRate() {
         return Rate;
     }
 
-    public void setRate(String Rate) {
+    public void setRate(int Rate) {
         this.Rate = Rate;
     }
 
@@ -145,20 +160,20 @@ public class WorkOrder {
         this.createDate = createDate;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return Status;
     }
 
-    public void setStatus(String Status) {
+    public void setStatus(int Status) {
         this.Status = Status;
     }
 
-    public Date getConfirmTime() {
-        return confirmTime;
+    public Date getConfirmDate() {
+        return confirmDate;
     }
 
-    public void setConfirmTime(Date confirmTime) {
-        this.confirmTime = confirmTime;
+    public void setConfirmDate(Date confirmDate) {
+        this.confirmDate = confirmDate;
     }
 
     public String getServiceLocation() {
@@ -216,7 +231,60 @@ public class WorkOrder {
     public void setSnapshot5(byte[] snapshot5) {
         this.snapshot5 = snapshot5;
     }
-    
-    
-    
+
+    public Member getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Member customer) {
+        this.customer = customer;
+    }
+
+    public ServiceProvider getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(ServiceProvider serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
+
+    public String getConfirmComment() {
+        return confirmComment;
+    }
+
+    public void setConfirmComment(String confirmComment) {
+        this.confirmComment = confirmComment;
+    }
+
+    public int getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(int deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public Date getServiceDate() {
+        return serviceDate;
+    }
+
+    public void setServiceDate(Date serviceDate) {
+        this.serviceDate = serviceDate;
+    }
+
+    public ProductPackage getFromPackage() {
+        return fromPackage;
+    }
+
+    public void setFromPackage(ProductPackage fromPackage) {
+        this.fromPackage = fromPackage;
+    }
+
+    public Date getEffectiveEndDate() {
+        return effectiveEndDate;
+    }
+
+    public void setEffectiveEndDate(Date effectiveEndDate) {
+        this.effectiveEndDate = effectiveEndDate;
+    }
 }

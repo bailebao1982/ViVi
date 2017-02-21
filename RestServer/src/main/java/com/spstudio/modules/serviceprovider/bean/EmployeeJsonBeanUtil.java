@@ -1,6 +1,7 @@
 package com.spstudio.modules.serviceprovider.bean;
 
 import com.spstudio.common.image.ImageUtils;
+import com.spstudio.common.utils.StringUtils;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;
@@ -49,17 +50,16 @@ public class EmployeeJsonBeanUtil {
         String profilePic = employeeJsonBean.getEmployee_profilePic();
         if(profilePic != null && !profilePic.isEmpty())
             spBean.setProfilePicture(ImageUtils.stringToByte(profilePic));
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        if(employeeJsonBean.getEmployee_birthday() != null &&
-                !employeeJsonBean.getEmployee_birthday().isEmpty()){
-            try {
-                Date employeeBirthday = formatter.parse(employeeJsonBean.getEmployee_birthday());
-                spBean.setSpBirthDay(employeeBirthday);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return null;
-            }
+
+        Date employeeBirthday = null;
+        try {
+            employeeBirthday = StringUtils.str2Date(
+                    employeeJsonBean.getEmployee_birthday()
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        spBean.setSpBirthDay(employeeBirthday);
 
         spBean.setSpSex(employeeJsonBean.getEmployee_sex());
         spBean.setSpTelphone(employeeJsonBean.getEmployee_telphone());

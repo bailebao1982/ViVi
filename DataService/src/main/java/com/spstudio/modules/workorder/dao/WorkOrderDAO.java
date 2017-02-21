@@ -5,7 +5,12 @@
  */
 package com.spstudio.modules.workorder.dao;
 
+import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+
+import java.util.List;
 
 /**
  *
@@ -14,9 +19,17 @@ import com.spstudio.modules.workorder.entity.WorkOrder;
 public interface WorkOrderDAO {
     public WorkOrder addWorkOrder(WorkOrder workOrder);
     
-    public WorkOrder confirmWorkOrder(String workOrderId,String rate,String status);
+    public WorkOrder updateWorkOrder(WorkOrder workOrder);
     
-    public WorkOrder findWorkOrdertByWordOrderId(String workOrderId);
+    public WorkOrder findWorkOrderByWordOrderId(String workOrderId);
+
+    public List<WorkOrder> findWorkOrdersOfServiceProvider(ServiceProvider provider);
+
+    public List<WorkOrder> findWorkOrdersOfCustomer(Member member);
     
     public void zapWorkOrder(WorkOrder workOrder);
+
+    public List<WorkOrder> queryForPage(int offset, int length, SearchCriteria criteria);
+
+    public int queryForCount(SearchCriteria criteria);
 }

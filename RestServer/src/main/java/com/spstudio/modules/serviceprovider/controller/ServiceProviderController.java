@@ -8,6 +8,9 @@ import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.search.SearchCriteriaItem;
 import com.spstudio.modules.common.bean.CommonTypeJsonBean;
+import com.spstudio.modules.common.bean.Select2OptionJsonBean;
+import com.spstudio.modules.common.bean.Select2ResponseJsonBean;
+import com.spstudio.modules.common.bean.Select2ResponseJsonBeanUtil;
 import com.spstudio.modules.serviceprovider.bean.*;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
@@ -120,6 +123,33 @@ public class ServiceProviderController {
                 true,
                 returnPage
         );
+    }
+
+    @RequestMapping(value = "/list_employees_for_select2",
+            method = RequestMethod.GET,
+            headers = "Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody Select2ResponseJsonBean listEmployeesForSelect2(
+            @RequestParam(value="query", required = false) String query,
+            @RequestParam(value="page", required=true) int page,
+            @RequestParam(value="page_size", required=true) int page_size){
+        SearchCriteria sc = new SearchCriteria();
+        if(query != null && !query.isEmpty())
+            sc.addSearchCriterialItem("spName",
+                    new SearchCriteriaItem("spName", query, SearchConditionEnum.Like)
+            );
+
+        Page<ServiceProvider> resultPageBean = serviceProviderService.queryForPage(page, page_size, sc);
+
+        List<Select2OptionJsonBean> spJsonBeanList =
+                SimpleEmployeeJsonBeanUtil.toJsonBeanList(resultPageBean.getList());
+
+        Select2ResponseJsonBean returnBean = Select2ResponseJsonBeanUtil.toJsonBean(
+                resultPageBean.getTotalRecords(),
+                spJsonBeanList
+        );
+
+        return returnBean;
     }
 
     @RequestMapping(value = "/add_employee",

@@ -5,8 +5,13 @@
  */
 package com.spstudio.modules.workorder.dao.impl;
 
+import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.dao.WorkOrderDAO;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -33,7 +38,7 @@ public class WorkOrderDAOImpl implements WorkOrderDAO {
     }
 
     @Override
-    public WorkOrder findWorkOrdertByWordOrderId(String workOrderId) {
+    public WorkOrder findWorkOrderByWordOrderId(String workOrderId) {
         String hql = "from WorkOrder where workOrderId = :id and deleteFlag = 0";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString("id", workOrderId);
@@ -42,21 +47,73 @@ public class WorkOrderDAOImpl implements WorkOrderDAO {
             return list.get(0);
         return null;
     }
+
+    @Override
+    public List<WorkOrder> findWorkOrdersOfServiceProvider(ServiceProvider provider) {
+        String hql = "from WorkOrder where serviceProviderId = :id and deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("id", provider.getServiceProviderId());
+        List<WorkOrder> list = query.list();
+        return list;
+    }
+
+    @Override
+    public List<WorkOrder> findWorkOrdersOfCustomer(Member member) {
+        String hql = "from WorkOrder where memberId = :id and deleteFlag = 0";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("id", member.getMemberId());
+        List<WorkOrder> list = query.list();
+        return list;
+    }
     
     @Override
-    public WorkOrder confirmWorkOrder(String workOrderId, String rate, String status) {
-       WorkOrder wo = this.findWorkOrdertByWordOrderId(workOrderId);
-       wo.setRate(rate);
-       wo.setStatus(status);
-       this.sessionFactory.getCurrentSession().saveOrUpdate(wo);
-       return wo;
-       
+    public WorkOrder updateWorkOrder(WorkOrder workOrder) {
+       this.sessionFactory.getCurrentSession().saveOrUpdate(workOrder);
+       return workOrder;
     }
 
     @Override
     public void zapWorkOrder(WorkOrder workOrder) {
         this.sessionFactory.getCurrentSession().delete(workOrder);
     }
-    
-    
+
+    @Override
+    public List<WorkOrder> queryForPage(int offset, int length, SearchCriteria criteria) {
+        List<WorkOrder> entitylist = new ArrayList<WorkOrder>();
+        try{
+            StringBuffer queryString = new StringBuffer();
+            queryString.append("from WorkOrder where deleteFlag = 0");
+
+            for(String key:criteria.getItemMap().keySet()){
+                queryString.append(" and ");
+                queryString.append(criteria.getItemMap().get(key).getSearchCriteriaItem());
+            }
+
+            Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
+            query.setFirstResult(offset);
+            query.setMaxResults(length);
+            entitylist = query.list();
+
+        }catch(RuntimeException re){
+            throw re;
+        }
+
+        return entitylist;
+    }
+
+    @Override
+    public int queryForCount(SearchCriteria criteria) {
+        StringBuffer queryString = new StringBuffer();
+        queryString.append("select count(1) from WorkOrder where deleteFlag = 0");
+
+        for(String key:criteria.getItemMap().keySet()){
+            queryString.append(" and ");
+            queryString.append(criteria.getItemMap().get(key).getSearchCriteriaItem());
+        }
+
+        Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
+        Long count = (Long)query.uniqueResult();;
+        return count.intValue();
+    }
+
 }

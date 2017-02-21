@@ -83,8 +83,8 @@ public class Member {
     MemberType type;
     
     
-    @ManyToMany(mappedBy = "customers")
-    private Set<WorkOrder> workOrders;
+//    @ManyToMany(mappedBy = "customers")
+//    private Set<WorkOrder> workOrders;
     
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -231,13 +231,13 @@ public class Member {
         this.deleteFlag = deleteFlag;
     }
 
-    public Set<WorkOrder> getWorkOrders() {
-        return workOrders;
-    }
-
-    public void setWorkOrders(Set<WorkOrder> workOrders) {
-        this.workOrders = workOrders;
-    }
+//    public Set<WorkOrder> getWorkOrders() {
+//        return workOrders;
+//    }
+//
+//    public void setWorkOrders(Set<WorkOrder> workOrders) {
+//        this.workOrders = workOrders;
+//    }
 
     public MemberType getType() {
         return type;
