@@ -10,6 +10,7 @@ import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.entity.WorkOrder;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +27,8 @@ public interface WorkOrderDAO {
     public List<WorkOrder> findWorkOrdersOfServiceProvider(ServiceProvider provider);
 
     public List<WorkOrder> findWorkOrdersOfCustomer(Member member);
+
+    public List<WorkOrder> findExpiredWorkOrder(Date dt);
     
     public void zapWorkOrder(WorkOrder workOrder);
 

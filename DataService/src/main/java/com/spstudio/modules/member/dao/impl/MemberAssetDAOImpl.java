@@ -93,6 +93,16 @@ public class MemberAssetDAOImpl implements MemberAssetDAO{
     }
 
     @Override
+    public List<MemberAsset> findProductAssetOfMember(Member member, Product product) {
+        String hql = "from MemberAsset where memberId = :member_id and productId = :product_id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("member_id", member.getMemberId());
+        query.setString("product_id", product.getProductId());
+        List<MemberAsset> list = query.list();
+        return list;
+    }
+
+    @Override
     public MemberAsset findDepositAssetOfMember(Member member) {
         String hql = "from MemberAsset where memberId = :member_id and assetType = 2";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);

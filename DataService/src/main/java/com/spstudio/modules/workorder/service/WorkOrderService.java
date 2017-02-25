@@ -10,6 +10,9 @@ import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import com.spstudio.modules.workorder.exception.InsuffientPackageAssetException;
+import com.spstudio.modules.workorder.exception.InsuffientProductAssetException;
+import com.spstudio.modules.workorder.exception.AssetNotFoundException;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ import java.util.List;
  */
 public interface WorkOrderService {
     
-    public WorkOrder addWorkOrder(WorkOrder workOrder);
+    public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException, InsuffientPackageAssetException;
     
     public WorkOrder confirmWorkOrder(String workOrderId, int rate, String confirmComment);
     
@@ -31,7 +34,7 @@ public interface WorkOrderService {
 
     public void removeWorkOrder(WorkOrder workOrder);
 
-    public boolean cancelWorkOrder(WorkOrder workOrder);
+    public boolean cancelWorkOrder(WorkOrder workOrder) throws AssetNotFoundException;
     
     public void zapWorkOrder(WorkOrder workOrder);
 

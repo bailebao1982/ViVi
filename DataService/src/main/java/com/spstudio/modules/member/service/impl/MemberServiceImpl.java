@@ -253,6 +253,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<MemberAsset> findProductAssetOfMember(Member member, Product product) {
+        return memberAssetDAO.findProductAssetOfMember(member, product);
+    }
+
+    @Override
     public MemberAsset getDepositAssetOfMember(Member member) {
         return memberAssetDAO.findDepositAssetOfMember(member);
     }

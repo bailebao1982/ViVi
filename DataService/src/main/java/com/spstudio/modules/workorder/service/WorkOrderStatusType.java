@@ -6,6 +6,7 @@ package com.spstudio.modules.workorder.service;
 public enum WorkOrderStatusType {
     WO_UNCONFIRMED,
     WO_CONFIRMED,
+    WO_EXPIRED,
     WO_UNKNOWN;
 
     public static WorkOrderStatusType fromInteger(int x)

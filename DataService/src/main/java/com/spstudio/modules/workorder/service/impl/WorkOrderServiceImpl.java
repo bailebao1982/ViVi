@@ -9,11 +9,21 @@ import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.utils.DateUtils;
 import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.member.entity.MemberAsset;
+import com.spstudio.modules.member.service.MemberService;
+import com.spstudio.modules.product.entity.Product;
+import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.dao.WorkOrderDAO;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import com.spstudio.modules.workorder.exception.InsuffientPackageAssetException;
+import com.spstudio.modules.workorder.exception.InsuffientProductAssetException;
+import com.spstudio.modules.workorder.exception.AssetNotFoundException;
 import com.spstudio.modules.workorder.service.WorkOrderService;
 import com.spstudio.modules.workorder.service.WorkOrderStatusType;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -24,6 +34,25 @@ import java.util.List;
  * @author wewezhu
  */
 public class WorkOrderServiceImpl implements WorkOrderService {
+
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(WorkOrderServiceImpl.class);
+
+    //
+    // TODO: Real deduction of member asserts should be done here,
+    // TODO: so do we need to change the sale module for
+    // TODO: member assert check logic ???
+    //
+    // I think the best logic should be like below:
+    // 1. real assets deduction when work order created
+    // user confirm --> OK
+    // user not confirm, exceed effective end date-> add asset back
+    // cancel workorder -> add asset back
+    //
+
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
     private WorkOrderDAO workOrderDAO;
 
     public WorkOrderDAO getWorkOrderDAO() {
@@ -36,8 +65,57 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
     @Override
     @Transactional
-    public WorkOrder addWorkOrder(WorkOrder workOrder) {
+    public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException, InsuffientPackageAssetException{
         // TODO: should add logic for member asset deduction
+        Member member = workOrder.getCustomer();
+        Product product = workOrder.getConsumeProduct();
+        if(member == null){
+            logger.error("addWorkOrder: member is null");
+            return null;
+        }
+
+        if(product == null){
+            logger.error("addWorkOrder: product is null");
+            return null;
+        }
+        List<MemberAsset> assets = memberService.findProductAssetOfMember(member, product);
+
+        ProductPackage productPackage = workOrder.getFromPackage();
+
+        boolean assetFound = false;
+        for(MemberAsset asset: assets){
+            int assetCount = asset.getCount();
+            if(productPackage == null && asset.getProductPackage() == null){
+
+                if(assetCount > 0){
+                    asset.setCount(assetCount - 1);
+                    memberService.updateProductAsset(asset);
+                }else{
+                    throw new InsuffientProductAssetException();
+                }
+                assetFound = true;
+                break;
+            }else if(productPackage != null && asset.getProductPackage() != null &&
+                    productPackage.getProductPackageId().equalsIgnoreCase(
+                            asset.getProductPackage().getProductPackageId()
+                    )){
+
+                if(assetCount > 0){
+                    asset.setCount(assetCount - 1);
+                    memberService.updateProductAsset(asset);
+                }else{
+                    throw new InsuffientProductAssetException();
+                }
+
+                assetFound = true;
+                break;
+            }
+        }
+
+        if(!assetFound){
+            throw new AssetNotFoundException();
+        }
+
         return workOrderDAO.addWorkOrder(workOrder);
     }
 
@@ -45,18 +123,6 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public WorkOrder confirmWorkOrder(String workOrderId, int rate, String confirmComment) {
         WorkOrder workOrder = findWorkOrderByWordOrderId(workOrderId);
         if(workOrder != null){
-            //
-            // TODO: Real deduction of member asserts should be done here,
-            // TODO: so do we need to change the sale module for
-            // TODO: member assert check logic ???
-            //
-            // I think the best logic should be like below:
-            // 1. real assets deduction when work order created
-            // user confirm --> OK
-            // user not confirm, exceed effective end date-> add asset back
-            // cancel workorder -> add asset back
-            //
-
             Date now = DateUtils.getDateNow();
             workOrder.setConfirmDate(now);
             workOrder.setRate(rate);
@@ -70,11 +136,53 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
     @Override
     @Transactional
-    public boolean cancelWorkOrder(WorkOrder workOrder) {
+    public boolean cancelWorkOrder(WorkOrder workOrder) throws AssetNotFoundException{
         // cancel workorder -> add asset back
+        Member member = workOrder.getCustomer();
+        Product product = workOrder.getConsumeProduct();
+        if(member == null){
+            logger.error("addWorkOrder: member is null");
+            return false;
+        }
+
+        if(product == null){
+            logger.error("addWorkOrder: product is null");
+            return false;
+        }
+        List<MemberAsset> assets = memberService.findProductAssetOfMember(member, product);
+
+        ProductPackage productPackage = workOrder.getFromPackage();
+
+        boolean assetFound = false;
+        for(MemberAsset asset: assets){
+            int assetCount = asset.getCount();
+            if(productPackage == null && asset.getProductPackage() == null){
+                asset.setCount(assetCount + 1);
+                memberService.updateProductAsset(asset);
+
+                assetFound = true;
+                break;
+            }else if(productPackage != null && asset.getProductPackage() != null &&
+                    productPackage.getProductPackageId().equalsIgnoreCase(
+                            asset.getProductPackage().getProductPackageId()
+                    )){
+
+                asset.setCount(assetCount + 1);
+                memberService.updateProductAsset(asset);
+
+                assetFound = true;
+                break;
+            }
+        }
+
+        if(!assetFound){
+            logger.error("addWorkOrder: no asset found for this member :" + member.getMemberId() + ", product id :" + product.getProductId());
+            throw new AssetNotFoundException();
+        }
+
 
         this.removeWorkOrder(workOrder);
-        return false;
+        return true;
     }
 
     @Override
@@ -123,5 +231,21 @@ public class WorkOrderServiceImpl implements WorkOrderService {
             workOrder.setDeleteFlag(1);
             workOrderDAO.updateWorkOrder(workOrder);
         }
+    }
+
+    @Scheduled(cron = "0 0 23 ? * *") // 每天23:00:00执行该定时计划
+    public void expireWorkOrder(){
+        Date now = DateUtils.getDateNow();
+
+        List<WorkOrder> workOrders = workOrderDAO.findExpiredWorkOrder(now);
+
+        for (WorkOrder workOrder : workOrders){
+            // TODO: Dd we need to return the asset to member?
+            workOrder.setStatus(WorkOrderStatusType.WO_EXPIRED.ordinal());
+            workOrder.setConfirmDate(now);
+
+            workOrderDAO.updateWorkOrder(workOrder);
+        }
+
     }
 }

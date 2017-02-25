@@ -54,6 +54,7 @@ public interface MemberService {
 
     // Member Asset Service
     public List<MemberAsset> findAssetOfMember(Member member);
+    public List<MemberAsset> findProductAssetOfMember(Member member, Product product);
 
     public MemberAsset getDepositAssetOfMember(Member member);
 

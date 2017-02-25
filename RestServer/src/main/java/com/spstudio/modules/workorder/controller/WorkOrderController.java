@@ -14,6 +14,9 @@ import com.spstudio.modules.workorder.bean.WorkOrderConfirmJsonBean;
 import com.spstudio.modules.workorder.bean.WorkOrderJsonBean;
 import com.spstudio.modules.workorder.bean.WorkOrderJsonBeanUtil;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import com.spstudio.modules.workorder.exception.AssetNotFoundException;
+import com.spstudio.modules.workorder.exception.InsuffientPackageAssetException;
+import com.spstudio.modules.workorder.exception.InsuffientProductAssetException;
 import com.spstudio.modules.workorder.service.WorkOrderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +51,9 @@ public class WorkOrderController {
                     put("7001",  "日期格式错误");
                     put("7002",  "未能找到该工单，工单Id: %s");
                     put("7003",  "工单（%s）取消失败");
+                    put("7004",  "用户套餐资产(%s)中无足够的产品(%s)");
+                    put("7005",  "用户资产中无足够的产品(%s)");
+                    put("7006",  "用户资产中无此类型的资产");
                 }
             };
 
@@ -81,8 +87,9 @@ public class WorkOrderController {
     @CrossOrigin
     public @ResponseBody ResponseBean addWorkOrder(
             @RequestBody WorkOrderJsonBean workOrderJsonBean){
+        WorkOrder workOrder = null;
         try {
-            WorkOrder workOrder = WorkOrderJsonBeanUtil.toEntityBean(
+            workOrder = WorkOrderJsonBeanUtil.toEntityBean(
                     workOrderJsonBean,
                     serviceProviderService,
                     memberService,
@@ -99,6 +106,21 @@ public class WorkOrderController {
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "7001",
                     errorMap.get("7001")
+            );
+        } catch (InsuffientPackageAssetException e) {
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "7004",
+                    String.format(errorMap.get("7004"), workOrder.getFromPackage().getPackageName(), workOrder.getConsumeProduct().getProductName())
+            );
+        } catch (InsuffientProductAssetException e) {
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "7005",
+                    String.format(errorMap.get("7005"), workOrder.getConsumeProduct().getProductName())
+            );
+        } catch (AssetNotFoundException e) {
+            return ResponseMsgBeanFactory.getErrorResponseBean(
+                    "7006",
+                    String.format(errorMap.get("7006"))
             );
         }
     }
@@ -141,14 +163,23 @@ public class WorkOrderController {
                 String.format(errorMap.get("7002"), workorder_id)
             );
         }
-        if(workOrderService.cancelWorkOrder(workOrder)){
-            return ResponseMsgBeanFactory.getSuccessResponseBean(
-                "工单取消成功!"
-            );
-        }else{
+
+        try {
+            boolean result = workOrderService.cancelWorkOrder(workOrder);
+            if(result){
+                return ResponseMsgBeanFactory.getSuccessResponseBean(
+                        "工单取消成功!"
+                );
+            }else{
+                return ResponseMsgBeanFactory.getErrorResponseBean(
+                        "7003",
+                        String.format(errorMap.get("7003"), workorder_id)
+                );
+            }
+        } catch (AssetNotFoundException e) {
             return ResponseMsgBeanFactory.getErrorResponseBean(
-                "7003",
-                String.format(errorMap.get("7003"), workorder_id)
+                    "7006",
+                    String.format(errorMap.get("7006"))
             );
         }
     }
