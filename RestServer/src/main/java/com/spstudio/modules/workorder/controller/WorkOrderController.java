@@ -211,6 +211,31 @@ public class WorkOrderController {
                     new SearchCriteriaItem("employee_id", employee_id, SearchConditionEnum.Equal)
             );
 
+        if(start_date != null &&
+                !start_date.isEmpty())
+            sc.addSearchCriterialItem("start_date",
+                    new SearchCriteriaItem("serviceDate", start_date, SearchConditionEnum.LargeOrEqual)
+            );
+
+        if(end_date!=null &&
+                !end_date.isEmpty())
+            sc.addSearchCriterialItem("end_date",
+                    new SearchCriteriaItem("serviceDate", end_date, SearchConditionEnum.SmallOrEqual)
+            );
+
+        if(confirm_start_date != null &&
+                !confirm_start_date.isEmpty())
+            sc.addSearchCriterialItem("start_date",
+                    new SearchCriteriaItem("confirmDate", confirm_start_date, SearchConditionEnum.LargeOrEqual)
+            );
+
+        if(confirm_end_date!=null &&
+                !confirm_end_date.isEmpty())
+            sc.addSearchCriterialItem("end_date",
+                    new SearchCriteriaItem("confirmDate", confirm_end_date, SearchConditionEnum.SmallOrEqual)
+            );
+
+
         Page<WorkOrder> resultPageBean = workOrderService.queryForPage(page, page_size, sc);
 
         List<WorkOrderJsonBean> workorderListJsonBean = new ArrayList<WorkOrderJsonBean>();

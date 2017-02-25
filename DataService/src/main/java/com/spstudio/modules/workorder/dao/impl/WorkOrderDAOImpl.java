@@ -12,6 +12,7 @@ import com.spstudio.modules.workorder.dao.WorkOrderDAO;
 import com.spstudio.modules.workorder.entity.WorkOrder;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -65,7 +66,16 @@ public class WorkOrderDAOImpl implements WorkOrderDAO {
         List<WorkOrder> list = query.list();
         return list;
     }
-    
+
+    @Override
+    public List<WorkOrder> findExpiredWorkOrder(Date dt) {
+        String hql = "from WorkOrder where effectiveEndDate < :dt";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("dt", dt.toString());
+        List<WorkOrder> list = query.list();
+        return list;
+    }
+
     @Override
     public WorkOrder updateWorkOrder(WorkOrder workOrder) {
        this.sessionFactory.getCurrentSession().saveOrUpdate(workOrder);
