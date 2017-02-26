@@ -11,11 +11,10 @@ import com.spstudio.common.utils.DateUtils;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.product.entity.Product;
-import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.dao.WorkOrderDAO;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import com.spstudio.modules.workorder.entity.WorkOrderAssetMapping;
 import com.spstudio.modules.workorder.exception.InsuffientPackageAssetException;
 import com.spstudio.modules.workorder.exception.InsuffientProductAssetException;
 import com.spstudio.modules.workorder.exception.AssetNotFoundException;
@@ -28,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -68,48 +68,31 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException, InsuffientPackageAssetException{
         // TODO: should add logic for member asset deduction
         Member member = workOrder.getCustomer();
-        Product product = workOrder.getConsumeProduct();
+        Set<WorkOrderAssetMapping> assetMappings = workOrder.getAssetMappingSet();
         if(member == null){
             logger.error("addWorkOrder: member is null");
             return null;
         }
 
-        if(product == null){
-            logger.error("addWorkOrder: product is null");
+        if(assetMappings.size() == 0){
+            logger.error("addWorkOrder: asset is null");
             return null;
         }
-        List<MemberAsset> assets = memberService.findProductAssetOfMember(member, product);
-
-        ProductPackage productPackage = workOrder.getFromPackage();
 
         boolean assetFound = false;
-        for(MemberAsset asset: assets){
+        for(WorkOrderAssetMapping assetMapping: assetMappings){
+            MemberAsset asset = assetMapping.getAsset();
             int assetCount = asset.getCount();
-            if(productPackage == null && asset.getProductPackage() == null){
+            int deductCount = assetMapping.getCount();
 
-                if(assetCount > 0){
-                    asset.setCount(assetCount - 1);
-                    memberService.updateProductAsset(asset);
-                }else{
-                    throw new InsuffientProductAssetException();
-                }
-                assetFound = true;
-                break;
-            }else if(productPackage != null && asset.getProductPackage() != null &&
-                    productPackage.getProductPackageId().equalsIgnoreCase(
-                            asset.getProductPackage().getProductPackageId()
-                    )){
-
-                if(assetCount > 0){
-                    asset.setCount(assetCount - 1);
-                    memberService.updateProductAsset(asset);
-                }else{
-                    throw new InsuffientProductAssetException();
-                }
-
-                assetFound = true;
-                break;
+            if(assetCount > deductCount){
+                asset.setCount(assetCount - deductCount);
+                memberService.updateProductAsset(asset);
+            }else{
+                throw new InsuffientProductAssetException();
             }
+            assetFound = true;
+            break;
         }
 
         if(!assetFound){
@@ -139,47 +122,26 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public boolean cancelWorkOrder(WorkOrder workOrder) throws AssetNotFoundException{
         // cancel workorder -> add asset back
         Member member = workOrder.getCustomer();
-        Product product = workOrder.getConsumeProduct();
+        Set<WorkOrderAssetMapping> assetMappings = workOrder.getAssetMappingSet();
         if(member == null){
             logger.error("addWorkOrder: member is null");
             return false;
         }
 
-        if(product == null){
-            logger.error("addWorkOrder: product is null");
+        if(assetMappings.size() > 0){
+            logger.error("addWorkOrder: asset is null");
             return false;
         }
-        List<MemberAsset> assets = memberService.findProductAssetOfMember(member, product);
 
-        ProductPackage productPackage = workOrder.getFromPackage();
 
-        boolean assetFound = false;
-        for(MemberAsset asset: assets){
+        for(WorkOrderAssetMapping assetMapping: assetMappings){
+            MemberAsset asset = assetMapping.getAsset();
             int assetCount = asset.getCount();
-            if(productPackage == null && asset.getProductPackage() == null){
-                asset.setCount(assetCount + 1);
-                memberService.updateProductAsset(asset);
+            int increaseCount = assetMapping.getCount();
 
-                assetFound = true;
-                break;
-            }else if(productPackage != null && asset.getProductPackage() != null &&
-                    productPackage.getProductPackageId().equalsIgnoreCase(
-                            asset.getProductPackage().getProductPackageId()
-                    )){
-
-                asset.setCount(assetCount + 1);
-                memberService.updateProductAsset(asset);
-
-                assetFound = true;
-                break;
-            }
+            asset.setCount(assetCount + increaseCount);
+            memberService.updateProductAsset(asset);
         }
-
-        if(!assetFound){
-            logger.error("addWorkOrder: no asset found for this member :" + member.getMemberId() + ", product id :" + product.getProductId());
-            throw new AssetNotFoundException();
-        }
-
 
         this.removeWorkOrder(workOrder);
         return true;

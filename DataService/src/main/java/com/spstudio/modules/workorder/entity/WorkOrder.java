@@ -1,10 +1,12 @@
 package com.spstudio.modules.workorder.entity;
 
 import com.spstudio.modules.member.entity.Member;
+import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.product.entity.Product;
 
 
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.*;
 
 import com.spstudio.modules.product.entity.ProductPackage;
@@ -35,6 +37,10 @@ public class WorkOrder {
 //  Set<Member> customers;
 
     @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+    @JoinColumn(name="serviceProviderId",referencedColumnName="serviceProviderId")
+    ServiceProvider serviceProvider;
+
+    @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
     @JoinColumn(name="memberId",referencedColumnName="memberId")
     Member customer;
 
@@ -43,18 +49,8 @@ public class WorkOrder {
 //    // 可能存在一种服务是多个service provider为一个人服务
 //    Set<ServiceProvider> serviceProviders;
 
-    @ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-    @JoinColumn(name="serviceProviderId",referencedColumnName="serviceProviderId")
-    ServiceProvider serviceProvider;
-
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, optional = true)
-    @JoinColumn(name = "productPackageId", nullable = true)
-    ProductPackage fromPackage;
-
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH })
-    @JoinColumn(name = "productId")
-    Product consumeProduct;
+    @JoinColumn(name="workOrderId" ,referencedColumnName="workOrderId")
+    Set<WorkOrderAssetMapping> assetMappingSet;
 
     @Column(length=32)
     String comment;
@@ -127,14 +123,6 @@ public class WorkOrder {
 //    public void setRegisterDate(Date registerDate) {
 //        this.registerDate = registerDate;
 //    }
-
-    public Product getConsumeProduct() {
-        return consumeProduct;
-    }
-
-    public void setConsumeProduct(Product consumeProduct) {
-        this.consumeProduct = consumeProduct;
-    }
 
     public String getComment() {
         return comment;
@@ -272,19 +260,19 @@ public class WorkOrder {
         this.serviceDate = serviceDate;
     }
 
-    public ProductPackage getFromPackage() {
-        return fromPackage;
-    }
-
-    public void setFromPackage(ProductPackage fromPackage) {
-        this.fromPackage = fromPackage;
-    }
-
     public Date getEffectiveEndDate() {
         return effectiveEndDate;
     }
 
     public void setEffectiveEndDate(Date effectiveEndDate) {
         this.effectiveEndDate = effectiveEndDate;
+    }
+
+    public Set<WorkOrderAssetMapping> getAssetMappingSet() {
+        return assetMappingSet;
+    }
+
+    public void setAssetMappingSet(Set<WorkOrderAssetMapping> assetMappingSet) {
+        this.assetMappingSet = assetMappingSet;
     }
 }

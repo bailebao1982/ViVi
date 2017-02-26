@@ -1,9 +1,9 @@
 package com.spstudio.modules.workorder.bean;
 
 import com.spstudio.modules.member.bean.request.MemberJsonBean;
-import com.spstudio.modules.product.bean.request.PackageJsonBean;
-import com.spstudio.modules.product.bean.request.ProductJsonBean;
 import com.spstudio.modules.serviceprovider.bean.EmployeeJsonBean;
+
+import java.util.List;
 
 /**
  * Created by Soul on 2017/2/13.
@@ -13,8 +13,7 @@ public class WorkOrderJsonBean {
     private String note;
     private MemberJsonBean member;
     private EmployeeJsonBean employee;
-    private ProductJsonBean product;
-    private PackageJsonBean from_pkg;
+    private List<AssetCountJsonBean> assets;
     private int confirmed;
     private int rate;
     private String confirm_comment;
@@ -28,7 +27,6 @@ public class WorkOrderJsonBean {
     private String base64Img3;
     private String base64Img4;
     private String base64Img5;
-
 
     public String getWorkorder_id() {
         return workorder_id;
@@ -60,14 +58,6 @@ public class WorkOrderJsonBean {
 
     public void setEmployee(EmployeeJsonBean employee) {
         this.employee = employee;
-    }
-
-    public ProductJsonBean getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductJsonBean product) {
-        this.product = product;
     }
 
     public int getConfirmed() {
@@ -166,19 +156,19 @@ public class WorkOrderJsonBean {
         this.confirm_comment = confirm_comment;
     }
 
-    public PackageJsonBean getFrom_pkg() {
-        return from_pkg;
-    }
-
-    public void setFrom_pkg(PackageJsonBean from_pkg) {
-        this.from_pkg = from_pkg;
-    }
-
     public String getEffective_end_date() {
         return effective_end_date;
     }
 
     public void setEffective_end_date(String effective_end_date) {
         this.effective_end_date = effective_end_date;
+    }
+
+    public List<AssetCountJsonBean> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<AssetCountJsonBean> assets) {
+        this.assets = assets;
     }
 }
