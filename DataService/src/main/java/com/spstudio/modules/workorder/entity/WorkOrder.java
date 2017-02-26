@@ -49,6 +49,7 @@ public class WorkOrder {
 //    // 可能存在一种服务是多个service provider为一个人服务
 //    Set<ServiceProvider> serviceProviders;
 
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name="workOrderId" ,referencedColumnName="workOrderId")
     Set<WorkOrderAssetMapping> assetMappingSet;
 

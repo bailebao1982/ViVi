@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.spstudio.modules.member.service.AssetType.ASSET_PACKAGE_TYPE;
+import static com.spstudio.modules.member.service.AssetType.ASSET_PRODUCT_TYPE;
+
 /**
  *
  * @author wewezhu
@@ -444,5 +447,26 @@ public class MemberController {
                     "会员信息删除失败，无法找到会员ID：" + member_id
             );
         }
+    }
+
+    @RequestMapping(value = "/assets_for_select2/{member_id}",
+            method = RequestMethod.GET,
+            headers="Accept=application/json")
+    @CrossOrigin
+    public @ResponseBody List<Select2OptionJsonBean> listAssetsForSelect2(@PathVariable String member_id){
+        Member memb = memberService.findMemberByMemberId(member_id);
+
+        List<MemberAsset> memberAssets = memberService.findAssetOfMember(memb);
+
+        List<Select2OptionJsonBean> results = new ArrayList<>();
+        for (MemberAsset asset : memberAssets){
+            if(asset.getAssetType() == ASSET_PACKAGE_TYPE.ordinal() ||
+               asset.getAssetType() == ASSET_PRODUCT_TYPE.ordinal()){
+                Select2OptionJsonBean select2OptionJsonBean = SimpleAssetJsonBeanUtil.toJsonBean(asset);
+                results.add(select2OptionJsonBean);
+            }
+        }
+
+        return results;
     }
 }

@@ -248,6 +248,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberAsset findAssetById(String assetId) {
+        return memberAssetDAO.findAssetById(assetId);
+    }
+
+    @Override
     public List<MemberAsset> findAssetOfMember(Member member) {
         return memberAssetDAO.findAssetOfMember(member);
     }
@@ -372,6 +377,7 @@ public class MemberServiceImpl implements MemberService {
     public boolean zapAssetOfMember(Member member) {
         return memberAssetDAO.removeAssetOfMember(member);
     }
+
 
     // Member Config service
 

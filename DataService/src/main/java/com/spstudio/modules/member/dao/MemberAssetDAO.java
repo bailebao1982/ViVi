@@ -18,6 +18,8 @@ import java.util.List;
  * @author wewezhu
  */
 public interface MemberAssetDAO {
+    public MemberAsset findAssetById(String assetId);
+
     public List<MemberAsset> findAssetOfMember(Member member);
 
     public List<MemberAsset> findProductAssetOfMember(Member member, Product product);
