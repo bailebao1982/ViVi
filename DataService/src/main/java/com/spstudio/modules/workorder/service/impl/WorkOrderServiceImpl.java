@@ -15,7 +15,6 @@ import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.dao.WorkOrderDAO;
 import com.spstudio.modules.workorder.entity.WorkOrder;
 import com.spstudio.modules.workorder.entity.WorkOrderAssetMapping;
-import com.spstudio.modules.workorder.exception.InsuffientPackageAssetException;
 import com.spstudio.modules.workorder.exception.InsuffientProductAssetException;
 import com.spstudio.modules.workorder.exception.AssetNotFoundException;
 import com.spstudio.modules.workorder.service.WorkOrderService;
@@ -65,7 +64,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
     @Override
     @Transactional
-    public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException, InsuffientPackageAssetException{
+    public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException{
         // TODO: should add logic for member asset deduction
         Member member = workOrder.getCustomer();
         Set<WorkOrderAssetMapping> assetMappings = workOrder.getAssetMappingSet();
@@ -89,7 +88,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
                 asset.setCount(assetCount - deductCount);
                 memberService.updateProductAsset(asset);
             }else{
-                throw new InsuffientProductAssetException();
+                String exMsg = String.format("会员资产中产品：%s剩余不足", asset.getProduct().getProductName());
+                throw new InsuffientProductAssetException(exMsg);
             }
             assetFound = true;
             break;

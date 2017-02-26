@@ -53,6 +53,7 @@ public interface MemberService {
     public void zapMember(Member member);
 
     // Member Asset Service
+    public MemberAsset findAssetById(String assetId);
     public List<MemberAsset> findAssetOfMember(Member member);
     public List<MemberAsset> findProductAssetOfMember(Member member, Product product);
 

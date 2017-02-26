@@ -92,8 +92,7 @@ public class WorkOrderController {
             workOrder = WorkOrderJsonBeanUtil.toEntityBean(
                     workOrderJsonBean,
                     serviceProviderService,
-                    memberService,
-                    productService
+                    memberService
                     );
 
             workOrderService.addWorkOrder(workOrder);
@@ -107,15 +106,10 @@ public class WorkOrderController {
                     "7001",
                     errorMap.get("7001")
             );
-        } catch (InsuffientPackageAssetException e) {
-            return ResponseMsgBeanFactory.getErrorResponseBean(
-                    "7004",
-                    String.format(errorMap.get("7004"), workOrder.getFromPackage().getPackageName(), workOrder.getConsumeProduct().getProductName())
-            );
         } catch (InsuffientProductAssetException e) {
             return ResponseMsgBeanFactory.getErrorResponseBean(
                     "7005",
-                    String.format(errorMap.get("7005"), workOrder.getConsumeProduct().getProductName())
+                    e.getMessage()
             );
         } catch (AssetNotFoundException e) {
             return ResponseMsgBeanFactory.getErrorResponseBean(

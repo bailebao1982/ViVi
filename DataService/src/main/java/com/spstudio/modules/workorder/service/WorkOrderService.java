@@ -22,7 +22,7 @@ import java.util.List;
  */
 public interface WorkOrderService {
     
-    public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException, InsuffientPackageAssetException;
+    public WorkOrder addWorkOrder(WorkOrder workOrder) throws AssetNotFoundException, InsuffientProductAssetException;
     
     public WorkOrder confirmWorkOrder(String workOrderId, int rate, String confirmComment);
     

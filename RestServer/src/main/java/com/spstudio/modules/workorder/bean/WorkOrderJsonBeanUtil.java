@@ -2,6 +2,7 @@ package com.spstudio.modules.workorder.bean;
 
 import com.spstudio.common.utils.DateUtils;
 import com.spstudio.common.utils.StringUtils;
+import com.spstudio.modules.member.bean.request.MemberAssetJsonBeanUtil;
 import com.spstudio.modules.member.bean.request.MemberJsonBeanUtil;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.service.MemberService;
@@ -13,9 +14,10 @@ import com.spstudio.modules.serviceprovider.bean.EmployeeJsonBeanUtil;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import com.spstudio.modules.workorder.entity.WorkOrderAssetMapping;
 
 import java.text.ParseException;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Soul on 2017/2/14.
@@ -36,19 +38,26 @@ public class WorkOrderJsonBeanUtil {
         workOrderJsonBean.setWorkorder_id(wkBean.getWorkOrderId());
         workOrderJsonBean.setEffective_end_date(wkBean.getEffectiveEndDate().toString());
 
-
-        workOrderJsonBean.setProduct(ProductJsonBeanUtil.toJsonBean(wkBean.getConsumeProduct()));
         workOrderJsonBean.setMember(MemberJsonBeanUtil.toJsonBean(wkBean.getCustomer()));
-        workOrderJsonBean.setFrom_pkg(PackageJsonBeanUtil.toJsonBean(wkBean.getFromPackage()));
         workOrderJsonBean.setEmployee(EmployeeJsonBeanUtil.toJsonBean(wkBean.getServiceProvider()));
+
+        List<AssetCountJsonBean> assets = new ArrayList<>();
+        for(WorkOrderAssetMapping assetMapping: wkBean.getAssetMappingSet()){
+            AssetCountJsonBean assetCountJsonBean = new AssetCountJsonBean();
+            assetCountJsonBean.setCount(assetMapping.getCount());
+            assetCountJsonBean.setAsset(MemberAssetJsonBeanUtil.toJsonBean(
+                    assetMapping.getAsset()
+            ));
+        }
+
+        workOrderJsonBean.setAssets(assets);
 
         return workOrderJsonBean;
     }
 
     public static WorkOrder toEntityBean(WorkOrderJsonBean jsonBean,
                                          ServiceProviderService spService,
-                                         MemberService memberService,
-                                         ProductService productService) throws ParseException {
+                                         MemberService memberService) throws ParseException {
         WorkOrder workOrderEntity = new WorkOrder();
 
         workOrderEntity.setStatus(jsonBean.getConfirmed());
@@ -77,17 +86,18 @@ public class WorkOrderJsonBeanUtil {
                 memberService.findMemberByMemberId(jsonBean.getMember().getMember_id());
         workOrderEntity.setCustomer(member);
 
-        String prdtId = jsonBean.getProduct().getProduct_id();
-        Product product = productService.findProductByProductId(prdtId);
-        workOrderEntity.setConsumeProduct(product);
+        List<AssetCountJsonBean> assetsBeans = jsonBean.getAssets();
+        Set<WorkOrderAssetMapping> mappingSet = new HashSet<>();
 
-        if(jsonBean.getFrom_pkg() != null){
-            workOrderEntity.setFromPackage(
-                    productService.findProductPackageByPackageId(
-                            jsonBean.getFrom_pkg().getPackage_id()
-                    )
-            );
+        for (AssetCountJsonBean assetCountBean: assetsBeans){
+            WorkOrderAssetMapping mapping = new WorkOrderAssetMapping();
+            mapping.setCount(assetCountBean.getCount());
+            mapping.setWorkOrder(workOrderEntity);
+            mapping.setAsset(memberService.findAssetById(assetCountBean.getAsset().getAsset_id()));
+            mappingSet.add(mapping);
         }
+
+        workOrderEntity.setAssetMappingSet(mappingSet);
 
         return workOrderEntity;
     }

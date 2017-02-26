@@ -7,12 +7,21 @@ import com.spstudio.modules.product.bean.request.ProductJsonBean;
  * Created by Soul on 2017/1/23.
  */
 public class MemberAssetJsonBean {
+    private String          asset_id;
     private int             asset_type;
     private ProductJsonBean asset_product;
     private PackageJsonBean asset_package;
     private int             deposit;
     private int             count;
     private String          create_date;
+
+    public String getAsset_id() {
+        return asset_id;
+    }
+
+    public void setAsset_id(String asset_id) {
+        this.asset_id = asset_id;
+    }
 
     public int getAsset_type() {
         return asset_type;

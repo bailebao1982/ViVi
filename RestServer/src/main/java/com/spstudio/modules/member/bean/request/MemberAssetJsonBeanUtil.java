@@ -11,6 +11,8 @@ import com.spstudio.modules.product.bean.request.ProductJsonBeanUtil;
 public class MemberAssetJsonBeanUtil {
     public static MemberAssetJsonBean toJsonBean(MemberAsset asset){
         MemberAssetJsonBean assetJsonBean = new MemberAssetJsonBean();
+
+        assetJsonBean.setAsset_id(asset.getMemberAssetId());
         assetJsonBean.setAsset_type(asset.getAssetType());
         assetJsonBean.setCount(asset.getCount());
         assetJsonBean.setDeposit(asset.getDeposit());
