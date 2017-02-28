@@ -138,8 +138,9 @@ public class WorkOrderController {
                     String.format(errorMap.get("7002"), workorder_id)
             );
         }else{
-            return ResponseMsgBeanFactory.getSuccessResponseBean(
-                    "订单确认成功！"
+            return ResponseMsgBeanFactory.getResponseBean(
+                    true,
+                    WorkOrderJsonBeanUtil.toJsonBean(workOrder)
             );
         }
     }

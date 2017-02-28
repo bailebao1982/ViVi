@@ -9,6 +9,7 @@ import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.entity.WorkOrder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,8 @@ import java.util.List;
  */
 public interface WorkOrderDAO {
     public WorkOrder addWorkOrder(WorkOrder workOrder);
-    
+
+    @Transactional
     public WorkOrder updateWorkOrder(WorkOrder workOrder);
     
     public WorkOrder findWorkOrderByWordOrderId(String workOrderId);
@@ -28,6 +30,7 @@ public interface WorkOrderDAO {
 
     public List<WorkOrder> findWorkOrdersOfCustomer(Member member);
 
+    @Transactional
     public List<WorkOrder> findExpiredWorkOrder(Date dt);
     
     public void zapWorkOrder(WorkOrder workOrder);

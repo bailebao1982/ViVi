@@ -22,6 +22,8 @@ public interface MemberAssetDAO {
 
     public List<MemberAsset> findAssetOfMember(Member member);
 
+    public List<MemberAsset> findPackageAssetOfMember(Member member, ProductPackage pkg);
+
     public List<MemberAsset> findProductAssetOfMember(Member member, Product product);
 
     public MemberAsset findDepositAssetOfMember(Member member);

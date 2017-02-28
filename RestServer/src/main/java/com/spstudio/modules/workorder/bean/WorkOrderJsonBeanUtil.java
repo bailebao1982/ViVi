@@ -31,16 +31,35 @@ public class WorkOrderJsonBeanUtil {
         workOrderJsonBean.setConfirm_comment(wkBean.getConfirmComment());
         workOrderJsonBean.setNote(wkBean.getComment());
         workOrderJsonBean.setConfirmed(wkBean.getStatus());
-        workOrderJsonBean.setConfirm_date(wkBean.getConfirmDate().toString());
-        workOrderJsonBean.setCreate_date(wkBean.getCreateDate().toString());
-        workOrderJsonBean.setService_date(wkBean.getServiceDate().toString());
+        if(wkBean.getConfirmDate() != null){
+            String confirm_date = null;
+            try {
+                confirm_date = StringUtils.date2Str(wkBean.getConfirmDate());
+                workOrderJsonBean.setConfirm_date(confirm_date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(wkBean.getCreateDate() != null) {
+            workOrderJsonBean.setCreate_date(wkBean.getCreateDate().toString());
+        }
+
+        if(wkBean.getServiceDate() != null) {
+            workOrderJsonBean.setService_date(wkBean.getServiceDate().toString());
+        }
+
         workOrderJsonBean.setService_location(wkBean.getServiceLocation());
         workOrderJsonBean.setWorkorder_id(wkBean.getWorkOrderId());
-        workOrderJsonBean.setEffective_end_date(wkBean.getEffectiveEndDate().toString());
+        if(wkBean.getEffectiveEndDate() != null){
+            workOrderJsonBean.setEffective_end_date(wkBean.getEffectiveEndDate().toString());
+        }
 
         workOrderJsonBean.setMember(MemberJsonBeanUtil.toJsonBean(wkBean.getCustomer()));
         workOrderJsonBean.setEmployee(EmployeeJsonBeanUtil.toJsonBean(wkBean.getServiceProvider()));
 
+        String assetsSummary = "";
+        int maxAssetsCount = 0;
         List<AssetCountJsonBean> assets = new ArrayList<>();
         for(WorkOrderAssetMapping assetMapping: wkBean.getAssetMappingSet()){
             AssetCountJsonBean assetCountJsonBean = new AssetCountJsonBean();
@@ -48,9 +67,19 @@ public class WorkOrderJsonBeanUtil {
             assetCountJsonBean.setAsset(MemberAssetJsonBeanUtil.toJsonBean(
                     assetMapping.getAsset()
             ));
+            if(maxAssetsCount < 3) {
+                assetsSummary += assetMapping.getAsset().getProduct().getProductName();
+                maxAssetsCount++;
+            }
+
+            assets.add(assetCountJsonBean);
         }
 
         workOrderJsonBean.setAssets(assets);
+        if(wkBean.getAssetMappingSet().size() > maxAssetsCount){
+            assetsSummary = assetsSummary + "...";
+        }
+        workOrderJsonBean.setAssets_summary(assetsSummary);
 
         return workOrderJsonBean;
     }
@@ -70,6 +99,12 @@ public class WorkOrderJsonBeanUtil {
            !jsonBean.getConfirm_date().isEmpty()){
             Date confirmDate = StringUtils.str2Date(jsonBean.getConfirm_date());
             workOrderEntity.setConfirmDate(confirmDate);
+        }
+
+        if(jsonBean.getService_date() != null &&
+                !jsonBean.getService_date().isEmpty()){
+            Date serviceDate = StringUtils.str2Date(jsonBean.getService_date());
+            workOrderEntity.setServiceDate(serviceDate);
         }
 
         if(jsonBean.getEffective_end_date() != null &&

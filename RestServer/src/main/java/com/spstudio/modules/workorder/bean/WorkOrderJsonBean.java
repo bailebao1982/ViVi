@@ -14,6 +14,7 @@ public class WorkOrderJsonBean {
     private MemberJsonBean member;
     private EmployeeJsonBean employee;
     private List<AssetCountJsonBean> assets;
+    private String assets_summary;
     private int confirmed;
     private int rate;
     private String confirm_comment;
@@ -170,5 +171,13 @@ public class WorkOrderJsonBean {
 
     public void setAssets(List<AssetCountJsonBean> assets) {
         this.assets = assets;
+    }
+
+    public String getAssets_summary() {
+        return assets_summary;
+    }
+
+    public void setAssets_summary(String assets_summary) {
+        this.assets_summary = assets_summary;
     }
 }

@@ -460,6 +460,7 @@ public class MemberController {
 
         List<Select2OptionJsonBean> results = new ArrayList<>();
         for (MemberAsset asset : memberAssets){
+
             if(asset.getAssetType() == ASSET_PACKAGE_TYPE.ordinal() ||
                asset.getAssetType() == ASSET_PRODUCT_TYPE.ordinal()){
                 Select2OptionJsonBean select2OptionJsonBean = SimpleAssetJsonBeanUtil.toJsonBean(asset);

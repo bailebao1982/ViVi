@@ -6,6 +6,7 @@
 package com.spstudio.modules.workorder.dao.impl;
 
 import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.common.utils.DateUtils;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.workorder.dao.WorkOrderDAO;
@@ -34,6 +35,7 @@ public class WorkOrderDAOImpl implements WorkOrderDAO {
 
     @Override
     public WorkOrder addWorkOrder(WorkOrder workOrder) {
+        workOrder.setCreateDate(DateUtils.getDateNow());
         this.sessionFactory.getCurrentSession().saveOrUpdate(workOrder);
         return workOrder;
     }

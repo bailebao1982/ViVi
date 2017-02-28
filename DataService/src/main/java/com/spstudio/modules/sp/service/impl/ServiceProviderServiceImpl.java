@@ -15,6 +15,8 @@ import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.sp.dao.ServiceProviderDAO;
 import com.spstudio.modules.sp.entity.ServiceProvider;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 
 import java.util.List;
@@ -92,6 +94,7 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     }
 
     @Override
+    @Transactional
     public ServiceProvider addServiceProvider(ServiceProvider sp) {
         sp = serviceProviderDAO.addServiceProvider(sp);
         LoginUser loginUser = new LoginUser();

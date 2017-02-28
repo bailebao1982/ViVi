@@ -7,6 +7,7 @@ package com.spstudio.modules.member.service.impl;
 
 import com.spstudio.common.service.SystemConfigService;
 import com.spstudio.common.service.entity.SystemConfig;
+import com.spstudio.common.utils.DateUtils;
 import com.spstudio.modules.member.bean.DepositMemberTypeBean;
 import com.spstudio.modules.member.bean.DepositMemberTypeBeanUtil;
 import com.spstudio.modules.member.config.Configuration;
@@ -269,29 +270,74 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberAsset addProductAsset(Member member, Product product, int count) {
-        MemberAsset asset = _getAsset(member, AssetType.ASSET_PRODUCT_TYPE.ordinal(), product, null, 0, count);
-        return memberAssetDAO.addAsset(asset);
+        List<MemberAsset> existAssets = memberAssetDAO.findProductAssetOfMember(member, product);
+        MemberAsset foundAsset = null;
+        for (MemberAsset existAsset : existAssets){
+            if(existAsset.getProductPackage() == null){
+                // There should be only one product asset
+                foundAsset = existAsset;
+                break;
+            }
+        }
+        if(foundAsset != null){
+            int original = foundAsset.getCount();
+            foundAsset.setCount(original + count);
+            foundAsset.setLastUpdateDate(DateUtils.getDateNow());
+            return memberAssetDAO.updateAsset(foundAsset);
+        }else{
+            MemberAsset asset =
+                    _getAsset(member, AssetType.ASSET_PRODUCT_TYPE.ordinal(), product, null, 0, count);
+            return memberAssetDAO.addAsset(asset);
+        }
     }
 
     @Override
     public List<MemberAsset> addPackageAsset(Member member, ProductPackage productPackage, int count) {
         List<MemberAsset> listProducts = new ArrayList<MemberAsset>();
 
+        List<MemberAsset> existPkgAssets = memberAssetDAO.findPackageAssetOfMember(member, productPackage);
+
         Iterator iter = productPackage.getProductMappingSet().iterator();
         while (iter.hasNext()){
             PackageProductMapping mapping = (PackageProductMapping)iter.next();
-            MemberAsset asset =  _getAsset(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), mapping.getProduct(), productPackage, 0, mapping.getCount() * count);
-            MemberAsset retAsset = memberAssetDAO.addAsset(asset);
 
-            listProducts.add(retAsset);
+            // Find current existing asset
+            MemberAsset foundAsset = null;
+            for (MemberAsset existAsset : existPkgAssets){
+                if(existAsset.getProduct().getProductId().equalsIgnoreCase(
+                        mapping.getProduct().getProductId()
+                )){
+                    // There should be only one product asset
+                    foundAsset = existAsset;
+                    break;
+                }
+            }
+            if(foundAsset != null){
+                int original = foundAsset.getCount();
+                foundAsset.setCount(original + count);
+                foundAsset.setLastUpdateDate(DateUtils.getDateNow());
+                memberAssetDAO.updateAsset(foundAsset);
+            }else {
+                MemberAsset asset =  _getAsset(member, AssetType.ASSET_PACKAGE_TYPE.ordinal(), mapping.getProduct(), productPackage, 0, mapping.getCount() * count);
+                MemberAsset retAsset = memberAssetDAO.addAsset(asset);
+                listProducts.add(retAsset);
+            }
         }
         return listProducts;
     }
 
     @Override
     public MemberAsset addDepositAsset(Member member, int deposit) {
-        MemberAsset asset =  _getAsset(member, AssetType.ASSET_DEPOSIT_TYPE.ordinal(), null, null, deposit, 0);
-        return memberAssetDAO.addAsset(asset);
+        MemberAsset depositAsset = memberAssetDAO.findDepositAssetOfMember(member);
+        if(depositAsset != null){
+            int original = depositAsset.getDeposit();
+            depositAsset.setDeposit(original + deposit);
+            depositAsset.setLastUpdateDate(DateUtils.getDateNow());
+            return memberAssetDAO.updateAsset(depositAsset);
+        }else{
+            MemberAsset asset =  _getAsset(member, AssetType.ASSET_DEPOSIT_TYPE.ordinal(), null, null, deposit, 0);
+            return memberAssetDAO.addAsset(asset);
+        }
     }
 
     @Override

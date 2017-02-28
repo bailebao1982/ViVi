@@ -84,7 +84,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
             int assetCount = asset.getCount();
             int deductCount = assetMapping.getCount();
 
-            if(assetCount > deductCount){
+            if(assetCount >= deductCount){
                 asset.setCount(assetCount - deductCount);
                 memberService.updateProductAsset(asset);
             }else{
@@ -128,7 +128,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
             return false;
         }
 
-        if(assetMappings.size() > 0){
+        if(assetMappings.size() == 0){
             logger.error("addWorkOrder: asset is null");
             return false;
         }

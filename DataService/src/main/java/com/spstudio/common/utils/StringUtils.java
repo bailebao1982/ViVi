@@ -3,6 +3,7 @@ package com.spstudio.common.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -16,5 +17,11 @@ public class StringUtils {
             return date;
         }
         return null;
+    }
+
+    public static String date2Str(Date date) throws ParseException{
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String reportDate = df.format(date);
+        return reportDate;
     }
 }

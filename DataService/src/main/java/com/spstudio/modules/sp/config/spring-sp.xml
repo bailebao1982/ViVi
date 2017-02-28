@@ -13,6 +13,7 @@
         <property name="sessionFactory"><ref bean="sessionFactory"/></property>
     </bean>
     <bean id="serviceProviderServiceBase" class="com.spstudio.modules.sp.service.impl.ServiceProviderServiceImpl">
+        <property name="permissionDAO" ref="permissionDAO"></property>
         <property name="serviceProviderDAO" ref="serviceProviderDAO"></property>
         <property name="serviceProviderTypeDAO" ref="serviceProviderTypeDAO"></property>
     </bean>
