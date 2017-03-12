@@ -51,8 +51,12 @@ public interface PermissionService {
     public List<Privilege> listAllPrivileges();
     
     public Set<Privilege> listPrivilegsByLoginUser(LoginUser loginUser);
-    
+
+    public LoginUser updateLoginUser(LoginUser loginUser);
+
     public LoginUser getLoginUserByLoginName(String loginName);
+
+    public LoginUser getLoginUserByMemberId(String memberId);
     
     public Privilege findPrivilegeByFuncationName(String funcationName);
     

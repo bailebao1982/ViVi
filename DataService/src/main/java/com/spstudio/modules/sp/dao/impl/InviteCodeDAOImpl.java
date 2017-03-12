@@ -57,4 +57,17 @@ public class InviteCodeDAOImpl implements InviteCodeDAO {
         }
         return null;
     }
+
+    @Override
+    public SPInviteCode getEffectiveInviteCodeEntity(String inviteCode, Date effectiveDate) {
+        String hql = "from SPInviteCode where inviteCode = :invite_code and :eff_date >= effectiveStartDate and :eff_date <= effectiveEndDate";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("invite_code", inviteCode);
+        query.setParameter("eff_date", effectiveDate);
+        List<SPInviteCode> entitylist = query.list();
+        if(entitylist.size() > 0){
+            return entitylist.get(0);
+        }
+        return null;
+    }
 }

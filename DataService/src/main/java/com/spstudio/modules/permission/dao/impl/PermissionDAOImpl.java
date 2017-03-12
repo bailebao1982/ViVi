@@ -130,6 +130,18 @@ public class PermissionDAOImpl implements PermissionDAO{
     }
 
     @Override
+    public LoginUser getLoginUserByMemberId(String memberId) {
+        String hql = "from LoginUser where memberId = :memberId";
+
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setString("memberId", memberId);
+        List<LoginUser> list = query.list();
+        if(list.size() > 0)
+            return list.get(0);
+        return null;
+    }
+
+    @Override
     public Privilege getPrivilegeByFuncationName(String funcationName) {
          String hql = "from Privilege where funcationName = :fName";
        

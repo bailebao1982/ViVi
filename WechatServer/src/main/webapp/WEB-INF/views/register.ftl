@@ -39,6 +39,15 @@
 
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
+                        <input id="password" name="password" class="weui-input" type="password" placeholder="请设置您的密码" value="">
+                    </div>
+                    <div class="weui-cell__ft" style="display: none;">
+                        <i class="weui-icon-warn"></i>
+                    </div>
+                </div>
+
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
                         <input id="invite_code" name="invite_code" class="weui-input" type="text" placeholder="请输入您的邀请码" value="">
                     </div>
                     <div class="weui-cell__ft" style="display: none;">

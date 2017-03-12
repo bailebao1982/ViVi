@@ -42,6 +42,10 @@ public interface MemberService {
     
     public Member findMemberByMemberId(String memberId);
 
+    public Member findMemberByMemberNo(String memberNo);
+
+    public Member findMemberByMemberTelphone(String telphone);
+
     public Member findMemberByWechatId(String nickname);
     
     public boolean removeMember(Member member);

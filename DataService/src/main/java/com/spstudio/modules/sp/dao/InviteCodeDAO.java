@@ -15,4 +15,6 @@ public interface InviteCodeDAO {
     public String getEffectiveInviteCode(ServiceProvider sp, Date effectiveDate);
 
     public SPInviteCode getInviteCodeEntity(String inviteCode);
+
+    public SPInviteCode getEffectiveInviteCodeEntity(String inviteCode, Date effectiveDate);
 }

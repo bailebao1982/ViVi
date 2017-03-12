@@ -19,6 +19,10 @@ public interface MemberDAO {
 
     public Member findMemberByMemberId(String memberId);
 
+    public Member findMemberByMemberNo(String memberNo);
+
+    public Member findMemberByTelphone(String telphone);
+
     public Member findMemberByWechatId(String wechatId);
     
     public Member addMember(Member member);

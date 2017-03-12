@@ -7,6 +7,7 @@ package com.spstudio.modules.sp.service;
 
 import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.modules.sp.entity.SPInviteCode;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 
@@ -40,4 +41,6 @@ public interface ServiceProviderService {
     public Page<ServiceProvider> queryForPage(int currentPage, int pageSize, SearchCriteria sc);
     
     public void zapServiceProvider(ServiceProvider sp);
+
+    public SPInviteCode getEffectiveInviteCode(String inviteCode);
 }

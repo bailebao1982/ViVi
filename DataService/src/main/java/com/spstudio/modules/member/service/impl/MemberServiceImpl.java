@@ -91,6 +91,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findMemberByMemberNo(String memberNo) {
+        return memberDAO.findMemberByMemberNo(memberNo);
+    }
+
+    @Override
+    public Member findMemberByMemberTelphone(String telphone) {
+        return memberDAO.findMemberByTelphone(telphone);
+    }
+
+    @Override
     public Member findMemberByWechatId(String wechatId){
         return memberDAO.findMemberByWechatId(wechatId);
     }

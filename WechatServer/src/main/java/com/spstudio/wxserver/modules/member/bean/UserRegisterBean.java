@@ -4,6 +4,7 @@ package com.spstudio.wxserver.modules.member.bean;
  * Created by Soul on 2017/3/10.
  */
 public class UserRegisterBean {
+    private String memberno;
     private String telphone;
     private String birthday;
     private String address;
@@ -12,7 +13,15 @@ public class UserRegisterBean {
     private String headerImgUrl;
     private String openId;
     private String invite_code;
+    private String password;
 
+    public String getMemberno() {
+        return memberno;
+    }
+
+    public void setMemberno(String memberno) {
+        this.memberno = memberno;
+    }
 
     public String getTelphone() {
         return telphone;
@@ -76,5 +85,13 @@ public class UserRegisterBean {
 
     public void setInvite_code(String invite_code) {
         this.invite_code = invite_code;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

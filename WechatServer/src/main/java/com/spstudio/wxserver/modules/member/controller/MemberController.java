@@ -8,6 +8,11 @@ import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.entity.MemberType;
 import com.spstudio.modules.member.service.MemberService;
+import com.spstudio.modules.permission.entity.LoginUser;
+import com.spstudio.modules.permission.service.PermissionService;
+import com.spstudio.modules.sp.entity.SPInviteCode;
+import com.spstudio.modules.sp.entity.ServiceProvider;
+import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.workorder.entity.WorkOrder;
 import com.spstudio.modules.workorder.service.WorkOrderService;
 import com.spstudio.wxserver.common.controller.WxBaseController;
@@ -37,6 +42,12 @@ public class MemberController extends WxBaseController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private PermissionService permissionService;
+
+    @Autowired
+    private ServiceProviderService serviceProviderService;
 
     @Autowired
     protected WxMpService wxMpService;
@@ -84,7 +95,7 @@ public class MemberController extends WxBaseController {
                 userinfo.setMember_address(location);
                 userinfo.setMember_profilepic(wxMpUser.getHeadImgUrl());
 
-                return _getRegisterPage(userinfo);
+                return _getChoosePage(userinfo);
             }
         } catch (WxErrorException e) {
             ModelAndView mav = new ModelAndView();
@@ -114,6 +125,13 @@ public class MemberController extends WxBaseController {
         }
     }
 
+    private ModelAndView _getChoosePage(MemberJsonBean userinfo){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("userinfo", userinfo);
+        mav.setViewName("choose");
+        return mav;
+    }
+
     // According to the map
     private ModelAndView _getRegisterPage(MemberJsonBean userinfo){
         ModelAndView mav = new ModelAndView();
@@ -124,8 +142,21 @@ public class MemberController extends WxBaseController {
 
     @RequestMapping(value = "/register",
             method = RequestMethod.GET)
-    public ModelAndView register(ModelAndView mav){
-        mav.addObject("userinfo", new MemberJsonBean());
+    public ModelAndView register(ModelAndView mav,
+                                 @RequestParam String nickname,
+                                 @RequestParam String gender,
+                                 @RequestParam String headImgUrl,
+                                 @RequestParam String openId,
+                                 @RequestParam String address){
+        MemberJsonBean userinfo = new MemberJsonBean();
+        userinfo.setMember_name(nickname);
+        userinfo.setMember_sex(gender);
+        userinfo.setMember_wechat(openId);
+        userinfo.setMember_profilepic(headImgUrl);
+        userinfo.setMember_address(address);
+
+        mav.addObject("userinfo", userinfo);
+
         mav.setViewName("register");
         return mav;
     }
@@ -133,6 +164,12 @@ public class MemberController extends WxBaseController {
     @RequestMapping(value = "/register",
             method = RequestMethod.POST)
     public ModelAndView doRegister(@RequestBody UserRegisterBean registerBean){
+
+        SPInviteCode spInviteCode = serviceProviderService.getEffectiveInviteCode(registerBean.getInvite_code());
+        if(spInviteCode == null){
+            return _getErrorView("对不起， 您的邀请码不存在！");
+        }
+
         Member newMember = new Member();
 
         newMember.setWeixinId(registerBean.getOpenId());
@@ -155,8 +192,60 @@ public class MemberController extends WxBaseController {
 
         Member addedMember = memberService.addMember(newMember);
 
-        return __getMembershipPage(addedMember);
+        LoginUser loginUser = permissionService.getLoginUserByLoginName(addedMember.getMemberId());
+        if(loginUser != null) {
+            loginUser.setLoginPassword(registerBean.getPassword());
+            permissionService.updateLoginUser(loginUser);
+        }
 
+        return __getMembershipPage(addedMember);
+    }
+
+    @RequestMapping(value = "/binding",
+            method = RequestMethod.GET)
+    public ModelAndView binding(ModelAndView mav,
+                                  @RequestParam String nickname,
+                                  @RequestParam String gender,
+                                  @RequestParam String headImgUrl,
+                                  @RequestParam String openId,
+                                  @RequestParam String address){
+        MemberJsonBean userinfo = new MemberJsonBean();
+        userinfo.setMember_name(nickname);
+        userinfo.setMember_sex(gender);
+        userinfo.setMember_wechat(openId);
+        userinfo.setMember_profilepic(headImgUrl);
+        userinfo.setMember_address(address);
+
+        mav.addObject("userinfo", userinfo);
+
+        mav.setViewName("binding");
+        return mav;
+    }
+
+    @RequestMapping(value = "/binding",
+            method = RequestMethod.POST)
+    public ModelAndView doBinding(@RequestBody UserRegisterBean registerBean){
+        Member newMember = memberService.findMemberByMemberNo(registerBean.getMemberno());
+        if(newMember == null){
+            newMember = memberService.findMemberByMemberTelphone(registerBean.getMemberno());
+            if(newMember == null){
+                String msg = "错误：无法找到要绑定的会员, 会员编号【或者手机号】 " + registerBean.getMemberno();
+                return _getErrorView(msg);
+            }
+        }
+
+        newMember.setWeixinId(registerBean.getOpenId());
+        newMember.setProfilePicture(registerBean.getHeaderImgUrl());
+
+        memberService.updateMember(newMember);
+
+        LoginUser loginUser = permissionService.getLoginUserByLoginName(newMember.getMemberId());
+        if(loginUser != null) {
+            loginUser.setLoginPassword(registerBean.getPassword());
+            permissionService.updateLoginUser(loginUser);
+        }
+
+        return __getMembershipPage(newMember);
     }
 
     @RequestMapping(value = "/myinfo/{member_id}",

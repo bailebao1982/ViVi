@@ -7,10 +7,13 @@ package com.spstudio.modules.sp.service.impl;
 
 import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchCriteria;
+import com.spstudio.common.utils.DateUtils;
 import com.spstudio.modules.permission.dao.PermissionDAO;
 import com.spstudio.modules.permission.entity.LoginUser;
 import com.spstudio.modules.permission.service.impl.SysContent;
+import com.spstudio.modules.sp.dao.InviteCodeDAO;
 import com.spstudio.modules.sp.dao.ServiceProviderTypeDAO;
+import com.spstudio.modules.sp.entity.SPInviteCode;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;
 import com.spstudio.modules.sp.dao.ServiceProviderDAO;
@@ -29,6 +32,8 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     private ServiceProviderDAO serviceProviderDAO;
 
     private ServiceProviderTypeDAO serviceProviderTypeDAO;
+
+    private InviteCodeDAO inviteCodeDAO;
     
     private PermissionDAO permissionDAO;
 
@@ -56,8 +61,15 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         this.permissionDAO = permissionDAO;
     }
 
-    
-    
+
+    public InviteCodeDAO getInviteCodeDAO() {
+        return inviteCodeDAO;
+    }
+
+    public void setInviteCodeDAO(InviteCodeDAO inviteCodeDAO) {
+        this.inviteCodeDAO = inviteCodeDAO;
+    }
+
     @Override
     public List<ServiceProviderType> listServiceProviderTypes() {
         return serviceProviderTypeDAO.listServiceProviderType();
@@ -138,6 +150,11 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     @Override
     public void zapServiceProvider(ServiceProvider sp) {
         serviceProviderDAO.zapServiceProvider(sp);
+    }
+
+    @Override
+    public SPInviteCode getEffectiveInviteCode(String inviteCode) {
+        return inviteCodeDAO.getEffectiveInviteCodeEntity(inviteCode, DateUtils.getDateNow());
     }
 
 }

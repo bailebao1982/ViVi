@@ -63,7 +63,7 @@ public class PermissionServiceImpl implements PermissionService{
     public LoginUser createNewLoginUserFromMember(Member member) {
        LoginUser newLoginUser = new LoginUser();
        newLoginUser.setLoginCount(0);
-       newLoginUser.setLoginPassword(SysContent.DEFAULT_PWD);
+       newLoginUser.setLoginPassword(SysContent.DEFAULT_MEMB_PWD);
        newLoginUser.setMemberId(member.getMemberId());
        newLoginUser.setLoginUser(member.getMemberName());
        newLoginUser.setCreationTime(new Date(System.currentTimeMillis()));
@@ -75,7 +75,7 @@ public class PermissionServiceImpl implements PermissionService{
     public LoginUser createNewLoginUserFromServiceProvider(ServiceProvider sp) {
        LoginUser newLoginUser = new LoginUser();
        newLoginUser.setLoginCount(0);
-       newLoginUser.setLoginPassword(SysContent.DEFAULT_PWD);
+       newLoginUser.setLoginPassword(SysContent.DEFAULT_SP_PWD);
        newLoginUser.setCreationTime(new Date(System.currentTimeMillis()));
        newLoginUser.setMemberId(sp.getServiceProviderId());
        newLoginUser.setLoginUser(sp.getSpName());
@@ -175,8 +175,18 @@ public class PermissionServiceImpl implements PermissionService{
     }
 
     @Override
+    public LoginUser updateLoginUser(LoginUser loginUser) {
+        return permissionDAO.updateLoginUser(loginUser);
+    }
+
+    @Override
     public LoginUser getLoginUserByLoginName(String loginName) {
        return permissionDAO.getLoginUserByLoginName(loginName);
+    }
+
+    @Override
+    public LoginUser getLoginUserByMemberId(String memberId) {
+        return permissionDAO.getLoginUserByMemberId(memberId);
     }
 
     @Override

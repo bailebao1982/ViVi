@@ -40,6 +40,8 @@ public interface PermissionDAO {
     public List<LoginUser> listAllLoginUsers();
     
     public LoginUser getLoginUserByLoginName(String loginName);
+
+    public LoginUser getLoginUserByMemberId(String memberId);
     
     public Privilege getPrivilegeByFuncationName(String funcationName);
     
