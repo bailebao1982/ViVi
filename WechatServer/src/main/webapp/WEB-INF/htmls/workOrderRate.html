@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>确认成功</title>
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/myOrder.css">
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+</head>
+<script>
+    window.onload = function () {
+        var wid = window.screen.width;
+        document.documentElement.style.fontSize = wid / 10 + 'px';
+    };
+    window.onresize = function(){
+        var width = window.screen.width;
+        document.documentElement.style.fontSize = width / 10 + 'px';
+    };
+</script>
+<body>
+<div class="my-header">
+    <div class="my-info">
+        <div class="my-face">
+            <img src="../images/myFace.jpg">
+        </div>
+    </div>
+</div>
+<div class="container" id="container">
+    <div class="page">
+        <div id="result_panel" class="bd">
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-msg">
+                    <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+                    <div class="weui-msg__text-area">
+                        <h2 class="weui-msg__title">订单确认成功！</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="order_card" class="myOrder-card" style="display: none;">
+            <p class="myOrder-number">工单编号<span>LG11313131313</span></p>
+
+            <div class="weui-cells__title">您的评分:</div>
+            <div id="rate_panel" class="rate_panel">
+                <span id="rate_0" class="glyphicon glyphicon-star-empty rate_star"></span>
+                <span id="rate_1" class="glyphicon glyphicon-star-empty rate_star"></span>
+                <span id="rate_2" class="glyphicon glyphicon-star-empty rate_star"></span>
+                <span id="rate_3" class="glyphicon glyphicon-star-empty rate_star"></span>
+                <span id="rate_4" class="glyphicon glyphicon-star-empty rate_star"></span>
+                <span id="rate_5" class="glyphicon glyphicon-star-empty rate_star"></span>
+            </div>
+
+
+            <div class="weui-cells__title">您的评价:</div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd" style="padding: 5px;border: 1px solid #ccc; border-radius: 2px">
+                        <textarea class="weui-textarea" placeholder="输入您的宝贵意见" rows="3"></textarea>
+                        <div class="weui-textarea-counter">200</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-btn-area">
+                <button class="weui-btn weui-btn_primary my_weui-btn_primary">提交</button>
+            </div>
+            <br/>
+        </div>
+
+
+    </div>
+</div>
+<div class="weui-msg__extra-area">
+    <div class="weui-footer">
+        <p class="weui-footer__links">
+            <a href="javascript:void(0);" class="weui-footer__link">vivi天玺瑗美容</a>
+        </p>
+        <p class="weui-footer__text">Copyright &copy; 2009-2016 Plume.Studio</p>
+    </div>
+</div>
+</body>
+
+<script src="../js/zepto.min.js"></script>
+<script src="../js/weui.min.js"></script>
+<script src="../js/example.js"></script>
+
+<script type="application/javascript">
+    setTimeout(function () {
+        $('#result_panel').fadeOut(500);
+    }, 500);
+    setTimeout(function () {
+        $('#order_card').fadeIn(1000);
+    }, 1000)
+
+    $('#rate_panel').on('click', '.rate_star', function (event) {
+        var rate = event.target.id.split("_")[1];
+        var i = 0;
+        for(; i <= rate; i++){
+            var rate_star_id = "rate_" + i;
+            $("#" + rate_star_id).removeClass("glyphicon-star-empty");
+            $("#" + rate_star_id).addClass("glyphicon-star");
+            $("#" + rate_star_id).css("color", "#FBCB44");
+        }
+
+        for(; i <= 5; i++){
+            var rate_star_id = "rate_" + i;
+            $("#" + rate_star_id).removeClass("glyphicon-star");
+            $("#" + rate_star_id).addClass("glyphicon-star-empty");
+            $("#" + rate_star_id).css("color", "#000");
+        }
+    });
+</script>
+
+</html>

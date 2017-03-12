@@ -451,8 +451,11 @@ public class SaleServiceImpl implements SaleService {
         if(newMemberType != null){
             if(!member.getMemberType().getMemberTypeId().equalsIgnoreCase(
                     newMemberType.getMemberTypeId()
-                )
+                ) && (
+                    newMemberType.getPriority() > member.getMemberType().getPriority()
+                    )
             ){
+                // TODO:  this logic is wrong, 我们还需要考虑降级的情况，但是目前不做考虑
                 member.setMemberType(newMemberType);
                 memberService.updateMember(member);
             }
@@ -473,6 +476,7 @@ public class SaleServiceImpl implements SaleService {
 
     /**
      * Buy product and pay with cash
+     * 直接购买产品的时候不享受任何折扣
      */
     private void _buyProductPayWithCash(Member member, Product product, int count, String saler)
             throws StockNotEnoughException{
@@ -504,6 +508,7 @@ public class SaleServiceImpl implements SaleService {
 
     /**
      * Buy package and pay with cash
+     * 购买套餐不享受折扣
      */
     @Transactional(rollbackFor=Exception.class)
     private void _buyPackagePayWithCash(Member member, ProductPackage pkg, int count, String saler)
@@ -538,6 +543,7 @@ public class SaleServiceImpl implements SaleService {
     }
     /**
      * Buy product and pay with deposit
+     * 使用充值余额的时候购买产品享受折扣
      */
     private void _buyProductPayWithDeposit(Member member, Product product, int count, String saler)
             throws StockNotEnoughException, InsufficientDepositException{

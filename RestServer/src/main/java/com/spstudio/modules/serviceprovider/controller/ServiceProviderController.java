@@ -12,6 +12,8 @@ import com.spstudio.modules.common.bean.Select2OptionJsonBean;
 import com.spstudio.modules.common.bean.Select2ResponseJsonBean;
 import com.spstudio.modules.common.bean.Select2ResponseJsonBeanUtil;
 import com.spstudio.modules.serviceprovider.bean.*;
+import com.spstudio.modules.sp.dto.EmployeeJsonBean;
+import com.spstudio.modules.sp.dto.EmployeeJsonBeanUtil;
 import com.spstudio.modules.sp.entity.ServiceProvider;
 import com.spstudio.modules.sp.entity.ServiceProviderType;
 import com.spstudio.modules.sp.service.ServiceProviderService;

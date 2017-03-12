@@ -1,0 +1,106 @@
+.index-content {
+    position: relative;
+    top:0;
+    bottom: 1.28rem;;
+    overflow: scroll;
+    width: 10rem;
+}
+.index-header {
+    height: 1.28rem;
+    line-height: 1.28rem;
+    width: 10rem;
+    text-align: center;
+    font-size: 0.45333rem;
+    border-bottom:1px #DEDEDE solid;
+}
+.index-footer {
+    position: fixed;
+    bottom: 0;
+    width: 10rem;
+    height: 1.28rem;
+    background: #F9F9F9;
+    color:#666;
+    box-shadow: 0 -0.26rem 0.5333rem #ccc;
+}
+.index-tab {
+    height: 1.4933rem;
+    line-height: 1.4933rem;
+    text-align: center;
+    font-size: 0.45333rem;
+}
+.index-tab .weui-tabbar__item {
+    border-left:1px #DEDEDE solid;
+    font-size: 0.45333rem;
+    padding: 0;
+    color:#666;
+}
+.index-tab .weui-tabbar__item span {
+    margin-right: 0.24rem;
+}
+.index-tab .weui-tabbar__item:first-child {
+    border:none;
+}
+/**************************************body部分****************************************/
+.index-body,.weui-cells {
+    margin-top: 0;
+    font-size: 0.4rem;
+}
+.index-body .weui-cells:after {
+    border-bottom: none;
+}
+.index-body .weui-cell {
+    height: 1.85rem;
+    padding: 0;
+}
+.index-body .weui-cell:hover {
+    background: #f3ffF5;
+    border-left: 0.08rem solid #04BE02;
+}
+.index-body .weui-cell:hover .weui-cell__hd {
+    margin-right: -0.06rem;
+}
+
+.index-body .weui-cell__hd {
+    width: 1.12rem;
+}
+.index-body .weui-cell__bd {
+    height: 80px;
+    line-height: 80px;
+    border-left: 1px solid #DEDEDE;
+    position: relative;
+    padding-left: 0.74667rem;
+}
+.index-body .weui-cell__bd span {
+    display: block;
+    position: absolute;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    color: #4aa9ff;
+    border: 1px solid #4aa9ff;
+    top: 40px;
+    left: -0.44rem;
+    margin-top: -0.4rem;
+    line-height: 0.8rem;
+    text-align: center;
+    background: #FFFFFF;
+}
+.index-body .weui-cell__bd i {
+    display: block;
+    position: absolute;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: #FFFFFF;
+    left: -0.4rem;
+}
+.index-body .weui-cell__bd .index-icon-mask1{
+    bottom: 40px;
+    margin-bottom: 0.4rem;
+}
+.index-body .weui-cell__bd .index-icon-mask2{
+    top: 40px;
+    margin-top: 0.4rem;
+}
+.index-body .weui-cell:before{
+    border:none;
+}

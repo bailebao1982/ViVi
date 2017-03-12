@@ -1,9 +1,8 @@
 package com.spstudio.modules.sale.bean;
 
-import com.spstudio.modules.member.bean.request.MemberTypeJsonBean;
-import com.spstudio.modules.product.bean.request.ProductJsonBean;
-import com.spstudio.modules.product.bean.request.ProductTypeJsonBean;
-import com.spstudio.modules.product.entity.ProductType;
+import com.spstudio.modules.member.dto.MemberTypeJsonBean;
+import com.spstudio.modules.product.dto.ProductJsonBean;
+import com.spstudio.modules.product.dto.ProductTypeJsonBean;
 
 /**
  * Created by Soul on 2017/1/22.

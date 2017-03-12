@@ -1,0 +1,102 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?i3ejvr');
+  src:  url('../fonts/icomoon.eot?i3ejvr#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?i3ejvr') format('truetype'),
+    url('../fonts/icomoon.woff?i3ejvr') format('woff'),
+    url('../fonts/icomoon.svg?i3ejvr#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon_15:before {
+  content: "\e90e";
+}
+.icon-icon_14:before {
+  content: "\e90d";
+}
+.icon-icon_1:before {
+  content: "\e900";
+}
+.icon-icon_2:before {
+  content: "\e901";
+}
+.icon-icon_3:before {
+  content: "\e902";
+}
+.icon-icon_4:before {
+  content: "\e903";
+}
+.icon-icon_5:before {
+  content: "\e904";
+}
+.icon-icon_6:before {
+  content: "\e905";
+}
+.icon-icon_7:before {
+  content: "\e906";
+}
+.icon-icon_8:before {
+  content: "\e907";
+}
+.icon-icon_9:before {
+  content: "\e908";
+}
+.icon-icon_10:before {
+  content: "\e909";
+}
+.icon-icon_11:before {
+  content: "\e90a";
+}
+.icon-icon_12:before {
+  content: "\e90b";
+}
+.icon-icon_13:before {
+  content: "\e90c";
+}
+
+
+.my_weui-btn_primary {
+  background-color: #4BBAF2;
+}
+.my_weui-btn_primary:not(.weui-btn_disabled):visited {
+  color: #4788F4;
+}
+.weui-btn_primary:not(.weui-btn_disabled):active {
+  color: rgba(255, 255, 255, 0.6);
+  background-color: #4788F4;
+}
+
+.weui-btn_disabled.weui-btn_primary {
+  background-color: #9ED99D;
+}
+
+
+.rate_panel{
+  padding: 0px 20px;
+  font-size: 30px;
+}
+
+.rate_panel span{
+  display: inline-block;
+}
+
+
+.table thead{
+  background: #bce8f1;
+}

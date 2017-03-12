@@ -1,11 +1,11 @@
 package com.spstudio.modules.sale.bean;
 
-import com.spstudio.modules.member.bean.request.MemberTypeJsonBeanUtil;
+import com.spstudio.modules.member.dto.MemberTypeJsonBeanUtil;
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.product.bean.request.ProductJsonBean;
-import com.spstudio.modules.product.bean.request.ProductJsonBeanUtil;
-import com.spstudio.modules.product.bean.request.ProductTypeJsonBean;
-import com.spstudio.modules.product.bean.request.ProductTypeJsonBeanUtil;
+import com.spstudio.modules.product.dto.ProductJsonBean;
+import com.spstudio.modules.product.dto.ProductJsonBeanUtil;
+import com.spstudio.modules.product.dto.ProductTypeJsonBean;
+import com.spstudio.modules.product.dto.ProductTypeJsonBeanUtil;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductType;
 import com.spstudio.modules.product.service.ProductService;

@@ -71,15 +71,15 @@ public class TestJUnitTest {
          
          byte[] uncompressByte = ImageUtils.loadFile();
          System.out.println(uncompressByte.length);
-         byte[] compressByte = ImageUtils.compress(uncompressByte);
-         System.out.println(compressByte.length);
-         member.setProfilePicture(compressByte);
+//         byte[] compressByte = ImageUtils.compress(uncompressByte);
+//         System.out.println(compressByte.length);
+//         member.setProfilePicture(compressByte);
         memberService.addMember(member);
         Member findMember = memberService.findMemberByMemberId(member.getMemberId());
-        byte[] picByte = findMember.getProfilePicture();
+        //byte[] picByte = findMember.getProfilePicture();
         
-        byte[] uncompressed = ImageUtils.uncompress(picByte);
-        ImageUtils.writeFile(uncompressed);
+        //byte[] uncompressed = ImageUtils.uncompress(picByte);
+        //ImageUtils.writeFile(uncompressed);
         assertNotNull(findMember);
         
      }

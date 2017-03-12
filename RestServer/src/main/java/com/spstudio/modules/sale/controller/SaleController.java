@@ -6,8 +6,6 @@ import com.spstudio.common.search.Page;
 import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.search.SearchCriteriaItem;
-import com.spstudio.common.utils.StringUtils;
-import com.spstudio.modules.member.bean.request.MemberJsonBean;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.entity.MemberType;
 import com.spstudio.modules.member.service.AssetType;

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>错误</title>
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<script>
+    window.onload = function () {
+        var wid = window.screen.width;
+        document.documentElement.style.fontSize = wid / 10 + 'px';
+    };
+    window.onresize = function(){
+        var width = window.screen.width;
+        document.documentElement.style.fontSize = width / 10 + 'px';
+    };
+</script>
+<body>
+<div class="my-header">
+    <div class="my-info">
+        <div class="my-face">
+            <img src="../images/myFace.jpg">
+        </div>
+    </div>
+</div>
+<div class="container" id="container">
+    <div class="page">
+        <div class="bd">
+            <div class="weui-panel weui-panel_access">
+                <div class="weui-msg">
+                    <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+                    <div class="weui-msg__text-area">
+                        <h2 class="weui-msg__title">发生了错误</h2>
+                        <p class="weui-msg__desc">XXXXXX</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weui-msg__extra-area">
+    <div class="weui-footer">
+        <p class="weui-footer__links">
+            <a href="javascript:void(0);" class="weui-footer__link">vivi天玺瑗美容</a>
+        </p>
+        <p class="weui-footer__text">Copyright &copy; 2009-2016 Plume.Studio</p>
+    </div>
+</div>
+</body>
+
+<script src="../js/zepto.min.js"></script>
+<script src="../js/weui.min.js"></script>
+
+</html>

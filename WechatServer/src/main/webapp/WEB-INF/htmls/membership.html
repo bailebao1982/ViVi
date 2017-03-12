@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>ViVi会员中心</title>
+</head>
+<link rel="stylesheet" href="../css/index.css">
+<link rel="stylesheet" href="../css/my.css">
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/style.css">
+<script>
+    window.onload = function () {
+        var wid = window.screen.width;
+        document.documentElement.style.fontSize = wid / 10 + 'px';
+    };
+    window.onresize = function(){
+        var width = window.screen.width;
+        document.documentElement.style.fontSize = width / 10 + 'px';
+    };
+</script>
+<body>
+<div>
+    <div class="my-header">
+        <div class="my-info">
+            <div class="my-face">
+                <img src="../images/myFace.jpg">
+            </div>
+            <div class="my-name">
+                玛丽亚
+                <span class="icon-icon_3"></span>
+            </div>
+        </div>
+    </div>
+    <div class="my-content">
+        <ul>
+            <li>
+                <span class="icon-icon_13"></span>
+                <span>个人信息</span>
+                <span></span>
+                <span class="icon-icon_15"></span>
+            </li>
+            <li>
+                <span class="icon-icon_1"></span>
+                <span>资产列表</span>
+                <span></span>
+                <span class="icon-icon_15"></span>
+            </li>
+            <li>
+                <span class="icon-icon_12"></span>
+                <span>服务清单</span>
+                <span>6</span>
+                <span class="icon-icon_15"></span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="weui-msg__extra-area">
+    <div class="weui-footer">
+        <p class="weui-footer__links">
+            <a href="javascript:void(0);" class="weui-footer__link">vivi天玺瑗美容</a>
+        </p>
+        <p class="weui-footer__text">Copyright &copy; 2009-2016 Plume.Studio</p>
+    </div>
+</div>
+</body>
+<script src="../js/zepto.min.js"></script>
+<script src="../js/index.js"></script>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>会员注册</title>
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/model.css">
+    <link rel="stylesheet" href="../css/myOrder.css">
+    <link rel="stylesheet" href="../css/example.css"/>
+</head>
+<script>
+    window.onload = function () {
+        var wid = window.screen.width;
+        document.documentElement.style.fontSize = wid / 10 + 'px';
+    }
+    window.onresize = function(){
+        var width = window.screen.width;
+        document.documentElement.style.fontSize = width / 10 + 'px';
+    };
+</script>
+<body>
+<div class="my-header">
+    <div class="my-info">
+        <div class="my-face">
+            <img src="../images/myFace.jpg">
+        </div>
+        <div class="my-name">
+            玛丽亚
+            <span class="icon-icon_3"></span>
+        </div>
+    </div>
+</div>
+<div class="index-content">
+    <form method="POST" action="/member/register">
+        <div class="myOrder-card weui-cells">
+            <div id="container">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input id="telphone" name="phone" class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入您的联系电话">
+                    </div>
+                    <div class="weui-cell__ft" style="display: none;">
+                        <i class="weui-icon-warn"></i>
+                    </div>
+                </div>
+
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input id="birthday" name="birthday" class="weui-input" type="text" placeholder="请选择您的输入生日">
+                    </div>
+                    <div class="weui-cell__ft" style="display: none;">
+                        <i class="weui-icon-warn"></i>
+                    </div>
+                </div>
+
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input id="address" name="address" class="weui-input" type="text" placeholder="请输入您的地址">
+                    </div>
+                    <div class="weui-cell__ft" style="display: none;">
+                        <i class="weui-icon-warn"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <input name="name" type="hidden" value="">
+            <input name="gender" type="hidden" value="">
+            <input name="headerImgUrl" type="hidden" value="">
+            <input name="openId" type="hidden" value="">
+            <button class="weui-btn weui-btn_primary my_weui-btn_primary">确定</button>
+        </div>
+    </form>
+</div>
+<div class="weui-msg__extra-area">
+    <div class="weui-footer">
+        <p class="weui-footer__links">
+            <a href="javascript:void(0);" class="weui-footer__link">vivi天玺瑗美容</a>
+        </p>
+        <p class="weui-footer__text">Copyright &copy; 2009-2016 Plume.Studio</p>
+    </div>
+</div>
+</body>
+
+<script type="text/html" id="tpl_home">
+    <script type="text/javascript">
+        $('#birthday').on('click', function () {
+            weui.datePicker({
+                start: 1970,
+                end: new Date().getFullYear(),
+                onChange: function (result) {
+                    console.log(result);
+                },
+                onConfirm: function (result) {
+                    var year = result[0];
+                    var month = result[1] + 1;
+                    var day = result[2];
+                    var date = year + '年' + month + '月' + day + '日';
+                    console.log(date);
+                    $('#birthday').val(date);
+                }
+            });
+        });
+    </script>
+</script>
+
+<script src="../js/zepto.min.js"></script>
+<script src="../js/weui.min.js"></script>
+<script src="../js/example.js"></script>
+
+</html>

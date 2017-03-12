@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>我的资产</title>
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/model.css">
+    <link rel="stylesheet" href="../css/myOrder.css">
+    <link rel="stylesheet" href="../css/example.css"/>
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+</head>
+<script>
+    window.onload = function () {
+        var wid = window.screen.width;
+        document.documentElement.style.fontSize = wid / 10 + 'px';
+    };
+    window.onresize = function(){
+        var width = window.screen.width;
+        document.documentElement.style.fontSize = width / 10 + 'px';
+    };
+</script>
+<body>
+<div class="my-header">
+    <div class="my-info">
+        <div class="my-face">
+            <img src="../images/myFace.jpg">
+        </div>
+        <div class="my-name">
+            玛丽亚
+            <span class="icon-icon_3"></span>
+        </div>
+    </div>
+</div>
+<div class="index-content" id="container">
+    <div class="myOrder-card">
+        <p class="myOrder-number">我的积分 & 余额</p>
+        <div class="myOrder-details weui-flex">
+            <div class="weui-flex__item" style="font-size: 20px"><span>积分: 12000</span></div>
+            <div class="weui-flex__item" style="font-size: 20px"><span>余额: 18600</span></div>
+        </div>
+    </div>
+
+    <div class="myOrder-card">
+        <p class="myOrder-number">我的产品</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>产品名称</th>
+                <th>剩余数量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>DA还幼针</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>DNA-童颜再生针</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>冰晶美人—大腿内侧</td>
+                <td>1</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="myOrder-card">
+        <p class="myOrder-number">我的套餐</p>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>产品名称</th>
+                <th>套餐名称</th>
+                <th>剩余数量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>DA还幼针</td>
+                <td>欢迎卡</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>DNA-童颜再生针</td>
+                <td>欢迎卡</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>冰晶美人—大腿内侧</td>
+                <td>欢迎卡</td>
+                <td>2</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+</body>
+
+<script src="../js/zepto.min.js"></script>
+<script src="../js/weui.min.js"></script>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <title>我的订单</title>
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/model.css">
+    <link rel="stylesheet" href="../css/myOrder.css">
+</head>
+
+<script>
+    window.onload = function () {
+        var wid = window.screen.width;
+        document.documentElement.style.fontSize = wid / 10 + 'px';
+    };
+    window.onresize = function(){
+        var width = window.screen.width;
+        document.documentElement.style.fontSize = width / 10 + 'px';
+    };
+</script>
+<body>
+    <div class="my-header">
+        <div class="my-info">
+            <div class="my-face">
+                <img src="../images/myFace.jpg">
+            </div>
+            <div class="my-name">
+                玛丽亚
+                <span class="icon-icon_3"></span>
+            </div>
+        </div>
+    </div>
+    <div class="index-content" id="container">
+        <div class="myOrder-card">
+            <p class="myOrder-number">工单编号<span>LG11313131313</span></p>
+
+            <div class="myOrder-details weui-flex">
+                <div class="weui-flex__item"><span>日期: 2017/3/1</span></div>
+                <div class="weui-flex__item"><span>技师: 张小兰</span></div>
+            </div>
+            <div class="myOrder-details weui-flex">
+                <div class="weui-flex__item"><span>日期: 2017/3/1</span></div>
+                <div class="weui-flex__item"><span>技师: 张小兰</span></div>
+            </div>
+            <div class="weui-flex myOrder-operate">
+                <div class="weui-flex__item workorder_confirm_btn" id="xxxxxxx">确定</div>
+                <div class="weui-flex__item">查看详情</div>
+            </div><i class="myOrder-tips tip-doneIndentify">待确定</i>
+        </div>
+
+        <div class="myOrder-card">
+            <p class="myOrder-number">工单编号<span>LG11313131313</span></p>
+
+            <div class="myOrder-details weui-flex">
+                <div class="weui-flex__item"><span>日期: 2017/3/2</span></div>
+                <div class="weui-flex__item"><span>技师: 张小兰</span></div>
+            </div>
+            <div class="weui-flex myOrder-operate">
+                <div class="weui-flex__item">查看详情</div>
+            </div>
+            <i class="myOrder-tips tip-readyIndentify">已确认</i>
+        </div>
+
+    </div>
+    <div class="index-footer">
+        <div class="index-tab weui-tabbar">
+            <div class="weui-tabbar__item"><span class="icon-icon_11"></span>个人信息</div>
+            <div class="weui-tabbar__item"><span class="icon-icon_12"></span>资产列表</div>
+        </div>
+    </div>
+
+    <div id="dialogs">
+        <!--BEGIN dialog1-->
+        <div class="js_dialog" id="confirmDialog" style="display: none;">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog">
+                <div><strong class="weui-dialog__title">确认工单</strong></div>
+                <div class="weui-dialog__bd">
+                    <div class="weui-media-box weui-media-box_text">
+                        <p>服务日期：2015/03/17</p>
+                        <p>服务技师：张晓兰</p>
+                        <p>服务项目：脸部美容，手部护理</p>
+                    </div>
+                </div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+                </div>
+            </div>
+        </div>
+        <!--END dialog1-->
+    </div>
+</body>
+
+<script src="../js/zepto.min.js"></script>
+<script src="../js/weui.min.js"></script>
+<script src="../js/example.js"></script>
+
+<script type="text/html" id="tpl_home">
+    <script type="text/javascript">
+        $(function(){
+            $('#dialogs').on('click', '.weui-dialog__btn', function(){
+                $(this).parents('.js_dialog').fadeOut(200);
+            });
+
+            $('#container').on('click', '.workorder_confirm_btn', function(){
+                $('#confirmDialog').fadeIn(200);
+            });
+        });
+    </script>
+</script>
+
+</html>

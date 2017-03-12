@@ -1,0 +1,14 @@
+body{
+    background-size: 100%;
+    font-family:-apple-system-font,Helvetica Neue, Helvetica, 微软雅黑, 宋体, 仿宋, sans-serif;
+}
+
+.container {
+    padding: 10px 20px;
+}
+.hd {
+    padding: 2em 0;
+}
+.bd.spacing {
+    padding: 0 15px
+}

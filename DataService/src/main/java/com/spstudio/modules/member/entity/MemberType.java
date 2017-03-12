@@ -23,8 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
        uniqueConstraints={@UniqueConstraint(columnNames={"typeName"})}
 )
 public class MemberType {
-    
-    @Id  
+    @Id
     @GeneratedValue(generator="system-uuid")  
     @GenericGenerator(name = "system-uuid",strategy="uuid")  
     @Column(length=32)
@@ -47,6 +46,10 @@ public class MemberType {
           
     @Column(length=32)
     String lastUpdateBy;
+
+    @Column(columnDefinition = "int default 0")
+    // 定义memberType升级的线路
+    int priority;
 
     public String getTypeName() {
         return typeName;
@@ -102,5 +105,13 @@ public class MemberType {
 
     public void setLastUpdateBy(String lastUpdateBy) {
         this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

@@ -42,6 +42,9 @@ public class ServiceProvider {
     private String spSex;
 
     @Column
+    private String spWechatId;
+
+    @Column
     private Date spBirthDay;
 
     @Column
@@ -234,6 +237,12 @@ public class ServiceProvider {
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
-    
-    
+
+    public String getSpWechatId() {
+        return spWechatId;
+    }
+
+    public void setSpWechatId(String spWechatId) {
+        this.spWechatId = spWechatId;
+    }
 }

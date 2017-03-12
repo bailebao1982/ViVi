@@ -7,7 +7,7 @@ package com.spstudio.modules.member.entity;
 
 import com.spstudio.modules.workorder.entity.WorkOrder;
 import java.sql.Blob;
-import java.sql.Date;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -86,10 +86,12 @@ public class Member {
 //    @ManyToMany(mappedBy = "customers")
 //    private Set<WorkOrder> workOrders;
     
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "PROFILEPIC", columnDefinition = "BLOB",nullable=true)
-    private byte[] profilePicture;
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+//    @Column(name = "PROFILEPIC", columnDefinition = "BLOB",nullable=true)
+//    private byte[] profilePicture;
+     @Column()
+     private String profilePicture;
     
     public Member(){
         
@@ -247,11 +249,11 @@ public class Member {
         this.type = type;
     }
 
-    public byte[] getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
     

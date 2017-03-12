@@ -11,12 +11,11 @@ import com.spstudio.common.response.ResponseMsgBeanFactory;
 import com.spstudio.common.response.SuccessMessageBean;
 import com.spstudio.common.response.ResponseBean;
 import com.spstudio.modules.common.bean.Select2OptionJsonBean;
-import com.spstudio.modules.common.bean.Select2RequestBean;
 import com.spstudio.modules.common.bean.Select2ResponseJsonBean;
 import com.spstudio.modules.common.bean.Select2ResponseJsonBeanUtil;
-import com.spstudio.modules.member.bean.request.MemberJsonBean;
+import com.spstudio.modules.member.dto.*;
 import com.spstudio.modules.member.bean.request.*;
-import com.spstudio.modules.member.bean.response.MemberDepositBean;
+import com.spstudio.modules.member.dto.MemberDepositBean;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.entity.MemberAsset;
 import com.spstudio.modules.member.entity.MemberType;
@@ -25,7 +24,6 @@ import com.spstudio.common.search.SearchConditionEnum;
 import com.spstudio.common.search.SearchCriteria;
 import com.spstudio.common.search.SearchCriteriaItem;
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.permission.controller.UserSessionValidator;
 
 import javax.annotation.Resource;
 

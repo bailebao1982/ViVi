@@ -13,9 +13,7 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @DynamicInsert
-@Table(name="T_SystemConfig",
-        uniqueConstraints={@UniqueConstraint(columnNames={"configKey"})}
-)
+@Table(name="T_SystemConfig")
 public class SystemConfig {
     @Id
     @GeneratedValue(generator="system-uuid")

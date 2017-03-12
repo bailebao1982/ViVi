@@ -73,8 +73,8 @@ public class MemberServiceImpl implements MemberService {
     
 
     @Override
-    public void addMember(Member member) {
-        memberDAO.addMember(member);
+    public Member addMember(Member member) {
+        Member newMember = memberDAO.addMember(member);
         LoginUser loginUser = new LoginUser();
         loginUser.setCreationTime(new Date(System.currentTimeMillis()));
         loginUser.setLoginCount(0);
@@ -82,7 +82,7 @@ public class MemberServiceImpl implements MemberService {
         loginUser.setLoginUser(member.getMemberName());
         loginUser.setMemberId(member.getMemberId());
         permissionDAO.addLoginUser(loginUser);
-        
+        return newMember;
     }
 
     @Override
@@ -193,6 +193,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void addMemberType(MemberType type) {
         memberTypeDAO.addMemberType(type);
+    }
+
+    @Override
+    public MemberType getDefaultMemberType() {
+        return null;
     }
 
     @Override

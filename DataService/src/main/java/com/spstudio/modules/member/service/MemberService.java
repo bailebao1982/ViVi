@@ -25,6 +25,8 @@ public interface MemberService {
     // Member Type Service
     public void addMemberType(MemberType type);
 
+    public MemberType getDefaultMemberType();
+
     public List<MemberType> listAllMemberType();
 
     public MemberType findMemberTypeById(String memberTypeId);
@@ -36,7 +38,7 @@ public interface MemberService {
     public boolean updateMemberType(MemberType member);
 
     // Member Service
-    public void addMember(Member member);
+    public Member addMember(Member member);
     
     public Member findMemberByMemberId(String memberId);
 

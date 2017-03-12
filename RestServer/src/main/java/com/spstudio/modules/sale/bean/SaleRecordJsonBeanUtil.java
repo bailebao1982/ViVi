@@ -1,22 +1,15 @@
 package com.spstudio.modules.sale.bean;
 
-import com.spstudio.common.utils.DateUtils;
-import com.spstudio.modules.member.bean.request.MemberJsonBeanUtil;
+import com.spstudio.modules.member.dto.MemberJsonBeanUtil;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.service.AssetType;
 import com.spstudio.modules.member.service.MemberService;
-import com.spstudio.modules.product.bean.request.PackageJsonBean;
-import com.spstudio.modules.product.bean.request.PackageJsonBeanUtil;
-import com.spstudio.modules.product.bean.request.ProductJsonBeanUtil;
+import com.spstudio.modules.product.dto.PackageJsonBeanUtil;
+import com.spstudio.modules.product.dto.ProductJsonBeanUtil;
 import com.spstudio.modules.product.entity.Product;
 import com.spstudio.modules.product.entity.ProductPackage;
 import com.spstudio.modules.product.service.ProductService;
 import com.spstudio.modules.sales.entity.Sales;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Soul on 2017/1/19.
