@@ -78,7 +78,7 @@ public class MemberServiceImpl implements MemberService {
         LoginUser loginUser = new LoginUser();
         loginUser.setCreationTime(new Date(System.currentTimeMillis()));
         loginUser.setLoginCount(0);
-        loginUser.setLoginPassword(SysContent.DEFAULT_PWD);
+        loginUser.setLoginPassword(SysContent.DEFAULT_MEMB_PWD);
         loginUser.setLoginUser(member.getMemberName());
         loginUser.setMemberId(member.getMemberId());
         permissionDAO.addLoginUser(loginUser);

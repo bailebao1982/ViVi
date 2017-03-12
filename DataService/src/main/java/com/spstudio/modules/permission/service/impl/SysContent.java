@@ -17,7 +17,8 @@ public class SysContent {
     private static ThreadLocal<HttpServletRequest> requestLocal = new ThreadLocal<HttpServletRequest>();  
     private static ThreadLocal<HttpServletResponse> responseLocal = new ThreadLocal<HttpServletResponse>();  
   
-    public static String DEFAULT_PWD = "66666666";
+    public static String DEFAULT_SP_PWD = "66666666";
+    public static String DEFAULT_MEMB_PWD = "123456";
     
     public static HttpServletRequest getRequest() {  
         return requestLocal.get();  

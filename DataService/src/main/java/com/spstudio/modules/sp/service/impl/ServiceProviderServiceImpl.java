@@ -100,7 +100,7 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
         LoginUser loginUser = new LoginUser();
         loginUser.setCreationTime(new Date(System.currentTimeMillis()));
         loginUser.setLoginCount(0);
-        loginUser.setLoginPassword(SysContent.DEFAULT_PWD);
+        loginUser.setLoginPassword(SysContent.DEFAULT_SP_PWD);
         loginUser.setLoginUser(sp.getSpName());
         loginUser.setMemberId(sp.getServiceProviderId());
         permissionDAO.addLoginUser(loginUser);
