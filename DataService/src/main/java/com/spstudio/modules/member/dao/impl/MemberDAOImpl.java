@@ -5,6 +5,7 @@
  */
 package com.spstudio.modules.member.dao.impl;
 
+import com.spstudio.common.utils.StringUtils;
 import com.spstudio.modules.member.entity.Member;
 import com.spstudio.modules.member.dao.MemberDAO;
 import com.spstudio.common.search.SearchCriteria;
@@ -60,6 +61,7 @@ public class MemberDAOImpl implements MemberDAO {
     @Override
     public Member addMember(Member member) {
         member.setCreationDate(new Date(System.currentTimeMillis()));
+        member.setMemberNo(StringUtils.getPureNumberUniqueCode()); // 设置12位唯一会员编号
         sessionFactory.getCurrentSession().saveOrUpdate(member);
         return member;
     }

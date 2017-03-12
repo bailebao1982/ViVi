@@ -24,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
 @DynamicUpdate
 @DynamicInsert
 @Table(name="T_Member",
-       uniqueConstraints={@UniqueConstraint(columnNames={"mobile"})}
+       uniqueConstraints={@UniqueConstraint(columnNames={"mobile", "memberNo"})}
 )
 public class Member {
     @Id  
@@ -32,6 +32,10 @@ public class Member {
     @GenericGenerator(name = "system-uuid",strategy="uuid")  
     @Column(length=32)
     private String memberId;
+
+    // 会员编号
+    @Column(updatable = false)
+    String memberNo;
 
     @Column(length=32, nullable = false)
     String memberName;
@@ -256,7 +260,12 @@ public class Member {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
-    
-    
-    
+
+    public String getMemberNo() {
+        return memberNo;
+    }
+
+    public void setMemberNo(String memberNo) {
+        this.memberNo = memberNo;
+    }
 }
