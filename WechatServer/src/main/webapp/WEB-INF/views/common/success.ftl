@@ -1,7 +1,7 @@
-<#import "../layout/layout.ftl" as mainLayout>
-<#assign headerStyle = "simple" in mainLayout.layout>
-<#assign pageTitile = "操作成功" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#import "layout/layout.ftl" as mainLayout>
+<#assign headerStyle = "simple" in mainLayout>
+<#assign pageTitile = "操作成功" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 <div class="container" id="container">
@@ -20,5 +20,5 @@
     </div>
 </div>
 <#assign hidePage = "">
-<#include "../components/navtab.ftl">
+<#include "components/navtab.ftl">
 </@mainLayout.layout>

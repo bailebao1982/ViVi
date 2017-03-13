@@ -20,6 +20,11 @@
               <!--<property name="location" value="classpath:/WEB-INF/config/freemarker.properties" />-->
        </bean>
 
+       <mvc:resources mapping="/css/**" location="/,/WEB-INF/css/" />
+       <mvc:resources mapping="/js/**" location="/,/WEB-INF/js/" />
+       <mvc:resources mapping="/images/**" location="/,/WEB-INF/images/" />
+       <mvc:resources mapping="/fonts/**" location="/,/WEB-INF/fonts/" />
+
        <!--ViewResolver 视图解析器-->
        <!--用于支持html视图解析-->
        <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">

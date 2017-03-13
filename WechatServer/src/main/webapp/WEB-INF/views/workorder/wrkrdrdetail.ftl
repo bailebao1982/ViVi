@@ -1,8 +1,8 @@
-<#import "../layout/layout.ftl" as mainLayout>
+<#import "layout/layout.ftl" as mainLayout>
 
-<#assign headerStyle = "normal" in mainLayout.layout>
-<#assign pageTitile = "我的工单" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#assign headerStyle = "normal" in mainLayout>
+<#assign pageTitile = "我的工单" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 
@@ -65,5 +65,5 @@
     </#if>
 </div>
 
-<#include "../components/footer.ftl">
+<#include "components/footer.ftl">
 </@mainLayout.layout>

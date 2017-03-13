@@ -1,8 +1,8 @@
-<#import "../layout/layout.ftl" as mainLayout>
+<#import "layout/layout.ftl" as mainLayout>
 
-<#assign headerStyle = "simple" in mainLayout.layout>
-<#assign pageTitile = "创建工单" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#assign headerStyle = "simple" in mainLayout>
+<#assign pageTitile = "创建工单" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 
@@ -53,7 +53,7 @@
     </form>
 </div>
 
-<#include "../components/footer.ftl">
+<#include "components/footer.ftl">
 
 <script type="text/html" id="tpl_home">
     <script type="text/javascript">

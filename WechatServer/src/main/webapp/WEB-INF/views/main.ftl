@@ -1,8 +1,8 @@
 <#import "layout/layout.ftl" as mainLayout>
 
-<#assign headerStyle = "normal" in mainLayout.layout>
-<#assign pageTitile = "ViVA天玺瑗皮肤管理" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#assign headerStyle = "normal" in mainLayout>
+<#assign pageTitile = "ViVA天玺瑗皮肤管理" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 

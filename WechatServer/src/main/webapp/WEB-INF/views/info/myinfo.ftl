@@ -1,8 +1,8 @@
-<#import "../layout/layout.ftl" as mainLayout>
+<#import "layout/layout.ftl" as mainLayout>
 
-<#assign headerStyle = "simple" in mainLayout.layout>
-<#assign pageTitile = "我的信息" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#assign headerStyle = "simple" in mainLayout>
+<#assign pageTitile = "我的信息" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 <div id="read_only_profile" class="index-content">
@@ -96,7 +96,7 @@
 </div>
 
 <#assign hidePage = "PERSONALINFO_PAGE">
-<#include "../components/navtab.ftl">
+<#include "components/navtab.ftl">
 
 <script type="text/html" id="tpl_home">
     <script type="text/javascript">

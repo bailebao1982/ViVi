@@ -1,8 +1,8 @@
-<#import "../layout/layout.ftl" as mainLayout>
+<#import "layout/layout.ftl" as mainLayout>
 
-<#assign headerStyle = "normal" in mainLayout.layout>
-<#assign pageTitile = "我的工单" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#assign headerStyle = "normal" in mainLayout>
+<#assign pageTitile = "我的工单" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 
@@ -23,7 +23,7 @@
                 <p class="myOrder-number">工单编号<span>${workorder.workorder_id}</span></p>
 
                 <div class="weui-cells__title">您的评分:</div>
-                <#include "../components/ratepanel.ftl">
+                <#include "components/ratepanel.ftl">
 
                 <div class="weui-cells__title">您的评价:</div>
                 <div class="weui-cells weui-cells_form">
@@ -43,7 +43,7 @@
         </div>
     </div>
 </div>
-<#include "../components/footer.ftl">
+<#include "components/footer.ftl">
 
 <script type="application/javascript">
     setTimeout(function () {

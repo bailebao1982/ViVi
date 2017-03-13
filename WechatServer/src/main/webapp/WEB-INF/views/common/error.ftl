@@ -1,7 +1,7 @@
-<#import "../layout/layout.ftl" as mainLayout>
-<#assign headerStyle = "simple" in mainLayout.layout>
-<#assign pageTitile = "发生了错误" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#import "layout/layout.ftl" as mainLayout>
+<#assign headerStyle = "simple" in mainLayout>
+<#assign pageTitile = "发生了错误" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 <div class="container" id="container">
@@ -20,5 +20,5 @@
     </div>
 </div>
 
-<#include "../components/footer.ftl">
+<#include "components/footer.ftl">
 </@mainLayout.layout>

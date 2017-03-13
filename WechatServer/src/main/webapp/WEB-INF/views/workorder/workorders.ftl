@@ -1,8 +1,8 @@
-<#import "../layout/layout.ftl" as mainLayout>
+<#import "layout/layout.ftl" as mainLayout>
 
-<#assign headerStyle = "normal" in mainLayout.layout>
-<#assign pageTitile = "我的工单" in mainLayout.layout>
-<#assign userinfo = userinfo in mainLayout.layout>
+<#assign headerStyle = "normal" in mainLayout>
+<#assign pageTitile = "我的工单" in mainLayout>
+<#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 <div class="index-content" id="container">
@@ -43,7 +43,7 @@
 </div>
 
     <#assign hidePage = "WORKORDER_PAGE">
-    <#include "../components/navtab.ftl">
+    <#include "components/navtab.ftl">
 
 <div id="dialogs">
     <!--BEGIN dialog1-->
