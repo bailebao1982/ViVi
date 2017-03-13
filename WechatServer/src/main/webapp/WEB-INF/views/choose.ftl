@@ -13,8 +13,8 @@
         <input id="headerImgUrl" name="headerImgUrl" type="hidden" value="${userinfo.member_profilepic}">
         <input id="openId" name="openId" type="hidden" value="${userinfo.member_wechat}">
         <input id="address" name="address" type="hidden" value="${userinfo.member_address}">
-        <button id="show_reg" class="weui-btn weui-btn_primary my_weui-btn_primary">注册新会员</button>
-        <button id="show_binding"  class="weui-btn weui-btn_primary my_weui-btn_primary">绑定已有账户</button>
+        <button id="showReg" class="weui-btn weui-btn_primary my_weui-btn_primary">注册新会员</button>
+        <button id="showBinding"  class="weui-btn weui-btn_primary my_weui-btn_primary">绑定已有账户</button>
     </div>
 </div>
 
@@ -22,31 +22,35 @@
 
 <script type="text/html" id="tpl_home">
     <script type="text/javascript">
-        $('#show_reg').on('click', function () {
+        $('#showReg').on('click', function (event) {
+            console.log("response show_reg");
             var nickname = $('#nickname').val();
             var gender = $('#gender').val();
             var headerImgUrl = $('#headerImgUrl').val();
             var openId = $('#openId').val();
             var address = $('#address').val();
 
-            window.location.href = "/member/register?nickname=" + nickname +
-                            "&gender=" + gender +
-                            "&headerImgUrl=" + headerImgUrl +
-                            "&openId=" + openId +
-                            "&address" + address;
+            var loc = "/wxserver/member/register?nickname=" + nickname +
+                        "&gender=" + gender +
+                        "&headImgUrl=" + headerImgUrl +
+                        "&openId=" + openId +
+                        "&address=" + address;
+            window.location.href = loc;
         });
-        $('#show_binding').on('click', function () {
+        $('#showBinding').on('click', function (event) {
+            console.log("response show_binding");
             var nickname = $('#nickname').val();
             var gender = $('#gender').val();
             var headerImgUrl = $('#headerImgUrl').val();
             var openId = $('#openId').val();
             var address = $('#address').val();
 
-            window.location.href = "/member/binding?nickname=" + nickname +
-                            "&gender=" + gender +
-                            "&headerImgUrl=" + headerImgUrl +
-                            "&openId=" + openId +
-                            "&address" + address;
+            var loc = "/wxserver/member/binding?nickname=" + nickname +
+                "&gender=" + gender +
+                "&headImgUrl=" + headerImgUrl +
+                "&openId=" + openId +
+                "&address=" + address;
+            window.location.href = loc;
         });
 </script>
 </script>

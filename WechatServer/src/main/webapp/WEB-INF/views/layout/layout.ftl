@@ -31,10 +31,13 @@
 <#else>
     <#include "components/header.ftl">
 </#if>
+<div id="wxcontainer">
 <#nested>
-</body>
+</div>
+
 <script src="../js/zepto.min.js"></script>
 <script src="../js/weui.min.js"></script>
 <script src="../js/example.js"></script>
+</body>
 </html>
 </#macro>

@@ -4,7 +4,7 @@
  */
 $(function () {
     var pageManager = {
-        $container: $('#container'),
+        $container: $('#wxcontainer'),
         init: function () {
             var config = {
                 name: 'home',
