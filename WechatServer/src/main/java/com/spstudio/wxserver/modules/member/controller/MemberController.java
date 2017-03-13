@@ -23,6 +23,7 @@ import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -162,8 +163,11 @@ public class MemberController extends WxBaseController {
     }
 
     @RequestMapping(value = "/register",
-            method = RequestMethod.POST)
-    public ModelAndView doRegister(@RequestBody UserRegisterBean registerBean){
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ModelAndView doRegister(UserRegisterBean registerBean){
 
         SPInviteCode spInviteCode = serviceProviderService.getEffectiveInviteCode(registerBean.getInvite_code());
         if(spInviteCode == null){
@@ -223,8 +227,11 @@ public class MemberController extends WxBaseController {
     }
 
     @RequestMapping(value = "/binding",
-            method = RequestMethod.POST)
-    public ModelAndView doBinding(@RequestBody UserRegisterBean registerBean){
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ModelAndView doBinding(UserRegisterBean registerBean){
         Member newMember = memberService.findMemberByMemberNo(registerBean.getMemberno());
         if(newMember == null){
             newMember = memberService.findMemberByMemberTelphone(registerBean.getMemberno());
@@ -266,6 +273,9 @@ public class MemberController extends WxBaseController {
     }
 
     private ModelAndView _getErrorView(String msg){
+        //
+        // TODO:: MISSING USERINFO HERE
+        //
         ModelAndView mav = new ModelAndView();
         mav.addObject("message", msg);
         mav.setViewName("common/error");
