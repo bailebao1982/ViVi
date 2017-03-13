@@ -19,7 +19,7 @@
             </div>
         </div>
         <div id="order_card" class="myOrder-card" style="display: none;">
-            <form method="post" action="/workorder/rate/${workorder.workorder_id}">
+            <form method="post" action="/wxserver/workorder/rate/${workorder.workorder_id}">
                 <p class="myOrder-number">工单编号<span>${workorder.workorder_id}</span></p>
 
                 <div class="weui-cells__title">您的评分:</div>

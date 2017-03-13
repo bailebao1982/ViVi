@@ -56,7 +56,7 @@
     </div>
 
     <#if workorder.confirmed == 0>
-    <form method="post" action="/workorder/confirm">
+    <form method="post" action="/wxserver/workorder/confirm">
         <div class="weui-btn-area">
             <input name="workorder_id" value="${workorder.workorder_id}" type="hidden">
             <button class="weui-btn weui-btn_primary my_weui-btn_primary">确认</button>

@@ -7,7 +7,7 @@
 <@mainLayout.layout>
 
 <div class="index-content">
-    <form method="POST" action="/employee/register">
+    <form method="POST" action="/wxserver/employee/register">
         <div class="myOrder-card weui-cells">
             <div id="container">
                 <div class="weui-cell">

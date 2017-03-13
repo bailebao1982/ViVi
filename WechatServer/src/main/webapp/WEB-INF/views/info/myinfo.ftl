@@ -48,7 +48,7 @@
 </div>
 
 <div id="form_profile" class="index-content" style="display: none;">
-    <form method="POST" action="/member/update/${userinfo.member_id}">
+    <form method="POST" action="/wxserver/member/update/${userinfo.member_id}">
         <div class="myOrder-card weui-cells">
             <div id="container">
                 <div class="weui-cell">
