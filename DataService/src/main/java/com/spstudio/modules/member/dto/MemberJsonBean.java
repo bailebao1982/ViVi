@@ -13,6 +13,8 @@ public class MemberJsonBean {
 
     private String member_id;
 
+    private String member_no;
+
     private String member_wechat;
     
     private String member_sex;
@@ -162,5 +164,14 @@ public class MemberJsonBean {
 
     public void setMember_bonusPoint(int member_bonusPoint) {
         this.member_bonusPoint = member_bonusPoint;
+    }
+
+
+    public String getMember_no() {
+        return member_no;
+    }
+
+    public void setMember_no(String member_no) {
+        this.member_no = member_no;
     }
 }

@@ -13,7 +13,7 @@ public class UserRegisterBean {
     private String headerImgUrl;
     private String openId;
     private String invite_code;
-    private String password;
+    private String type;
 
     public String getMemberno() {
         return memberno;
@@ -87,11 +87,11 @@ public class UserRegisterBean {
         this.invite_code = invite_code;
     }
 
-    public String getPassword() {
-        return password;
+    public String getType() {
+        return type;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setType(String type) {
+        this.type = type;
     }
 }

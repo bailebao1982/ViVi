@@ -1,18 +1,18 @@
 <#import "layout/layout.ftl" as mainLayout>
 
 <#assign headerStyle = "normal" in mainLayout>
-<#assign pageTitile = "会员绑定" in mainLayout>
+<#assign pageTitile = "员工绑定" in mainLayout>
 <#assign userinfo = userinfo in mainLayout>
 
 <@mainLayout.layout>
 
 <div class="index-content">
-    <form method="POST" action="/wxserver/member/binding">
+    <form method="POST" action="/wxserver/serviceprovider/binding">
         <div class="myOrder-card weui-cells">
             <div id="container">
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <input id="memberno" name="memberno" class="weui-input" type="text" placeholder="请输入会员编号或者手机号" value="">
+                        <input id="employeeno" name="employeeno" class="weui-input" type="text" placeholder="请输入员工编号或者手机号" value="">
                     </div>
                     <div class="weui-cell__ft" style="display: none;">
                         <i class="weui-icon-warn"></i>

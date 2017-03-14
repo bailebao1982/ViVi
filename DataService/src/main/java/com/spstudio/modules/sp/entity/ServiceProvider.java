@@ -89,10 +89,12 @@ public class ServiceProvider {
     @Column(length=32)
     String lastUpdateBy;
     
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "PROFILEPIC", columnDefinition = "BLOB",nullable=true)
-    private byte[] profilePicture;
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+//    @Column(name = "PROFILEPIC", columnDefinition = "BLOB",nullable=true)
+//    private byte[] profilePicture;
+    @Column()
+    private String profilePicture;
 
     public Date getCreationDate() {
         return creationDate;
@@ -230,11 +232,20 @@ public class ServiceProvider {
         this.spType = spType;
     }
 
-    public byte[] getProfilePicture() {
+//    public byte[] getProfilePicture() {
+//        return profilePicture;
+//    }
+//
+//    public void setProfilePicture(byte[] profilePicture) {
+//        this.profilePicture = profilePicture;
+//    }
+
+
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(byte[] profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 

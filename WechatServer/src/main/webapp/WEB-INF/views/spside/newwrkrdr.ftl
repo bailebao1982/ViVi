@@ -7,7 +7,7 @@
 <@mainLayout.layout>
 
 <div class="index-content">
-    <form method="POST" action="/wxserver/member/register">
+    <form method="POST" action="/wxserver/serviceprovider/createworkorder">
         <div class="myOrder-card weui-cells">
             <div id="container">
                 <div class="weui-cell">
@@ -21,7 +21,7 @@
 
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <input id="telphone" name="phone" class="weui-input" type="text" placeholder="请输入会员名称">
+                        <input id="member_name" name="member_name" class="weui-input" type="text" placeholder="请输入会员名称">
                     </div>
                     <div class="weui-cell__ft" style="display: none;">
                         <i class="weui-icon-warn"></i>
@@ -32,7 +32,7 @@
                     <div class="weui-cell__hd" style="border-right: 1px solid #9b9b9b">
                         <input type="hidden" value="" name="product_id_0">
                         <input type="hidden" value="" name="package_id_0">
-                        <input class="weui-input service_product_select" type="text" placeholder="请服务项目">
+                        <input id="member_asset" name="member_asset" class="weui-input service_product_select" type="text" placeholder="请服务项目">
                     </div>
                     <div class="weui-cell__bd" style="margin-left: 10px">
                         <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入数量">
@@ -46,6 +46,7 @@
                     <a class="weui-btn weui-btn_plain-default">添加项目</a>
                 </div>
                 <div class="weui-flex__item" style="padding: 0px 10px 0px 10px;">
+                    <input name="employee_id" class="weui-input" type="hidden" value="${userinfo.member_id}">
                     <button class="weui-btn weui-btn_primary my_weui-btn_primary">确定</button>
                 </div>
             </div>
@@ -74,7 +75,35 @@
                 }
             });
         });
-        $('#container').on('click', '.service_product_select', function () {
+
+        $('member_asset').on('click', function () {
+            weui.picker([{
+                label: '飞机票',
+                value: 0
+            }, {
+                label: '火车票',
+                value: 1
+            }, {
+                label: '的士票',
+                value: 2
+            },{
+                label: '公交票 (disabled)',
+                disabled: true,
+                value: 3
+            }, {
+                label: '其他',
+                value: 4
+            }], {
+                onChange: function (result) {
+                    console.log(result);
+                },
+                onConfirm: function (result) {
+                    console.log(result);
+                }
+            });
+        });
+
+        $('#member_name').on('click', function () {
             weui.picker([{
                 label: '飞机票',
                 value: 0

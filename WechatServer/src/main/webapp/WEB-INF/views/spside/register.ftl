@@ -30,7 +30,7 @@
 
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <input id="address" name="address" class="weui-input" type="text" placeholder="请输入您的地址">
+                       <input id="address" name="address" class="weui-input" type="text" placeholder="请输入您的地址" value="${userinfo.member_address}">
                     </div>
                     <div class="weui-cell__ft" style="display: none;">
                         <i class="weui-icon-warn"></i>
@@ -39,7 +39,7 @@
 
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <input id="employee_type" name="employee_type" class="weui-input" type="text" placeholder="请选择您的类别">
+                        <input id="member_type" name="type" class="weui-input" type="text" placeholder="请选择您的员工类别">
                     </div>
                     <div class="weui-cell__ft" style="display: none;">
                         <i class="weui-icon-warn"></i>
@@ -75,6 +75,39 @@
                     var date = year + '年' + month + '月' + day + '日';
                     console.log(date);
                     $('#birthday').val(date);
+                }
+            });
+        });
+        $('#employee_type').on('click', function () {
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: 'GET',
+                url: "/restservrt/employee/list_employee_type",
+                dataType: 'json',
+                success: function(resData){
+                    if(resData.success) {
+                        var typeArr = resData.data;
+                        var pickerArr = new Array();
+                        $.each(typeArr, function (idx, ele) {
+                            pickerArr.push({
+                                label: ele.description,
+                                value: ele.typeName
+                            });
+                        });
+                        weui.picker(pickerArr, {
+                            onChange: function (result) {
+                                console.log(result);
+                            },
+                            onConfirm: function (result) {
+                                console.log(result);
+                            }
+                        });
+                    }else {
+                        console.log(resData.data);
+                    }
                 }
             });
         });

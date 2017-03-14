@@ -44,8 +44,8 @@ public class MemberController extends WxBaseController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private PermissionService permissionService;
+//    @Autowired
+//    private PermissionService permissionService;
 
     @Autowired
     private ServiceProviderService serviceProviderService;
@@ -195,12 +195,12 @@ public class MemberController extends WxBaseController {
         newMember.setCreationDate(DateUtils.getDateNow());
 
         Member addedMember = memberService.addMember(newMember);
-
-        LoginUser loginUser = permissionService.getLoginUserByLoginName(addedMember.getMemberId());
-        if(loginUser != null) {
-            loginUser.setLoginPassword(registerBean.getPassword());
-            permissionService.updateLoginUser(loginUser);
-        }
+//
+//        LoginUser loginUser = permissionService.getLoginUserByLoginName(addedMember.getMemberId());
+//        if(loginUser != null) {
+//            loginUser.setLoginPassword(registerBean.getPassword());
+//            permissionService.updateLoginUser(loginUser);
+//        }
 
         return __getMembershipPage(addedMember);
     }
@@ -246,11 +246,11 @@ public class MemberController extends WxBaseController {
 
         memberService.updateMember(newMember);
 
-        LoginUser loginUser = permissionService.getLoginUserByLoginName(newMember.getMemberId());
-        if(loginUser != null) {
-            loginUser.setLoginPassword(registerBean.getPassword());
-            permissionService.updateLoginUser(loginUser);
-        }
+//        LoginUser loginUser = permissionService.getLoginUserByMemberId(newMember.getMemberId());
+//        if(loginUser != null) {
+//            loginUser.setLoginPassword(registerBean.getPassword());
+//            permissionService.updateLoginUser(loginUser);
+//        }
 
         return __getMembershipPage(newMember);
     }

@@ -28,7 +28,6 @@
             <#else>
                 <i class="myOrder-tips tip-doneIndentify">待确定</i>
             </#if>
-
         </div>
     </#list>
 </div>

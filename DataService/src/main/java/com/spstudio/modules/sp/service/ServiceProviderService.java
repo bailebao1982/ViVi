@@ -30,6 +30,12 @@ public interface ServiceProviderService {
 
     public ServiceProvider findServiceProviderById(String spId);
 
+    public ServiceProvider findServiceProviderByWechatId(String openId);
+
+    public ServiceProvider findServiceProviderByTelphone(String openId);
+
+    public ServiceProvider findServiceProviderByEmployeeNo(String employeeNo);
+
     public ServiceProvider addServiceProvider(ServiceProvider sp);
     
     public ServiceProvider updateServiceProvider(ServiceProvider sp);
